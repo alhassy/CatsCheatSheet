@@ -1,0 +1,35 @@
+#+TITLE: Reference Sheet for Elementary Category Theory
+# SUBTITLE: Cheat Sheet Template
+# DATE: << Spring 2018 >>
+# When we don't provide a date, one is provided for us.
+#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]]
+#+EMAIL: alhassy@gmail.com
+#+DESCRIPTION: This document is written by Musa Al-hassy for his learning in the spring of 2018.
+#+STARTUP: hideblocks
+#+STARTUP: overview
+#+TODO: BEGIN-IGNORE(b) END-IGNORE(e) } | DONE(d)
+#+INCLUDE: CheatSheet/CheatSheetSetup.org
+
+# Important shortcuts:
+# f7 preview changes
+# f8 commit each change
+# f9 push changes
+
+* ∞ Further Reads
+
++ Roland Backhouse
++ Grant Malcolm
++ Lambert Meertens
++ Jaap van der Woude
+
+* newpage :ignore:
+  \newpage
+* COMMENT footer
+
+(find-file "CheatSheet.el")
+
+# Local Variables:
+# eval: (org-babel-tangle)
+# eval: (load-file "CheatSheet.el")
+# compile-command: (my-org-latex-export-to-pdf)
+# End:
