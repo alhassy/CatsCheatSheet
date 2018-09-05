@@ -8,12 +8,76 @@
 #+STARTUP: hideblocks
 #+STARTUP: overview
 #+TODO: BEGIN-IGNORE(b) END-IGNORE(e) } | DONE(d)
-#+INCLUDE: CheatSheet/CheatSheetSetup.org
+
 
 # Important shortcuts:
 # f7 preview changes
 # f8 commit each change
 # f9 push changes
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{newunicodechar}
+#+LATEX_HEADER: \newunicodechar{﹔}{\ensuremath{\raisebox{0.6ex}{\tiny ;}}}  %% forward composition ﹔
+
+#+INCLUDE: ~/Dropbox/MyUnicodeSymbols.org
+#+INCLUDE: CheatSheet/CheatSheetSetup.org
+
+* Latex setup :ignore:
+# See defn-Type, below for an expanded usage; \eqn{name}{formula}
+#+LaTeX: \def\eqn#1#2{ \begin{flalign*} #2 && \tag*{#1} \label{#1} \end{flalign*} }
+
+* Categories
+
+A *category* 𝒞 consists of a collection of “objects” ~Obj 𝒞,~ a collection of
+  “morphisms” ~Mor 𝒞~, an operation ~Id~ associating a morphism ~Idₐ : a → a~ to each object ~a~,
+  a parallel pair of functions ~src, tgt : Mor 𝒞 → Obj 𝒞~, and a “composition”
+  operation ~_﹔_ : ∀{A B C : Obj} → (A → B) → (B → C) → (A → C)~
+  where for objects ~X~ and ~Y~ we define the /type/ ~X → Y~
+  as follows
+\begin{flalign*}
+    f : X \to Y \quad\equiv\quad \mathsf{src}\; f = X \;\land\; \mathsf{tgt}\; f = Y 
+   &&
+   \tag*{defn-Type}
+   \label{defn-Type}
+\end{flalign*}
+# For other approaches see https://tex.stackexchange.com/a/12035/69371
+#
+# As we can see from \eqref{defn-Type}\ldots
+#
+  Moreover composition is required to be associative with ~Id~ as identity.
+
+Instead of ~src~ and ~tgt~ we can instead assume primitive a ternary relation
+~_:_→_~ and regain the operations precisely when the relation is functional
+in its last two arguments:
+\eqn{unique-Type}{f : A \to B \;\land\; f : A' \to B' \;\implies\; A=A' \;\land\; B=B'}
+When this condition is dropped, we obtain a /pre-category/; e.g., the familiar /Sets/
+is a pre-category that is usually treated as a category by making morphisms
+contain the information about their source and target: ~(A, f, B) : A → B~
+rather than just ~f~.
+
+\vspace{1em}
+
+A categorical statement is an expression built from notations for objects,
+typing, morphisms, composition, and identities by means of the usual logical
+connectives and quantifications and equality.
+
+\vspace{1em}
+
+Even when morphisms are functions, the objects need not be sets:
+Sometimes the objects are /operations/ --with an appropriate definition
+of typing for the functions. The categories of F-algebras are an example
+of this.
+
+\vspace{1em}
+
+Example Categories.
++ Each digraph determines a category: The objects are the nodes
+  and the paths are the morphisms typed with their starting and ending node.
+  Composition is catenation of paths and identity is the empty path.
++ Each preorder determines a category: The objects are the elements
+  and there is a morphism ~a → b~ named, say, ~(a, b),~ precisely when $a ≤ b$.
+
+
 
 * ∞ Further Reads
 
