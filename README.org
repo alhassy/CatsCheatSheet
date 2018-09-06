@@ -1,0 +1,23 @@
+# Title, author, etc are #+INCLUDE'd from CheatSheet.org.
+#+OPTIONS: toc:nil
+
+#+HTML: <h1> CatsCheatSheet </h1>
+
+This project is to contain a listing of common theorems in elementary category theory.
+
+*The listing sheet, as PDF, can be found [[https://github.com/alhassy/CheatSheet/blob/master/CatsCheatSheet.pdf][here]]*, while below is a quick-n-dirty html rendition.
+
+This reference sheet is built around the system https://github.com/alhassy/CheatSheet
+
+#+HTML: <object width="600" height="400" data="CheatSheet.pdf"></object>
+#+HTML: <hr> <hr> <hr>
+#+TOC: headlines 2
+#+INCLUDE: CheatSheet.org
+
+* COMMENT footer
+Preview webpage: (org-html-export-to-html)
+
+# Local Variables:
+# eval: (visual-line-mode t)
+# compile-command: (progn (org-md-export-to-markdown))
+# End:
