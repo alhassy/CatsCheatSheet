@@ -2,7 +2,7 @@
 
 This project is to contain a listing of common theorems in elementary category theory.
 
-**The listing sheet, as PDF, can be found [here](https://github.com/alhassy/CheatSheet/blob/master/CatsCheatSheet.pdf)**, while below is a quick-n-dirty html rendition.
+**The listing sheet, as PDF, can be found [here](https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf)**, while below is a quick-n-dirty html rendition.
 
 This reference sheet is built around the system <https://github.com/alhassy/CheatSheet>
 
@@ -13,10 +13,10 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 # Table of Contents
 
-1.  [Categories](#org0691569)
-2.  [Functors](#org900cfc3)
-3.  [Naturality](#org26e324c)
-4.  [∞ Further Reads](#org39bdc24)
+1.  [Categories](#org632b015)
+2.  [Functors](#orgb56c446)
+3.  [Naturality](#org8a34e44)
+4.  [∞ Further Reads](#org61f4fa8)
 
 
 
@@ -29,7 +29,7 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 
 
-<a id="org0691569"></a>
+<a id="org632b015"></a>
 
 # Categories
 
@@ -82,7 +82,7 @@ Example Categories.
     and there is a morphism `a → b` named, say, `(a, b),` precisely when \(a ≤ b\).
 
 
-<a id="org900cfc3"></a>
+<a id="orgb56c446"></a>
 
 # Functors
 
@@ -143,7 +143,7 @@ Category \(𝒜lℊ(F)\)
 -   A **bifunctor** from 𝒞 to 𝒟 is just a functor *𝒞² → 𝒟*.
 
 
-<a id="org26e324c"></a>
+<a id="org8a34e44"></a>
 
 # Naturality
 
@@ -152,7 +152,7 @@ A natural transformation is nothing but a structure preserving map between funct
 is, or represents, a structure that objects might have.
 
 
-<a id="org39bdc24"></a>
+<a id="org61f4fa8"></a>
 
 # ∞ Further Reads
 

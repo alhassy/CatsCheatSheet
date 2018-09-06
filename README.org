@@ -5,7 +5,7 @@
 
 This project is to contain a listing of common theorems in elementary category theory.
 
-*The listing sheet, as PDF, can be found [[https://github.com/alhassy/CheatSheet/blob/master/CatsCheatSheet.pdf][here]]*, while below is a quick-n-dirty html rendition.
+*The listing sheet, as PDF, can be found [[https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf][here]]*, while below is a quick-n-dirty html rendition.
 
 This reference sheet is built around the system https://github.com/alhassy/CheatSheet
 
