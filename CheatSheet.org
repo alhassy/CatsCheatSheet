@@ -17,7 +17,7 @@
 
 #+LATEX_HEADER: \usepackage[utf8]{inputenc}
 #+LATEX_HEADER: \usepackage{newunicodechar}
-#+LATEX_HEADER: \newunicodechar{﹔}{\ensuremath{\raisebox{0.6ex}{\tiny ;}}}  %% forward composition ﹔
+#+LATEX_HEADER: \newunicodechar{﹔}{\ensuremath{\raisebox{0.4ex}{\tiny \,;\,}}}  %% forward composition ﹔
 
 #+INCLUDE: ~/Dropbox/MyUnicodeSymbols.org
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
@@ -25,6 +25,11 @@
 * Latex setup :ignore:
 # See defn-Type, below for an expanded usage; \eqn{name}{formula}
 #+LaTeX: \def\eqn#1#2{ \begin{flalign*} #2 && \tag*{#1} \label{#1} \end{flalign*} }
+
+# Variant with less spacing
+#+LaTeX: \def\eqnLS#1#2{  \eqn{#1}{#2}} }
+
+#+LaTeX: \def\Id{\mathsf{Id}}
 
 * Categories
 
@@ -53,7 +58,7 @@ in its last two arguments:
 When this condition is dropped, we obtain a /pre-category/; e.g., the familiar /Sets/
 is a pre-category that is usually treated as a category by making morphisms
 contain the information about their source and target: ~(A, f, B) : A → B~
-rather than just ~f~.
+rather than just ~f~. /This is sometimes easier to give, then src and tgt! C.f. Alg(F)./
 
 \vspace{1em}
 
@@ -77,7 +82,91 @@ Example Categories.
 + Each preorder determines a category: The objects are the elements
   and there is a morphism ~a → b~ named, say, ~(a, b),~ precisely when $a ≤ b$.
 
+* Functors
 
+A *functor* /F : 𝒜 → ℬ/ is a pair of mappings, denoted by one name,
+from the objects, and morphisms, of 𝒜 to those of ℬ such that
+it respects the categorical structure:
+
+#+BEGIN_EXPORT latex 
+{\setlength{\abovedisplayskip}{-1pt}\setlength{\belowdisplayskip}{-1pt}
+
+\eqn{functor-Type}{F\, f : F\, A \to_ℬ F\, B \quad\Leftarrow\quad f : A \to_𝒜 B }
+
+\eqn{Functor}{F\, \Id_A \;=\; \Id_{F\, A}} 
+
+\eqn{Functor}{F\, (f ﹔ g) \;=\; F\, f ﹔ F\, g}
+
+}
+#+END_EXPORT
+
+\vspace{1em}
+
+The two axioms are equivalent to the single statement that 
+/functors distribute over finite compositions, with $\Id$ being the empty composition/
+\[ F(f ﹔ \cdots ﹔ g) \;=\; F\, f ﹔ \cdots ﹔ F\, g \]
+
+Use of Functors.
++ In the definition of a category, “objects” are “just things” for which no internal
+  structure is observable by categorical means --composition, identities, morphisms, typing.
+
+  Functors form the tool to deal with “structured” objects
+
+  Indeed in 𝒮ℯ𝓉 the aspect of a structure is that it has “constituents”, and that it is possible
+  to apply a function to all the individual constituents; this is done by
+  /F f : F A → F B/.
+
++  For example, let /𝑰 A = A × A/ and /𝑰 f = (x, y) ↦ (f x, f y)./
+  So 𝑰 is or represents the structure of pairs; /𝑰 A/ is the set of pairs of /A/,
+  and /𝑰 f/ is the function that applies /f/ to each constituent of a pair.
+
+  - A /binary operation on A/ is then just a function /𝑰 A → A;/
+    in the same sense we obtain “F-ary operations”.
+
++  Also, /Seq/ is or represents the structure of sequences; /Seq A/ is the structure of sequences
+  over /A/, and /Seq f/ is the function that applies /f/ to each constituent of a sequence.
+
++  Even though /F A/ is still just an object, a thing with no observable internal structure, the
+  functor properties enable to exploit the “structure” of /F A/ by allowing us to “apply”
+  a /f/ to each “constituent” by using /F f/.
+
+\vspace{1em}
+
+Category $𝒜lℊ(F)$
++ For a functor /F : 𝒜 → 𝒟/, this category has “F-algebras”, F-ary operations in 𝒟 as, objects
+  -- i.e., objects are 𝒟-arrows $F\, A → A$ --
+  and /F/-homomorphisms as morphisms, and it inherits composition and identities from 𝒟.
+
+  #+BEGIN_EXPORT latex 
+  {\setlength{\abovedisplayskip}{-1pt}\setlength{\belowdisplayskip}{-1pt}
+
+  \eqn{defn-Homomorphism}{f : ⊕ →_F ⊗ \quad\equiv\quad ⊕ ﹔ f = F\, f ﹔ ⊗ }
+
+  \eqn{id-Homomorphism}{ \Id : ⊕ →_F ⊕ }
+
+  \eqn{comp-Homomorhism}{ f ﹔ g : ⊕ →_F ⊙ \qquad\Leftarrow\qquad f : ⊕ →_F ⊗ \;\land\; g : ⊗ →_F ⊙}
+  }
+  #+END_EXPORT
+
+  Note that category axiom \eqref{unique-Type} is not fulfilled since a function can be
+  a homomorphism between several distinct operations. However, we pretend it is a category
+  in the way discussed earlier, and so the carrier of an algebra is fully determined by
+  the operation itself, so that the operation itself can be considered the algebra.
+
+  #+BEGIN_CENTER
+  /Theorem \eqref{comp-Homomorhism} renders a semantic property as a syntactic condition!/
+  #+END_CENTER
+
+\vspace{1em}
+
++ A *contravariant functor* 𝒞 → 𝒟 is just a functor /𝒞ᵒᵖ → 𝒟ᵒᵖ/.
++ A *bifunctor* from 𝒞 to 𝒟 is just a functor /𝒞² → 𝒟/.
+
+* Naturality
+
+A natural transformation is nothing but a structure preserving map between functors.
+“Structure preservation” makes sense, here, since we've seen already that a functor
+is, or represents, a structure that objects might have.
 
 * ∞ Further Reads
 
