@@ -29,6 +29,8 @@
 # Variant with less spacing
 #+LaTeX: \def\eqnLS#1#2{  \eqn{#1}{#2}} }
 
+#+LaTeX: \def\src{\mathsf{src}}
+#+LaTeX: \def\tgt{\mathsf{tgt}}
 #+LaTeX: \def\Id{\mathsf{Id}}
 
 * Categories
@@ -167,6 +169,101 @@ Category $𝒜lℊ(F)$
 A natural transformation is nothing but a structure preserving map between functors.
 “Structure preservation” makes sense, here, since we've seen already that a functor
 is, or represents, a structure that objects might have.
+
+\vspace{1em}
+
+As discussed before for the case /F : 𝒞 → 𝒮ℯ𝓉/, each /F A/ denotes a structured set
+and /F/ denotes the structure itself.
+
+\vspace{1em}
+
+For example, 𝑰 is the structure of pairs, /Seq/ is the structure of sequences,
+/𝑰 Seq/ the structure of pairs of sequences, /Seq Seq/ the structure of sequences of
+sequences, and so on.
+
+\vspace{1em}
+
+A “transformation” from structure /F/ to structure /G/ is a family of functions
+/t : ∀{A} → F A → G A/; and it is “natural” if each /tₐ/ doesn't affect the /constituents/
+of the structured elements in /F A/ but only reshapes the structure of the elements,
+from an /F/-structure to a /G/-structure.
+
+\vspace{1em}
+
+#+BEGIN_CENTER
+/Reshaping the structure by t commutes with subjecting the constituents to an arbitrary morphism./
+
+That is, $F\, f ﹔ t_B \;=\; t_A ﹔ G\, f$ for all /f : A → B./
+#+END_CENTER
+
+#+LaTeX: \eqn{ntrf-Def}{ η : F →̣ G \quad\equiv\quad ∀ f \,•\, F\, f ﹔ η_{\tgt\, f}\;=\; η_{\src\, f} ﹔ G\, f }
+
+This is `naturally' remembered: Morphism $η_{\tgt\, f}$ has type $F (\tgt\, f) → G(\tgt\, f)$ and therefore
+appears at the target side of an occurrence of /f/; similarly $η_{\src\, f}$ occurs at the source side of an /f/.
+/Moreover/ since η is a transformation /from/ /F/ to /G/, functor /F/ occurs at the source side of an η
+and functor /G/ at the target side.
+
+\vspace{1em}
+
++ One also says /ηₐ is natural in/ its parameter /a/.
+
++ If we take $G = \Id$, then natural transformations $F →̣ \Id$ are precisely /F/-homomorphisms.
++ Indeed, a natural transformation is a sort-of homomorphism in that the image of a morphism
+  after reshaping is the same as the reshaping of the image.
+
+\vspace{1em}
+
+Example natrual transformations
++ /rev : Seq →̣ Seq : [a₁, …, aₙ] ↦ [aₙ, …, a₁]/
+  reverses its argument thereby reshaping a sequence structure into a sequence structure without affecting the constituents.
+
++ /inits : Seq →̣ Seq Seq : [a₁, …, aₙ] ↦ [[], [a₁], ⋯, [a₁, …, aₙ]]/
+  yields all initial parts of its argument
+  thereby reshaping a sequence structure into a sequence of sequences structure, not affecting
+  the constituents of its argument.
+
+\vspace{1em}
+
+#+BEGIN_EXPORT latex
+\def\begineqns{ \begingroup\setlength{\abovedisplayskip}{-1pt}\setlength{\belowdisplayskip}{-1pt} }
+\def\endeqns{ \endgroup }
+
+\def\providedS{ \qquad\Leftarrow\qquad }
+\def\lands{ \quad\land\quad }
+
+\begineqns
+
+\eqn{ntr-Ftr}{ Jη : JF →̣ JG \providedS η : F →̣ G \quad \text{ where } (Jη)_A ≔ J(η_A) }
+
+\eqn{ntr-Poly}{ ηK : FK →̣ GK  \hspace{-2ex}\providedS η : F →̣ G \quad \text{ where } (ηK)_A ≔ η_{(K\, A) } }
+
+\eqn{ntrf-Id}{ \Id_F : F →̣ F \text{\hspace{12em} where } (\Id_F)_A ≔ \Id_{(F\, A)} }
+
+\eqn{ntrf-Compose}{ ε ﹔ η : F →̣ H \hspace{2ex}\providedS ε : F →̣ G \lands η : G →̣ H 
+\\ \text{ where } (ε ﹔ η)_A = ε_A ﹔ η_A
+}
+
+\endeqns
+#+END_EXPORT
+
+\vspace{1em}
+
+*Category ℱ𝓊𝓃𝒸(𝒞, 𝒟)*
+consists of functors /𝒞 → 𝒟/ as objects and natrual transformations between them as objects.
+The identity transformation is indeed an identity for transformation composition, which is associative. 
+
+\vspace{1em}
+
+*Heuristic* To prove $φ = φ₁ ﹔ ⋯ ﹔ φₙ : F →̣ G$ is a natural transformation, it suffices
+to show that each $φᵢ$ is a natural transformation.
+ + Theorem \eqref{ntrf-Compose} renders proofs of semantic properties to be trivial type checking!
+ + E.g., It's trivial to prove /tails = rev ﹔ inits ﹔ Seq rev/ is a natural transformation
+   by type checking, but to prove the naturality equation by using the naturality equations of
+   /rev/ and /inits/ --no definitions required-- necessitates more writing, and worse: Actual thought! 
+
+* Adjunctions
+
+Nice Stuff ⌣̈ 
 
 * ∞ Further Reads
 
