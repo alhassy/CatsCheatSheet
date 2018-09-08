@@ -13,10 +13,12 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 # Table of Contents
 
-1.  [Categories](#org632b015)
-2.  [Functors](#orgb56c446)
-3.  [Naturality](#org8a34e44)
-4.  [∞ Further Reads](#org61f4fa8)
+1.  [Categories](#org17d7f98)
+2.  [Functors](#orgedb080a)
+3.  [Naturality](#orgc68e019)
+4.  [Adjunctions](#orgd825596)
+5.  [More](#orga1470f5)
+6.  [∞ Further Reads](#org7d0dd5d)
 
 
 
@@ -29,7 +31,8 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 
 
-<a id="org632b015"></a>
+
+<a id="org17d7f98"></a>
 
 # Categories
 
@@ -82,7 +85,7 @@ Example Categories.
     and there is a morphism `a → b` named, say, `(a, b),` precisely when \(a ≤ b\).
 
 
-<a id="orgb56c446"></a>
+<a id="orgedb080a"></a>
 
 # Functors
 
@@ -143,7 +146,7 @@ Category \(𝒜lℊ(F)\)
 -   A **bifunctor** from 𝒞 to 𝒟 is just a functor *𝒞² → 𝒟*.
 
 
-<a id="org8a34e44"></a>
+<a id="orgc68e019"></a>
 
 # Naturality
 
@@ -151,8 +154,150 @@ A natural transformation is nothing but a structure preserving map between funct
 “Structure preservation” makes sense, here, since we've seen already that a functor
 is, or represents, a structure that objects might have.
 
+\vspace{1em}
 
-<a id="org61f4fa8"></a>
+As discussed before for the case *F : 𝒞 → 𝒮ℯ𝓉*, each *F A* denotes a structured set
+and *F* denotes the structure itself.
+
+\vspace{1em}
+
+For example, 𝑰 is the structure of pairs, *Seq* is the structure of sequences,
+*𝑰 Seq* the structure of pairs of sequences, *Seq Seq* the structure of sequences of
+sequences, and so on.
+
+\vspace{1em}
+
+A “transformation” from structure *F* to structure *G* is a family of functions
+*η : ∀{A} → F A → G A*; and it is “natural” if each *ηₐ* doesn't affect the *constituents*
+of the structured elements in *F A* but only reshapes the structure of the elements,
+from an *F*-structure to a *G*-structure.
+
+\vspace{0em}
+
+<div class="org-center">
+*Reshaping the structure by η commutes with subjecting the constituents to an arbitrary morphism.*
+</div>
+
+\vspace{-2em}
+
+This is \`naturally' remembered: Morphism \(η_{\tgt\, f}\) has type \(F (\tgt\, f) → G(\tgt\, f)\) and therefore
+appears at the target side of an occurrence of *f*; similarly \(η_{\src\, f}\) occurs at the source side of an *f*.
+*Moreover* since η is a transformation *from* *F* to *G*, functor *F* occurs at the source side of an η
+and functor *G* at the target side.
+
+\vspace{1em}
+
+-   One also says *ηₐ is natural in* its parameter *a*.
+
+-   If we take \(G = \Id\), then natural transformations \(F →̣ \Id\) are precisely *F*-homomorphisms.
+-   Indeed, a natural transformation is a sort-of homomorphism in that the image of a morphism
+    after reshaping is the same as the reshaping of the image.
+
+\vspace{1em}
+
+Example natrual transformations
+
+-   *rev : Seq →̣ Seq : [a₁, …, aₙ] ↦ [aₙ, …, a₁]*
+    reverses its argument thereby reshaping a sequence structure into a sequence structure without affecting the constituents.
+
+-   *inits : Seq →̣ Seq Seq : [a₁, …, aₙ] ↦ [[], [a₁], ⋯, [a₁, …, aₙ]]*
+    yields all initial parts of its argument
+    thereby reshaping a sequence structure into a sequence of sequences structure, not affecting
+    the constituents of its argument.
+
+\vspace{1em}
+
+\vspace{1em}
+
+**Category ℱ𝓊𝓃𝒸(𝒞, 𝒟)**
+consists of functors *𝒞 → 𝒟* as objects and natrual transformations between them as objects.
+The identity transformation is indeed an identity for transformation composition, which is associative. 
+
+\vspace{1em}
+
+**Heuristic** To prove \(φ = φ₁ ﹔ ⋯ ﹔ φₙ : F →̣ G\) is a natural transformation, it suffices
+to show that each \(φᵢ\) is a natural transformation.
+
+-   Theorem \eqref{ntrf-Compose} renders proofs of semantic properties to be trivial type checking!
+-   E.g., It's trivial to prove *tails = rev ﹔ inits ﹔ Seq rev* is a natural transformation
+    by type checking, but to prove the naturality equation by using the naturality equations of
+    *rev* and *inits* &#x2013;no definitions required&#x2013; necessitates more writing, and worse: Actual thought!
+
+
+<a id="orgd825596"></a>
+
+# Adjunctions
+
+An adjunction is a particular one-one correspondence between different kinds of
+morphisms in different categories.
+
+\vspace{1em}
+
+An **adjunction** consists of two functors \(L : 𝒜 → ℬ\) and \(R : ℬ → 𝒜\),
+as well as two (not necessarily natural!) transformations
+\(η : \Id → RL\) and \(ε : LR → \Id\) such that
+
+\vspace{-1em}
+
+Reading right-to-left: In the equation \(L f ﹔ ε_B = g\) there is a unique solution to the unknown \(f\).
+Dually for the other direction.
+
+\vspace{1em}
+
+That is,
+*each L-algebra g is uniquely determined &#x2013;as an L-map followed by an ε-reduce--*
+*by its restriction to the adjunction's unit η.*
+
+\vspace{1em}
+
+A famous example is “Free ⊣ Forgetful”, e.g. to *define* lists for which the above
+becomes: Homomorphisms on lists are uniquely determined, as a map followed by a reduce,
+by its restriction to the singleton sequences.
+
+\vspace{1em}
+
+We may call \(f\) the restriction, or lowering, of \(g\) to the “unital case”
+and write \(f = ⌊g⌋ = η_A ﹔ R g\). Also, we may call \(g\) the extension, or raising,
+of \(f\) to an *L*-homomorphism and write \(g = ⌈f⌉ = L f ﹔ ε_B\). The above equivalence
+now reads:
+
+\vspace{1em}
+
+Note that ⌈ is like \`r' and the argument to ⌈⌉ must involve the *R*-ight adjoint in its type;
+
+{\textbf L}ad takes morphisms involving the {\textbf L}eft adjoint ;)
+
+\vspace{1em}
+
+This equivalence expresses that \`lad' \(⌊⌋\), from \emph{l}eft \emph{ad}jungate,
+and \`rad' \(⌈⌉\), from \emph{r}ight \emph{ad}jungate, are each other's inverses
+and constitute a correspondence between certain morphisms.
+*Being a bijective pair, lad and rad are injective, surjective, and undo one another.*
+
+\vspace{1em}
+
+We may think of ℬ as having all complicated problems so we abstract
+away some difficulties by \emph{r}aising up to a cleaner, simpler, domain
+via rad ⌈⌉; we then solve our problem there, then go back \emph{down} to
+the more complicated concrete issue via ⌊⌋, lad.
+( E.g., ℬ is the category of monoids, and 𝒜 is the category of sets; L is list functor. )
+
+(“zig-zag laws”) The unit has a post-inverse while the counit has a pre-inverse:
+
+Also,
+
+-   Left adjoints preserve colimits such as initial objects and sums.
+-   Right adjoints preserve limits such as terminal objects and products.
+
+
+<a id="orga1470f5"></a>
+
+# More
+
+Nice Stuff ⌣̈ 
+
+
+<a id="org7d0dd5d"></a>
 
 # ∞ Further Reads
 
@@ -160,6 +305,8 @@ is, or represents, a structure that objects might have.
 -   Grant Malcolm
 -   Lambert Meertens
 -   Jaap van der Woude
+
+-   *Adjunctions* by Fokkinga and Meertens
 
 \newpage
 
