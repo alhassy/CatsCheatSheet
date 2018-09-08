@@ -22,12 +22,21 @@
 #+INCLUDE: ~/Dropbox/MyUnicodeSymbols.org
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
 
+* LaTeX Setup :ignore:
+#+BEGIN_EXPORT latex
+\def\providedS{ \qquad\Leftarrow\qquad }
+\def\lands{ \quad\land\quad }
+
+\def\equivs{ \quad\equiv\quad}
+\def\equivS{ \qquad\equiv\qquad}
+
+\def\begineqns{ \begingroup\setlength{\abovedisplayskip}{-1pt}\setlength{\belowdisplayskip}{-1pt} }
+\def\endeqns{ \endgroup }
+#+END_EXPORT
+
 * Latex setup :ignore:
 # See defn-Type, below for an expanded usage; \eqn{name}{formula}
 #+LaTeX: \def\eqn#1#2{ \begin{flalign*} #2 && \tag*{#1} \label{#1} \end{flalign*} }
-
-# Variant with less spacing
-#+LaTeX: \def\eqnLS#1#2{  \eqn{#1}{#2}} }
 
 #+LaTeX: \def\src{\mathsf{src}}
 #+LaTeX: \def\tgt{\mathsf{tgt}}
@@ -184,18 +193,18 @@ sequences, and so on.
 \vspace{1em}
 
 A “transformation” from structure /F/ to structure /G/ is a family of functions
-/t : ∀{A} → F A → G A/; and it is “natural” if each /tₐ/ doesn't affect the /constituents/
+/η : ∀{A} → F A → G A/; and it is “natural” if each /ηₐ/ doesn't affect the /constituents/
 of the structured elements in /F A/ but only reshapes the structure of the elements,
 from an /F/-structure to a /G/-structure.
 
-\vspace{1em}
+\vspace{0em}
 
 #+BEGIN_CENTER
-/Reshaping the structure by t commutes with subjecting the constituents to an arbitrary morphism./
-
-That is, $F\, f ﹔ t_B \;=\; t_A ﹔ G\, f$ for all /f : A → B./
+/Reshaping the structure by η commutes with subjecting the constituents to an arbitrary morphism./
 #+END_CENTER
+# That is, $F\, f ﹔ t_B \;=\; t_A ﹔ G\, f$ for all /f : A → B./
 
+\vspace{-2em}
 #+LaTeX: \eqn{ntrf-Def}{ η : F →̣ G \quad\equiv\quad ∀ f \,•\, F\, f ﹔ η_{\tgt\, f}\;=\; η_{\src\, f} ﹔ G\, f }
 
 This is `naturally' remembered: Morphism $η_{\tgt\, f}$ has type $F (\tgt\, f) → G(\tgt\, f)$ and therefore
@@ -225,12 +234,6 @@ Example natrual transformations
 \vspace{1em}
 
 #+BEGIN_EXPORT latex
-\def\begineqns{ \begingroup\setlength{\abovedisplayskip}{-1pt}\setlength{\belowdisplayskip}{-1pt} }
-\def\endeqns{ \endgroup }
-
-\def\providedS{ \qquad\Leftarrow\qquad }
-\def\lands{ \quad\land\quad }
-
 \begineqns
 
 \eqn{ntr-Ftr}{ Jη : JF →̣ JG \providedS η : F →̣ G \quad \text{ where } (Jη)_A ≔ J(η_A) }
@@ -241,7 +244,7 @@ Example natrual transformations
 
 \eqn{ntrf-Compose}{ ε ﹔ η : F →̣ H \hspace{2ex}\providedS ε : F →̣ G \lands η : G →̣ H 
 \\ \text{ where } (ε ﹔ η)_A = ε_A ﹔ η_A
-}
+ }
 
 \endeqns
 #+END_EXPORT
@@ -263,6 +266,143 @@ to show that each $φᵢ$ is a natural transformation.
 
 * Adjunctions
 
+An adjunction is a particular one-one correspondence between different kinds of
+morphisms in different categories.
+
+\vspace{1em}
+
+An *adjunction* consists of two functors $L : 𝒜 → ℬ$ and $R : ℬ → 𝒜$,
+as well as two (not necessarily natural!) transformations
+$η : \Id → RL$ and $ε : LR → \Id$ such that
+
+\vspace{-1em}
+
+#+BEGIN_EXPORT latex
+\eqn{Adjunction}{f = η_A ﹔ R g \equivS L f ﹔ ε_B = g
+ \\ \text{ where }
+    f :   A →_𝒜 R B \text{ and }
+    g : L A →_ℬ   B
+}
+#+END_EXPORT
+
+Reading right-to-left: In the equation $L f ﹔ ε_B = g$ there is a unique solution to the unknown $f$.
+Dually for the other direction.
+
+\vspace{1em}
+
+That is,
+/each L-algebra g is uniquely determined --as an L-map followed by an ε-reduce--/
+/by its restriction to the adjunction's unit η./
+
+\vspace{1em}
+
+A famous example is “Free ⊣ Forgetful”, e.g. to /define/ lists for which the above
+becomes: Homomorphisms on lists are uniquely determined, as a map followed by a reduce,
+by its restriction to the singleton sequences.
+
+\vspace{1em}
+
+We may call $f$ the restriction, or lowering, of $g$ to the “unital case”
+and write $f = ⌊g⌋ = η_A ﹔ R g$. Also, we may call $g$ the extension, or raising,
+of $f$ to an /L/-homomorphism and write $g = ⌈f⌉ = L f ﹔ ε_B$. The above equivalence
+now reads:
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{Adjunction-Inverse}{f = ⌊g⌋ \equivS ⌈f⌉ = g}
+
+\eqn{lad-Type}{⌊g⌋_{A,B} = η_A ﹔ R g \; : \; A →_𝒜 R B
+ \text{ where } g : L A →_ℬ B
+ }
+
+\eqn{rad-Type}{⌈f⌉_{A,B} = L f ﹔ ε_B \; : \; L A →_ℬ B
+ \text{ where } f : A →_𝒜 R B
+ }
+
+\endeqns
+#+END_EXPORT
+
+\vspace{1em}
+
+Note that ⌈ is like `r' and the argument to ⌈⌉ must involve the /R/-ight adjoint in its type;
+# likewise for 
+{\textbf L}ad takes morphisms involving the {\textbf L}eft adjoint ;)
+
+\vspace{1em}
+
+This equivalence expresses that `lad' $⌊⌋$, from \emph{l}eft \emph{ad}jungate,
+and `rad' $⌈⌉$, from \emph{r}ight \emph{ad}jungate, are each other's inverses
+and constitute a correspondence between certain morphisms.
+/Being a bijective pair, lad and rad are injective, surjective, and undo one another./
+
+\vspace{1em}
+
+We may think of ℬ as having all complicated problems so we abstract
+away some difficulties by \emph{r}aising up to a cleaner, simpler, domain
+via rad ⌈⌉; we then solve our problem there, then go back \emph{down} to
+the more complicated concrete issue via ⌊⌋, lad.
+( E.g., ℬ is the category of monoids, and 𝒜 is the category of sets; L is list functor. )
+
+# Some useful results,
+
+#+LaTeX: \eqn{ntrf-Adj}{\text{The η and ε determine each other and they are \emph{natural} transformations.}}
+
+(“zig-zag laws”) The unit has a post-inverse while the counit has a pre-inverse:
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{unit-Inverse}{ \Id = η   ﹔ R ε}
+
+\eqn{Inverse-counit}{ \Id = L η ﹔ ε} 
+
+\vspace{1em}
+The unit and counit can be regained from the adjunction inverses,
+
+\eqn{unit-Def}{ η = ⌊\Id⌋}
+
+\eqn{counit-Def}{ ε = ⌈\Id⌉ }
+
+\vspace{1em}
+Lad and rad themselves are solutions to the problems of interest, \eqref{Adjunction}.
+
+\eqn{lad-Self}{L ⌊g⌋ ﹔ ε = g}
+
+\eqn{rad-Self}{η ﹔ R ⌈f⌉ = f }
+
+\vspace{1em}
+The following laws assert a kind of
+monoic-ness for ε and a kind of epic-ness for η.
+Pragmatically they allow us to prove an equality
+by shifting to a possibly easier equality obligation.
+
+\eqn{lad-Unique}{ η ﹔ R g = η ﹔ R g′ \equivS g = g′}
+
+\eqn{rad-Unique}{L f ﹔ ε \,= L f′ ﹔ ε \,\equivS f = f′}
+
+\vspace{1em}
+Lad and rad are natural transformations in the category $ℱ𝓊𝓃𝒸(𝒜ᵒᵖ × ℬ, 𝒮ℯ𝓉)$ realising
+$(L X → Y) ≅ (X → G Y)$ where $X, Y$ are the first and second projection functors
+and $(-→-) : 𝒞ᵒᵖ × 𝒞 → 𝒮ℯ𝓉$ is the hom-functor such that $(f → g) h = f ﹔ h ﹔ g$.
+\\ By extensionality in 𝒮ℯ𝓉, their naturality amounts to the laws:
+
+\eqn{lad-Fusion}{⌊ L x ﹔ g ﹔   y ⌋ \;=\; x   ﹔ ⌊g⌋ ﹔ R y }
+
+\eqn{rad-Fusion}{⌈   x ﹔ f ﹔ R y ⌉ \;=\; L x ﹔ ⌈f⌉ ﹔   y }
+
+\vspace{1em}
+
+
+\endeqns
+#+END_EXPORT
+
+Also,
++ Left adjoints preserve colimits such as initial objects and sums.
++ Right adjoints preserve limits such as terminal objects and products.
+
+* COMMENT Duality
+
+* More
 Nice Stuff ⌣̈ 
 
 * ∞ Further Reads
@@ -271,6 +411,8 @@ Nice Stuff ⌣̈
 + Grant Malcolm
 + Lambert Meertens
 + Jaap van der Woude
+
++ /Adjunctions/ by Fokkinga and Meertens
 
 * newpage :ignore:
   \newpage
