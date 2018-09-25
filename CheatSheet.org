@@ -9,7 +9,6 @@
 #+STARTUP: overview
 #+TODO: BEGIN-IGNORE(b) END-IGNORE(e) } | DONE(d)
 
-
 # Important shortcuts:
 # f7 preview changes
 # f8 commit each change
@@ -400,7 +399,14 @@ Also,
 + Left adjoints preserve colimits such as initial objects and sums.
 + Right adjoints preserve limits such as terminal objects and products.
 
-* COMMENT Duality
+* “Up to isomorphism”
+
+If a property $P$ holds for precisely one class of isomorphic objects,
+and for any two objects in the same class there is precisely one
+isomorphism from one to the other, then we say that
+/the P-object is unique up to unique isomorphism/. 
+For example, in 𝒮ℯ𝓉 the one-point set is unique up to a unique isomorphism,
+but the two-point set is not.
 
 * More
 Nice Stuff ⌣̈ 
