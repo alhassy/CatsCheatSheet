@@ -27,6 +27,7 @@
 
 \def\impliesS{ \qquad\Rightarrow\qquad }
 
+\def\landS{ \qquad\land\qquad }
 \def\lands{ \quad\land\quad }
 
 \def\equivs{ \quad\equiv\quad}
@@ -75,7 +76,7 @@ rather than just ~f~. /This is sometimes easier to give, then src and tgt! C.f. 
 
 Here's an equivalence-preserving property that is useful in algebraic calculations,
 #+LaTeX: \eqn{\!\!Composition}{ f : A → B \lands g : B → A \equivS f﹔g : A → A \lands g﹔f : B → B}
-
+<
 \vspace{1em}
 
 A categorical statement is an expression built from notations for objects,
@@ -415,7 +416,7 @@ For example, in 𝒮ℯ𝓉 the one-point set is unique up to a unique isomorphi
 but the two-point set is not.
 
 
-* Initiality and Finality
+* Initiality
 
 # LATEX_HEADER: \setlength{\parskip}{1em}
 #+LaTeX: \setlength{\parskip}{1em}
@@ -501,9 +502,96 @@ proof has the following format, or a circular implication thereof: For arbitrary
     f = ⦇ B ⦈ 
 #+END_EXAMPLE
 
+
+* Colimits
+
+Each colimit is a certain initial object, and each initial object is a certain colimit.
+
+A /diagram in 𝒞/ is a functor $D : 𝒟 → 𝒞$.
+
+#+LaTeX: \def\const#1{ \underline{#1} }
+
+Define the constant functor $\const{C}\, x = C$ for objects $x$ and
+$\const{C}\, f = \Id_C$ for morphisms $f$. For functions $g : A → B$, we define the natural
+transformation $\const{g} = x \mapsto g : \const{A} →̣ \const{B}$.
+
+The category $⋁D$, built upon 𝒞, has objects $γ : D →̣ \const{C}$ called “co-cones”, for
+some object $C =: \tgt\, γ$, and a morphism from $γ$ to $δ$ is a 𝒞-morphism $x$ such that $γ ﹔ \const{x} = δ$.
  
+A /colimit for D/ is an initial object in $⋁ D$; which may or may not exist.
+
+Writing $γ╲-$ for $⦇-⦈$ and working out the definition of co-cone in terms of equations in 𝒞,
+we obtain: $γ$ is a colimit for $D$ if there is a mapping $γ╲-$ such that /╲-Type/ and
+/╲-Char/ hold.
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{╲-Type}{ δ \text{ cocone for } D \impliesS γ╲δ : \src\, γ → \tgt\,δ}
+
+\eqn{╲-Char}{ y ﹔ \const{x} = δ \equivS x = γ ╲ δ }
+
+\eqn{╲-Self}{ γ ; γ╲δ = δ}
+
+\eqn{╲-Id}{γ╲γ = \Id}
+
+\eqn{╲-Unique}{γ ﹔ \const{x} = γ ﹔ \const{y} \impliesS x = y}
+
+\eqn{╲-Fusion}{γ╲δ ﹔\const{x} = γ╲(δ ﹔ \const{x})}
+
+\eqn{╲-Compose}{γ╲δ ﹔ δ╲ε = γ╲ε}
+
+\eqn{╲-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
+
+\eqn{╲-Pre-Functor-Elim}{γF╲δF = γ╲δ}
+
+\endeqns
+#+END_EXPORT
+
+* Sums
+
+Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( •^A \;\; •^B \right)$.
+Then a cocone δ for $D$ is a two-member family $δ = (f, g)$ with
+$f : A → C$ and $g : B → C$, where $C = \tgt\, δ$.
+
+#+LaTeX: \def\inl{\mathsf{inl}} 
+#+LaTeX: \def\inr{\mathsf{inr}}
+
+Let $γ=(\inl, \inr)$ be a colimit for $D$, let $A + B = \tgt\,γ$, and write
+$[f, g]$ in-place of $γ╲(f, g)$, then the ╲-laws become:
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{[]-Type}{f : A → C \lands g : B → C \impliesS [f, g] : A + B → C}
+
+\eqn{[]-Char}{ \inl ﹔ x = f \lands \inr ﹔ x = g \equivS x = [f, g] }
+
+\eqn{[]-Cancellation; []-Self}{ \inl ﹔ [f, g] = f \landS \inr ﹔ [f, g] = g}
+
+\eqn{[]-Id}{ [\inl, \inr] = \Id}
+
+\eqn{?-Unique}{γ ﹔ \const{x} = γ ﹔ \const{y} \impliesS x = y}
+
+\eqn{?-Fusion}{γ╲δ ﹔\const{x} = γ╲(δ ﹔ \const{x})}
+
+\eqn{?-Compose}{γ╲δ ﹔ δ╲ε = γ╲ε}
+
+\eqn{?-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
+
+\eqn{?-Pre-Functor-Elim}{γF╲δF = γ╲δ}
+
+\endeqns
+#+END_EXPORT
+
+
+
+
+
 * More
 Nice Stuff ⌣̈ 
+
++ Skipped pages 40-46.
 
 * ∞ Further Reads
 
