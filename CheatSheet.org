@@ -24,6 +24,9 @@
 * LaTeX Setup :ignore:
 #+BEGIN_EXPORT latex
 \def\providedS{ \qquad\Leftarrow\qquad }
+
+\def\impliesS{ \qquad\Rightarrow\qquad }
+
 \def\lands{ \quad\land\quad }
 
 \def\equivs{ \quad\equiv\quad}
@@ -69,6 +72,9 @@ When this condition is dropped, we obtain a /pre-category/; e.g., the familiar /
 is a pre-category that is usually treated as a category by making morphisms
 contain the information about their source and target: ~(A, f, B) : A → B~
 rather than just ~f~. /This is sometimes easier to give, then src and tgt! C.f. Alg(F)./
+
+Here's an equivalence-preserving property that is useful in algebraic calculations,
+#+LaTeX: \eqn{\!\!Composition}{ f : A → B \lands g : B → A \equivS f﹔g : A → A \lands g﹔f : B → B}
 
 \vspace{1em}
 
@@ -399,7 +405,7 @@ Also,
 + Left adjoints preserve colimits such as initial objects and sums.
 + Right adjoints preserve limits such as terminal objects and products.
 
-* “Up to isomorphism”
+* “Up to Isomorphism”
 
 If a property $P$ holds for precisely one class of isomorphic objects,
 and for any two objects in the same class there is precisely one
@@ -408,6 +414,94 @@ isomorphism from one to the other, then we say that
 For example, in 𝒮ℯ𝓉 the one-point set is unique up to a unique isomorphism,
 but the two-point set is not.
 
+
+* Initiality and Finality
+
+# LATEX_HEADER: \setlength{\parskip}{1em}
+#+LaTeX: \setlength{\parskip}{1em}
+
+An object /A/ is ``initial'' iff
+$∀ B  \;•\;  ∃₁ f  \;•\;  f : A → B$.
+
+The formulation of the definition is clear but it's not very well suited for /algebraic manipulation/.
+
+A convenient formulation is obtained by `skolemisation': An assertion of the form
+\[ ∀ x \;•\; ∃ y \;•\; R \, x \, y \]
+is equivalent to: There's a function ℱ such that
+\[ ∀ x, y \;•\; R \, x \, y \;≡\; y = ℱ\, x  \]
+In the former formulation it is the existential quantification “$∃ y$” inside the scope of a universal
+one that hinders effective calculation. In the latter formulation the existence claim is brought to a
+more global level: A reasoning need no longer be interrupted by the declaration and naming of the
+existence of a unique $y$ that depends on $x$; it can be denoted just $ℱ\, x$.
+As usual, the final universal quantification can be omitted, thus simplifying the formulation once more.
+
+In view of the important role of the various $y$'s, these $y$'s deserve a particular notation that
+triggers the reader of their particular properties. We employ bracket notation such as $⦇ x ⦈$
+for such $ℱ\, x$: An advantage of the bracket notation is that no extra parentheses are needed
+for composite arguments $x$, which we expect to occur often.
+
+The formula /characterising/ $ℱ$ may be called `ℱ-char' and it immediately give us some results
+by truthifying each side, namely `Self' and `Id'. A bit more on the naming:
+| Type   | Possibly non-syntactic constraint on notation being well-formed |
+| Self   | It, itself, is a solution                                       |
+| Id     | How $\Id$ can be expressed using it                             |
+| Uniq   | It's problem has a unique solution                              |
+| Fusion | How it behaves wrt composition                                  |
+
+Note that the last 3 indicate how the concept interacts with the categorical structure:
+$=, ﹔, \Id$. Also note that Self says there's at least one solution and Uniq says there is
+at most one solution, so together they are equivalent to ℱ-Char --however those two proofs
+are usually not easier nor more elegant than a proof of ℱ-Char directly.
+
+Convenient definition: An object /0 is initial/ if there's a mapping $⦇-⦈$, from objects to morphisms,
+such that
+# $f : A → B \equivs f = ⦇ B ⦈$. To make clear the dependency on $A$ it is sometimes written
+#+BEGIN_EXPORT latex 
+\begineqns
+
+\eqn{initial-Char}{ f : 0 → B \equivS f = ⦇ B ⦈ }
+
+\eqn{initial-Self}{ ⦇ B ⦈ : 0 → B }
+
+\eqn{initial-Id}{ id₀ = ⦇ 0 ⦈ }
+
+\eqn{initial-Uniq}{ f, g : 0 → B \impliesS f = g }
+
+\eqn{initial-Fusion}{ f : B → C \impliesS ⦇ B ⦈ ﹔ f = ⦇ C ⦈ }
+
+\eqn{initial-Type}{ B \text{ is an object in 𝒟 } \impliesS ⦇ B ⦈ \text{ is a morphism in 𝒞}
+   \\ \text{ where 𝒟 is built on top of 𝒞: 𝒟-objects are composite entities in 𝒞 } }
+
+\endeqns
+#+END_EXPORT
+
+
+# Since the initial object, if it exists, is unique up to unique isomorphism
+An alternative notation for $⦇ B ⦈$ is $\text{!`}_B$.
+
+These laws become much more interesting when the category is built upon another
+one and the typing is expressed as one or more equations in the underlying
+category. In particular the importance of fusion laws cannot be over-emphasised;
+it is proven by a strengthening step of the form
+$⦇B⦈ ﹔ f : 0 → C \providedS ⦇B⦈ : 0 → B \lands f : B → C$.
+
+For example, it can be seen that the datatype of sequences is `the' initial object
+in a suitable category, and the mediator $⦇-⦈$ captures
+“definitions by induction on the structure”! Hence induction arguments
+can be replaced by initiality arguments! Woah!
+
+*Proving Initiality* One may prove that an object $0$ is initial by providing
+a definition for $⦇-⦈$ and establishing initial-Char. Almost every such
+proof has the following format, or a circular implication thereof: For arbitrary /f/ and /B/,
+#+BEGIN_EXAMPLE org
+    f : A → B
+≡   ⋮
+    f = “an expression not involving f”
+≡          { *define* ⦇ B ⦈ to be the rhs of the previous equation }
+    f = ⦇ B ⦈ 
+#+END_EXAMPLE
+
+ 
 * More
 Nice Stuff ⌣̈ 
 
