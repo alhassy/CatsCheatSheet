@@ -20,8 +20,10 @@
 
 #+INCLUDE: ~/Dropbox/MyUnicodeSymbols.org
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
+# ⟅ ⟆ 
 
 * LaTeX Setup :ignore:
+
 #+BEGIN_EXPORT latex
 \def\providedS{ \qquad\Leftarrow\qquad }
 
@@ -658,7 +660,49 @@ The component morphisms $γ_A$ are \emph{jointly monic}.
 \endeqns
 #+END_EXPORT
 
+* Coequaliser
 
+# $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
+#
+Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
+where $f,g : A → B$ are given. Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
+with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $\const{C} h ﹔ δ_A = δ_B ﹔ D h$; in-particular
+$q' = q ﹔ f = g ﹔ q$ whence $q'$ is fully-determined by $q$ alone.
+
+Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $p╲-$ in-place of $γ╲-$, then the ╲-laws
+yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $p╲-$ such that /CoEq-Type/ and
+/CoEq-Char/ hold.
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{CoEq-Type}{ q ﹔ f =  q ﹔ g \impliesS p╲q : \tgt\, p → \tgt\,q}
+
+Well-formedness convention: In each law the variables are quantified
+in such a way that the premise of \eqref{CoEq-Type} is met.
+The notation $⋯╲q$ is only senseful if $q﹔f=q﹔g$,
+like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 0.
+
+\eqn{CoEq-Char}{ p ﹔ x = q \equivS x = p ╲ q }
+
+\eqn{CoEq-Self}{ p ; p╲q = q}
+
+\eqn{CoEq-Id}{p╲p = \Id}
+
+\eqn{CoEq-Fusion}{p╲q ﹔x = p╲(q ﹔ x)}
+
+\eqn{CoEq-Unique}{p ﹔ x = p ﹔ y \impliesS x = y}
+
+\eqn{CoEq-Compose}{p╲q ﹔ q╲r = p╲r}
+
+\eqn{?╲-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
+
+\eqn{?╲-Pre-Functor-Elim}{γF╲δF = γ╲δ}
+
+\endeqns
+#+END_EXPORT
+
+\newpage
 * Sums
 #+LaTeX: \def\inl{\mathsf{inl}} 
 #+LaTeX: \def\inr{\mathsf{inr}}
@@ -716,50 +760,115 @@ $(F\,\inl, F\,\inr, F(A+B))$ form a sum of $F\,A$ and $F\, B$.
 \endeqns
 #+END_EXPORT
 
-* COMMENT Coequaliser
+* Duality: Sums & Products
 
-# $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
+#+BEGIN_EXPORT latex
+\def\fst{\mathsf{fst}}
+\def\snd{\mathsf{snd}}
+#+END_EXPORT
+
+#+LaTeX_HEADER: \usepackage{stackengine} 
 #
-Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
-where $f,g : A → B$ are given. Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
-with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $\const{C} h ﹔ δ_A = δ_B ﹔ D h$; in-particular
-$q' = q ﹔ f = g ﹔ q$ whence $q'$ is fully-determined by $q$ alone.
+# \topinset{*}{O}{1pt}{}
+#
+#+LaTeX: \def\composition{ \topinset{﹔}{∘}{0.4pt}{} }
 
-Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $p╲-$ in-place of $γ╲-$, then the ╲-laws
-yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $p╲-$ such that /CoEq-Type/ and
-/CoEq-Char/ hold.
+In category theory there are two popular notations for composition,
+$f ﹔ g = g ∘ f$, and there are two arrow notations $A → B \;=\; B \leftarrow A$,
+known as the “forwards” and “backwards” notations.
+
+\room
+
+Some people prefer one notation and stick with it; however having both in-hand
+allows us to say: The /dual/ of a categorical statement formed with 
+$﹔,→$ is obtained by syntactically replacing these two with $∘, \leftarrow$ respectively
+while leaving variables and $\Id$'s alone.
+
+\room
+
+#+LaTeX: \def\dual{\mathsf{dual}}
+
+#+LATEX_HEADER: \usepackage{calculation} 
+#
+#
+For example, applying this process to sums yields /products/:
+\vspace{-0.5em}
+#+begin_calculation latex 
+   h = ⟨f, g⟩
+\step{  We define products as dual to sums }
+   h = \dual [f, g]
+\step{  dual operation definition }
+  \dual\left( h = [f,g] \right)
+\step{  []-Char and Leibniz }
+  \dual\left( \inl ﹔ h = f  \lands  \inr ﹔ h = g\right) 
+\step{  dual operation definition }
+  \dual\left(\inl ﹔ h\right) = f  \lands  \dual\left(\inr ﹔ h\right) = g) 
+\step{  dual operation definition }
+  \dual \text{ } \inl ∘ h = f  \lands  \dual \text{ }  \inr ∘ h = g
+\step{  Define: $\fst = \dual\, \inl$, $\snd = \dual\, \inr$ }
+  \fst ∘ h = f  \lands  \snd ∘ h = g
+\step{  Switch back to ﹔-notation }
+   h ﹔ \fst = f  \lands  h ﹔ \snd = g
+#+end_calculation
+
+# Dualising the other sum artefacts yields:
+/$(\fst, \snd, A × B)$ form a product of A and B/ if there is an operation
+$⟨-,-⟩$ satisfying the Char and Type laws below; from which we obtain a host of corollaries.
 
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{CoEq-Type}{ q ﹔ f =  q ﹔ g \impliesS p╲q : \tgt\, p → \tgt\,q}
+\eqn{$\langle\rangle$-Type}{f : C → A \lands g : C → B \impliesS ⟨f, g⟩ : C → A × B}
 
-Well-formedness convention: In each law the variables are quantified
-in such a way that the premise of \eqref{CoEq-Type} is met.
-The notation $⋯╲q$ is only senseful if $q﹔f=q﹔g$,
-like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 0.
+\eqn{$\langle\rangle$-Char}{ x ﹔ \fst = f \lands x ﹔ \snd = g \equivS x = ⟨f, g⟩ }
 
-\eqn{CoEq-Char}{ p ﹔ x = q \equivS x = p ╲ q }
+\eqn{$\langle\rangle$-Cancellation; $\langle\rangle$-Self}{ ⟨f, g⟩ ﹔ \fst = f \landS ⟨f, g⟩ ﹔ \snd = g}
 
-\eqn{CoEq-Self}{ p ; p╲q = q}
+\eqn{$\langle\rangle$-Id}{ ⟨\fst, \snd⟩ = \Id}
 
-\eqn{CoEq-Id}{p╲p = \Id}
+\eqn{$\langle\rangle$-Unique}{ x ﹔ \fst = y ﹔\fst  \lands x; \snd = y ﹔ \snd \impliesS x = y}
 
-\eqn{CoEq-Fusion}{p╲q ﹔x = p╲(q ﹔ x)}
+\eqn{$\langle\rangle$-Fusion}{ x ﹔ ⟨f , g⟩ = ⟨x﹔f, x ﹔ g⟩ }
 
-\eqn{CoEq-Unique}{p ﹔ x = p ﹔ y \impliesS x = y}
-
-\eqn{CoEq-Compose}{p╲q ﹔ q╲r = p╲r}
-
-\eqn{?╲-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
-
-\eqn{?╲-Pre-Functor-Elim}{γF╲δF = γ╲δ}
+\eqn{$\langle\rangle$-Functor-Dist}{F \, ⟨f, g⟩_𝒞 = ⟨F \, f , F \, g⟩_𝒟 \qquad\text{ where } F : 𝒞 → 𝒟}
 
 \endeqns
 #+END_EXPORT
 
+\room
 
+These are essentially a re-write of the sum laws; let's write the next set of laws only once.
 
+\room
+
+Let the tuple “⟅ ⟆, ⋆, $l$, $r$, $\composition$” be either
+“⟨ ⟩, ×, $\fst$, $\snd$, $∘$” or “[ ], +, $\inl$, $\inr$, $﹔$”.
+
+\room
+
+For categories in which sums and products exist, we define for $f : A → B$ and $g : C → D$,
+
+\begineqns
+
+\eqn{$\star$-Definition}{ f ⋆ g = ⟅ f \composition l, g \composition r⟆ : A ⋆ C → B ⋆ D}
+
+\eqn{$l,r$-Naturality}{ l \composition (f ⋆ g) = f \composition l \landS r \composition (f ⋆ g) = g \composition r }
+
+\eqn{Extensionality}{ ⟅l \composition h, r \composition h⟆ = h}
+
+\eqn{Absorption}{ (f ⋆ g) \composition ⟅h, j⟆ = ⟅f \composition h, g \composition j⟆ }
+
+\eqn{$\star$-Bi-Functoriality}{ \Id ⋆ \Id = \Id \landS (f ⋆ g) \composition (h ⋆ j) = (f \composition h) ⋆ (g \composition j)}
+
+\eqn{Structural Equality}{ ⟅f,g⟆ = ⟅h, j⟆ \equivS f = h \lands g = j }
+
+\eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
+
+\endeqns
+
+\room
+
+Notice that the last law above is self-dual.
 
 * COMMENT More
 Nice Stuff ⌣̈ 
