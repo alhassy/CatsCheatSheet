@@ -75,8 +75,8 @@ contain the information about their source and target: ~(A, f, B) : A → B~
 rather than just ~f~. /This is sometimes easier to give, then src and tgt! C.f. Alg(F)./
 
 Here's an equivalence-preserving property that is useful in algebraic calculations,
-#+LaTeX: \eqn{\!\!Composition}{ f : A → B \lands g : B → A \equivS f﹔g : A → A \lands g﹔f : B → B}
-<
+#+LaTeX: \eqn{Composition}{ f : A → B \lands g : B → A \equivs f﹔g : A → A \lands g﹔f : B → B}
+
 \vspace{1em}
 
 A categorical statement is an expression built from notations for objects,
@@ -406,7 +406,8 @@ Also,
 + Left adjoints preserve colimits such as initial objects and sums.
 + Right adjoints preserve limits such as terminal objects and products.
 
-* “Up to Isomorphism”
+* Skolemisation
+# “Up to Isomorphism”
 
 If a property $P$ holds for precisely one class of isomorphic objects,
 and for any two objects in the same class there is precisely one
@@ -415,15 +416,12 @@ isomorphism from one to the other, then we say that
 For example, in 𝒮ℯ𝓉 the one-point set is unique up to a unique isomorphism,
 but the two-point set is not.
 
-
-* Initiality
-
 # LATEX_HEADER: \setlength{\parskip}{1em}
 #+LaTeX: \setlength{\parskip}{1em}
 
-An object /A/ is ``initial'' iff
-$∀ B  \;•\;  ∃₁ f  \;•\;  f : A → B$.
-
+For example, an object /A/ is ``initial'' iff
+$∀ B  \;•\;  ∃₁ f  \;•\;  f : A → B$, and such objects are unique
+up to unique isomorphism --prove it!
 The formulation of the definition is clear but it's not very well suited for /algebraic manipulation/.
 
 A convenient formulation is obtained by `skolemisation': An assertion of the form
@@ -441,7 +439,7 @@ triggers the reader of their particular properties. We employ bracket notation s
 for such $ℱ\, x$: An advantage of the bracket notation is that no extra parentheses are needed
 for composite arguments $x$, which we expect to occur often.
 
-The formula /characterising/ $ℱ$ may be called `ℱ-char' and it immediately give us some results
+The formula /characterising/ $ℱ$ may be called `ℱ-Char' and it immediately give us some results
 by truthifying each side, namely `Self' and `Id'. A bit more on the naming:
 | Type        | Possibly non-syntactic constraint on notation being well-formed |
 | Self        | It, itself, is a solution                                       |
@@ -455,9 +453,14 @@ $=, ﹔, \Id$. Also note that Self says there's at least one solution and Uniq s
 at most one solution, so together they are equivalent to ℱ-Char --however those two proofs
 are usually not easier nor more elegant than a proof of ℱ-Char directly.
 
-Convenient definition: An object /0 is initial/ if there's a mapping $⦇-⦈$, from objects to morphisms,
-such that
-# $f : A → B \equivs f = ⦇ B ⦈$. To make clear the dependency on $A$ it is sometimes written
+* Initiality
+
+# Convenient definition: 
+An object /0 is initial/ if there's a mapping $⦇-⦈$, from objects to morphisms,
+such that \ref{initial-Char} holds; from which we obtain a host of useful corollaries.
+Alternative notations for $⦇ B ⦈$ are $\text{!`}_B$, or $⦇0 → B⦈$ to make the
+dependency on 0 explicit.
+
 #+BEGIN_EXPORT latex 
 \begineqns
 
@@ -470,9 +473,6 @@ such that
 \eqn{initial-Uniq}{ f, g : 0 → B \impliesS f = g }
 
 \eqn{initial-Fusion}{ f : B → C \impliesS ⦇ B ⦈ ﹔ f = ⦇ C ⦈ }
-
-An alternative notation for $⦇ B ⦈$ is $\text{!`}_B$; or $⦇0 → B⦈$ to make the
-dependence on 0 explicit.
 
 \text{Provided objects $B, C$ are both in 𝒜 and ℬ, which are full subcategories of some category 𝒞},
 \vspace{-2ex}
@@ -508,7 +508,6 @@ proof has the following format, or a circular implication thereof: For arbitrary
     f = ⦇ B ⦈ 
 #+END_EXAMPLE
 
-
 * Colimits
 
 Each colimit is a certain initial object, and each initial object is a certain colimit.
@@ -533,40 +532,93 @@ we obtain: /$γ : Obj(⋁D)$ is a colimit for $D$/ if there is a mapping $γ╲-
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{╲-Type}{ δ \text{ cocone for } D \impliesS γ╲δ : \tgt\, γ → \tgt\,δ}
+\eqn{$\backslash$-Type}{ δ \text{ cocone for } D \impliesS γ╲δ : \tgt\, γ → \tgt\,δ}
 
 Well-formedness convention: In each law the variables are quantified
-in such a way that the premise of ╲-Type is met.
+in such a way that the premise of $\backslash$-Type is met.
 The notation $⋯╲δ$ is only senseful if δ is a co-cone for $D$,
 like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 0.
 
-\eqn{╲-Char}{ γ ﹔ \const{x} = δ \equivS x = γ ╲ δ }
+\eqn{$\backslash$-Char}{ γ ﹔ \const{x} = δ \equivS x = γ ╲ δ }
 
-\eqn{╲-Self}{ γ ; γ╲δ = δ}
+Notice that for given $x : C → C'$ the equation $γ ╲ δ = x$ \underline{defines}
+δ, since by $\backslash$-Char that one equation equivales the family of equations
+$δ_A = γ_A ﹔ x$. This allows us to define a natural transformation --or `eithers' in
+the case of sums-- using a single function \emph{having} the type of the mediating arrow.
 
-\eqn{╲-Id}{γ╲γ = \Id}
+\eqn{$\backslash$-Self}{ γ ; \const{γ╲δ} = δ}
 
-\eqn{╲-Unique}{γ ﹔ \const{x} = γ ﹔ \const{y} \impliesS x = y}
+\eqn{$\backslash$-Id}{γ╲γ = \Id}
 
-This expresses that colimits γ have an epic-like property.
+\eqn{$\backslash$-Unique}{γ ﹔ \const{x} = γ ﹔ \const{y} \impliesS x = y}
 
-\eqn{╲-Fusion}{γ╲δ ﹔\const{x} = γ╲(δ ﹔ \const{x})}
+This expresses that colimits γ have an epic-like property: \\
+The component morphisms $γ_A$ are \emph{jointly epic}.
+
+\eqn{$\backslash$-Fusion}{γ╲δ ﹔x = γ╲(δ ﹔ \const{x})}
+% Direct Proof:
+%
+%    γ╲δ ﹔ x = γ ╲ (δ ﹔ _x_)
+% ≡  γ ﹔ \const{γ╲δ ﹔ x} = δ ﹔ _x_          ╲-char
+% ≡  γ ﹔ \const{γ╲δ} ﹔ _x_ = δ ﹔ _x_          const functor
+% ≡  δ ﹔ _x_ = δ ﹔ _x_                         ╲-self
+% ≡ true                                        =-reflexivity
 
 The following law confirms the choice of notation once more.
 
-\eqn{╲-Compose}{γ╲δ ﹔ δ╲ε = γ╲ε}
+\eqn{$\backslash$-Compose}{γ╲δ ﹔ δ╲ε = γ╲ε}
 
 The next law tells us that functors distribute over the ╲-notation
 provided the implicit well-formedness condition that 
 $Fγ$ is a colimit holds --clearly this condition is valid when $F$
 preserves colimits.
 
-\eqn{╲-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
+\eqn{$\backslash$-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
 
-\eqn{╲-Pre-Functor-Elim}{γF╲δF = γ╲δ}
+\eqn{$\backslash$-Pre-Functor-Elim}{γF╲δF = γ╲δ}
 
 \endeqns
 #+END_EXPORT
+
+** COMMENT Limits
+
+Dually, the category $⋀D$ has objects being “cones” $γ : \const{C} →̣ D$ where $C =: \src\, γ$
+is a 𝒞-object, and a morphism from $γ$ to $δ$ is a 𝒞-morphism $x$ such that $\const{x} ﹔ γ = δ$.
+In terms of 𝒞, /$γ : Obj(⋀ D)$ is a limit for $D$/ if there is a mapping $γ╱-$ such that
+╱-Type and ╱-Char hold.
+
+Well-formedness convention: In each law the variables are quantified
+in such a way that the premise of $/$-Type is met.
+The notation $δ╱⋯$ is only senseful if δ is a cone for $D$,
+like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 0.
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{/-Type}{ δ \text{ cocone for } D \impliesS γ╲δ : \tgt\, γ → \tgt\,δ}
+\eqn{/-Char}{ \const{x} ﹔ γ = δ \equivS x = δ ╱ γ }
+\eqn{/-Self}{ δ ╱ γ ﹔ γ = δ}
+\eqn{/-Id}{γ╱γ = \Id}
+\eqn{/-Unique}{\const{x} ﹔ γ = \const{y} ﹔ γ \impliesS x = y}
+\eqn{/-Fusion}{\const{x} ﹔ δ ╱ γ = (\const{x} ﹔ δ) ╱ γ}
+\eqn{/-Functor-Dist}{F(δ ╱ γ) = Fδ ╱ Fγ}
+\eqn{/-Pre-Functor-Elim}{δF╱γF = δ╱γ}
+% Direct proof:
+%
+%    δF╱γF = δ╱γ
+% ≡  δF = (δ ╱ γ) ﹔ γF
+% ≡  (δ ╱ γ ﹔ γ)F = (δ ╱ γ) ﹔ γF
+% ≡  (δ ╱ γ ﹔ γ)FA = ((δ ╱ γ) ﹔ γF)A
+% ≡  δ ╱ γ ; γFA  = δ╱γ ﹔ γFA
+% ≡  true
+% 
+\endeqns
+
+\ref{/-Unique} expresses that colimits γ have an monic-like property: \\
+The component morphisms $γ_A$ are \emph{jointly monic}.
+#+END_EXPORT
+
+
 
 * Sums
 
@@ -578,7 +630,9 @@ $f : A → C$ and $g : B → C$, where $C = \tgt\, δ$.
 #+LaTeX: \def\inr{\mathsf{inr}}
 
 Let $γ=(\inl, \inr)$ be a colimit for $D$, let $A + B = \tgt\,γ$, and write
-$[f, g]$ in-place of $γ╲(f, g)$, then the ╲-laws become:
+$[f, g]$ in-place of $γ╲(f, g)$, then the ╲-laws yield:
+/$(\inl, \inr, A+B)$ form a sum of $A$ and $B$/ if there is a mapping $[-,-]$
+such that \ref{[]-Type} and \ref{[]-Char} hold.
 
 #+BEGIN_EXPORT latex
 \begineqns
@@ -591,19 +645,37 @@ $[f, g]$ in-place of $γ╲(f, g)$, then the ╲-laws become:
 
 \eqn{[]-Id}{ [\inl, \inr] = \Id}
 
-\eqn{?-Unique}{γ ﹔ \const{x} = γ ﹔ \const{y} \impliesS x = y}
+\eqn{[]-Unique}{ \inl ﹔ x = \inl ﹔ y \lands \inr ﹔ x = \inr ﹔ y \impliesS x = y}
 
-\eqn{?-Fusion}{γ╲δ ﹔\const{x} = γ╲(δ ﹔ \const{x})}
+\eqn{[]-Fusion}{ [f , g] ﹔ x = [f﹔ x, g ﹔ x] }
 
-\eqn{?-Compose}{γ╲δ ﹔ δ╲ε = γ╲ε}
+The implicit well-formedness condition in the next law is that
+$(F\,\inl, F\,\inr, F(A+B))$ form a sum of $F\,A$ and $F\, B$.
+%  --which clearly holds if $F$ preserves sums.
 
-\eqn{?-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
+\eqn{[]-Functor-Dist}{F \, [f, g]_𝒞 = [F \, f , F \, g]_𝒟 \qquad\text{ where } F : 𝒞 → 𝒟}
+%
+% f : A → C
+% g : B → C
+% F[f,g]     : F(A + B) → F C
+% [F f, F g] : F A + F B → F C
+%
+% Types are okay since, by assumption, F(A + B) forms the sum of FA and FB,
+% That is, (F A + F B) ≔ F(A + B)
+%
+% Direct proof: 
+% 
+%    F[f,g] = [Ff, Fg]
+% ≡  F[f,g] ﹔ F inl = F f  ∧ F[f,g] ﹔ F inr = F g
+% ≡  F([f,g] ﹔ inl) = F f  ∧ F([f,g] ﹔ inr) = F g
+% ⇐ [f,g] ﹔ inl = f  ∧ [f,g] ﹔ inr = g
+% ≡  [f,g] = [f,g]
+% ≡  true
 
-\eqn{?-Pre-Functor-Elim}{γF╲δF = γ╲δ}
 \endeqns
 #+END_EXPORT
 
-* Coequaliser
+* COMMENT Coequaliser
 
 # $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
 #
