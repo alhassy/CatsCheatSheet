@@ -49,6 +49,8 @@
 % \def\endeqns{ \endgroup \setlength{\belowdisplayskip}{2pt} } % put belowspace back to desired setting
 #+END_EXPORT
 
+
+
 # See defn-Type, below for an expanded usage; \eqn{name}{formula}
 # LaTeX: \setlength{\abovedisplayskip}{5pt} \setlength{\belowdisplayskip}{2pt}
 #+LaTeX: \def\eqn#1#2{ \begin{flalign*} #2 && \tag*{#1} \label{#1} \end{flalign*}  }
@@ -56,6 +58,7 @@
 #+LaTeX: \def\src{\mathsf{src}}
 #+LaTeX: \def\tgt{\mathsf{tgt}}
 #+LaTeX: \def\Id{\mathsf{Id}}
+#+LaTeX: \def\bin{I\!\!I}
 
 # LATEX_HEADER: \setlength{\parskip}{1em}
 # LaTeX: \setlength{\parskip}{0.5em}
@@ -110,7 +113,7 @@ Example Categories.
   and the paths are the morphisms typed with their starting and ending node.
   Composition is catenation of paths and identity is the empty path.
 + Each preorder determines a category: The objects are the elements
-  and there is a morphism ~a → b~ named, say, ~(a, b),~ precisely when $a ≤ b$.
+  and there is a morphism ~a → b~ named, say, ~(a, b),~ precisely when $a \leq b$.
 
 \room
 
@@ -156,14 +159,14 @@ Use of Functors.
   to apply a function to all the individual constituents; this is done by
   /F f : F A → F B/.
 
-+  For example, let /𝑰 A = A × A/ and /𝑰 f = (x, y) ↦ (f x, f y)./
-  So 𝑰 is or represents the structure of pairs; /𝑰 A/ is the set of pairs of /A/,
-  and /𝑰 f/ is the function that applies /f/ to each constituent of a pair.
++  For example, let $\bin A = A × A$ and $\bin f = (x, y) ↦ (f\, x, f\, y)$.
+  So $\bin$ is or represents the structure of pairs; $\bin\, A$ is the set of pairs of /A/,
+  and $\bin\, f$ is the function that applies /f/ to each constituent of a pair.
 
-  - A /binary operation on A/ is then just a function /𝑰 A → A;/
-    in the same sense we obtain “F-ary operations”.
+  - A /binary operation on A/ is then just a function $\bin A → A$;
+    in the same sense we obtain /F-ary operations/.
 
-+  Also, /Seq/ is or represents the structure of sequences; /Seq A/ is the structure of sequences
++ Also, /Seq/ is or represents the structure of sequences; /Seq A/ is the structure of sequences
   over /A/, and /Seq f/ is the function that applies /f/ to each constituent of a sequence.
 
 +  Even though /F A/ is still just an object, a thing with no observable internal structure, the
@@ -214,8 +217,6 @@ As discussed before for the case /F : 𝒞 → 𝒮ℯ𝓉/, each /F A/ denotes 
 and /F/ denotes the structure itself.
 
 \room
-
-#+LaTeX: \def\bin{I\!\!I}
 
 For example, $\bin$ is the structure of pairs, /Seq/ is the structure of sequences,
 /Seq Seq/ the structure of sequences of sequences, 
@@ -450,7 +451,7 @@ The formulation of the definition is clear but it's not very well suited for /al
 \room
 
 A convenient formulation is obtained by `skolemisation': An assertion of the form
-\[ ∀ x \;•\; ∃ y \;•\; R \, x \, y \]
+\[ ∀ x \;•\; ∃₁ y \;•\; R \, x \, y \]
 is equivalent to: There's a function ℱ such that
 \[ ∀ x, y \;•\; R \, x \, y \;≡\; y = ℱ\, x  \]
 In the former formulation it is the existential quantification “$∃ y$” inside the scope of a universal
