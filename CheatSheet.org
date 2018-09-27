@@ -2,7 +2,7 @@
 # SUBTITLE: Cheat Sheet Template
 # DATE: << Spring 2018 >>
 # When we don't provide a date, one is provided for us.
-#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]]
+#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]] @@latex:{\tiny\hspace{5.5em}\url{https://github.com/alhassy/CatsCheatSheet}}@@
 #+EMAIL: alhassy@gmail.com
 #+DESCRIPTION: This document is written by Musa Al-hassy for his learning in the spring of 2018.
 #+STARTUP: hideblocks
@@ -18,9 +18,18 @@
 #+LATEX_HEADER: \usepackage{newunicodechar}
 #+LATEX_HEADER: \newunicodechar{﹔}{\ensuremath{\raisebox{0.4ex}{\tiny \,;\,}}}  %% forward composition ﹔
 
+#+LATEX_HEADER: \usepackage{calculation} 
+
 #+INCLUDE: ~/Dropbox/MyUnicodeSymbols.org
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
-# ⟅ ⟆ 
+
+* TODO commit info                                                   :ignore:
+
+#+begin_tiny
+  \vspace{-3.5em}
+  \hspace{19em} [[https://www.google.ca][~commit 706518a~]]
+  \vspace{2em}
+#+end_tiny
 
 * LaTeX Setup :ignore:
 
@@ -206,14 +215,17 @@ and /F/ denotes the structure itself.
 
 \room
 
-For example, 𝑰 is the structure of pairs, /Seq/ is the structure of sequences,
-/𝑰 Seq/ the structure of pairs of sequences, /Seq Seq/ the structure of sequences of
-sequences, and so on.
+#+LaTeX: \def\bin{I\!\!I}
+
+For example, $\bin$ is the structure of pairs, /Seq/ is the structure of sequences,
+/Seq Seq/ the structure of sequences of sequences, 
+$\bin \, Seq$ the structure of pairs of sequences --which is naturally isomorphic
+to $Seq \, \bin$ the structure of sequences of pairs!--, and so on.
 
 \room
 
-A “transformation” from structure /F/ to structure /G/ is a family of functions
-/η : ∀{A} → F A → G A/; and it is “natural” if each /ηₐ/ doesn't affect the /constituents/
+A “transformation” from structure /F/ to structure /G/ is a family of functions \newline
+$η : ∀\{A\} → F\, A → G\, A$; and it is “natural” if each $η_A$ doesn't affect the /constituents/
 of the structured elements in /F A/ but only reshapes the structure of the elements,
 from an /F/-structure to a /G/-structure.
 
@@ -242,7 +254,7 @@ and functor /G/ at the target side.
 
 \room
 
-Example natrual transformations
+Example natural transformations
 + /rev : Seq →̣ Seq : [a₁, …, aₙ] ↦ [aₙ, …, a₁]/
   reverses its argument thereby reshaping a sequence structure into a sequence structure without affecting the constituents.
 
@@ -298,10 +310,8 @@ $η : \Id → RL$ and $ε : LR → \Id$ such that
 \vspace{-1em}
 
 #+BEGIN_EXPORT latex
-\eqn{Adjunction}{f = η_A ﹔ R g \equivS L f ﹔ ε_B = g
- \\ \text{ where }
-    f :   A →_𝒜 R B \text{ and }
-    g : L A →_ℬ   B
+\eqn{Adjunction}{\text{\tiny Provided $f : A →_𝒜 R B$ and $g : L A →_ℬ B$ }
+ \\ f = η_A ﹔ R g \equivS L f ﹔ ε_B = g
 }
 #+END_EXPORT
 
@@ -316,9 +326,9 @@ That is,
 
 \room
 
-A famous example is “Free ⊣ Forgetful”, e.g. to /define/ lists for which the above
+A famous example is “Free ⊣ Forgetful”, e.g. to /define/ the list datatype, for which the above
 becomes: Homomorphisms on lists are uniquely determined, as a map followed by a reduce,
-by its restriction to the singleton sequences.
+by their restriction to the singleton sequences.
 
 \room
 
@@ -344,10 +354,10 @@ now reads:
 #+END_EXPORT
 
 \room
-
+\vspace{1ex} 
 Note that ⌈ is like `r' and the argument to ⌈⌉ must involve the /R/-ight adjoint in its type;
 # likewise for 
-{\textbf L}ad takes morphisms involving the {\textbf L}eft adjoint ;)
+#+LaTeX: {\textbf L}ad takes morphisms involving the {\textbf L}eft adjoint ;)
 
 \room
 
@@ -362,35 +372,37 @@ We may think of ℬ as having all complicated problems so we abstract
 away some difficulties by \emph{r}aising up to a cleaner, simpler, domain
 via rad ⌈⌉; we then solve our problem there, then go back \emph{down} to
 the more complicated concrete issue via ⌊⌋, lad.
-( E.g., ℬ is the category of monoids, and 𝒜 is the category of sets; L is list functor. )
+\newline
+( E.g., ℬ is the category of monoids, and 𝒜 is the category of sets; $L$ is the list functor. )
 
 # Some useful results,
-
-#+LaTeX: \eqn{ntrf-Adj}{\text{The η and ε determine each other and they are \emph{natural} transformations.}}
-
-(“zig-zag laws”) The unit has a post-inverse while the counit has a pre-inverse:
 #+BEGIN_EXPORT latex
 \begineqns
+
+\eqn{ntrf-Adj}{\text{The η and ε determine each other and they are \emph{natural} transformations.}}
+
+\vspace{2ex}
+“zig-zag laws” The unit has a post-inverse while the counit has a pre-inverse:
 
 \eqn{unit-Inverse}{ \Id = η   ﹔ R ε}
 
 \eqn{Inverse-counit}{ \Id = L η ﹔ ε} 
 
-\room
+\vspace{2ex}
 The unit and counit can be regained from the adjunction inverses,
 
 \eqn{unit-Def}{ η = ⌊\Id⌋}
 
 \eqn{counit-Def}{ ε = ⌈\Id⌉ }
 
-\room
+\vspace{2ex}
 Lad and rad themselves are solutions to the problems of interest, \eqref{Adjunction}.
 
 \eqn{lad-Self}{L ⌊g⌋ ﹔ ε = g}
 
 \eqn{rad-Self}{η ﹔ R ⌈f⌉ = f }
 
-\room
+\vspace{2ex}
 The following laws assert a kind of
 monoic-ness for ε and a kind of epic-ness for η.
 Pragmatically they allow us to prove an equality
@@ -400,7 +412,7 @@ by shifting to a possibly easier equality obligation.
 
 \eqn{rad-Unique}{L f ﹔ ε \,= L f′ ﹔ ε \,\equivS f = f′}
 
-\room
+\vspace{2ex}
 Lad and rad are natural transformations in the category $ℱ𝓊𝓃𝒸(𝒜ᵒᵖ × ℬ, 𝒮ℯ𝓉)$ realising
 $(L X → Y) ≅ (X → G Y)$ where $X, Y$ are the first and second projection functors
 and $(-→-) : 𝒞ᵒᵖ × 𝒞 → 𝒮ℯ𝓉$ is the hom-functor such that $(f → g) h = f ﹔ h ﹔ g$.
@@ -526,16 +538,19 @@ can be replaced by initiality arguments! Woah!
 *Proving Initiality* One may prove that an object $0$ is initial by providing
 a definition for $⦇-⦈$ and establishing initial-Char. Almost every such
 proof has the following format, or a circular implication thereof: For arbitrary /f/ and /B/,
-#+BEGIN_EXAMPLE org
+
+\vspace{2em}
+#+begin_calculation latex
     f : A → B
-≡   ⋮
-    f = “an expression not involving f”
-≡          { *define* ⦇ B ⦈ to be the rhs of the previous equation }
-    f = ⦇ B ⦈ 
-#+END_EXAMPLE
+\step[≡]{}
+    ⋮
+\step[≡]{}
+    f = \text{“an expression not involving $f$”}
+\step[≡]{ 𝒹ℯ𝒻𝒾𝓃ℯ $⦇ B ⦈$ to be the rhs of the previous equation }
+    f = ⦇ B ⦈
+#+end_calculation
 
-
-\vspace{-1em}
+\vspace{-2em}
 
 * Colimits
 
@@ -615,6 +630,9 @@ preserves colimits.
 \endeqns
 #+END_EXPORT
 
+
+\vspace{-1em}
+
 * Limits
 
 Dually, the category $⋀D$ has objects being “cones” $γ : \const{C} →̣ D$ where $C =: \src\, γ$
@@ -660,6 +678,9 @@ The component morphisms $γ_A$ are \emph{jointly monic}.
 \endeqns
 #+END_EXPORT
 
+
+\vspace{-1em}
+
 * Coequaliser
 
 # $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
@@ -678,8 +699,10 @@ yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $p╲-$ such that
 
 \eqn{CoEq-Type}{ q ﹔ f =  q ﹔ g \impliesS p╲q : \tgt\, p → \tgt\,q}
 
+
+\vspace{2ex}
 Well-formedness convention: In each law the variables are quantified
-in such a way that the premise of \eqref{CoEq-Type} is met.
+in such a way that the premise of \ref{CoEq-Type} is met.
 The notation $⋯╲q$ is only senseful if $q﹔f=q﹔g$,
 like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 0.
 
@@ -694,11 +717,11 @@ like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 
 \eqn{CoEq-Unique}{p ﹔ x = p ﹔ y \impliesS x = y}
 
 \eqn{CoEq-Compose}{p╲q ﹔ q╲r = p╲r}
-
-\eqn{?╲-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
-
-\eqn{?╲-Pre-Functor-Elim}{γF╲δF = γ╲δ}
-
+%%
+%% \eqn{?╲-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
+%% 
+%% \eqn{?╲-Pre-Functor-Elim}{γF╲δF = γ╲δ}
+%%
 \endeqns
 #+END_EXPORT
 
@@ -787,8 +810,6 @@ while leaving variables and $\Id$'s alone.
 \room
 
 #+LaTeX: \def\dual{\mathsf{dual}}
-
-#+LATEX_HEADER: \usepackage{calculation} 
 #
 #
 For example, applying this process to sums yields /products/:
@@ -870,10 +891,23 @@ For categories in which sums and products exist, we define for $f : A → B$ and
 
 Notice that the last law above is self-dual.
 
-* COMMENT More
-Nice Stuff ⌣̈ 
+* Reference
 
-+ Skipped pages 40-46.
+#+LaTeX: {\color{white}.}
+
+[[https://maartenfokkinga.github.io/utwente/mmf92b.pdf][A Gentle Introduction to Category Theory ─ the calculational approach]]
+\newline
+by [[https://maartenfokkinga.github.io/utwente/][Maarten Fokkinga]]
+
+\vspace{1em}
+
+An excellent introduction to category theory with examples motivated from programming, in-particular
+working with sequences. All steps are shown in a calculational style --which Fokkinga
+has made [[https://ctan.org/tex-archive/macros/latex/contrib/calculation][available]] for use with LaTeX-- thereby making it suitable for self-study.
+
+\vspace{1em}
+
+Clear, concise, and an illuminating read.
 
 * COMMENT ∞ Further Reads
 
