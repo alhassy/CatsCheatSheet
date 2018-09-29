@@ -41,6 +41,8 @@
 \def\landS{ \qquad\land\qquad }
 \def\lands{ \quad\land\quad }
 
+\def\eqs{ \quad=\quad}
+
 \def\equivs{ \quad\equiv\quad}
 \def\equivS{ \qquad\equiv\qquad}
 
@@ -48,8 +50,6 @@
 \def\endeqns{ \endgroup }
 % \def\endeqns{ \endgroup \setlength{\belowdisplayskip}{2pt} } % put belowspace back to desired setting
 #+END_EXPORT
-
-
 
 # See defn-Type, below for an expanded usage; \eqn{name}{formula}
 # LaTeX: \setlength{\abovedisplayskip}{5pt} \setlength{\belowdisplayskip}{2pt}
@@ -1036,19 +1036,22 @@ epic when its target consists only of $c$.
 * §2.7 Isos
 
 A function is an /iso/ iff it is invertible:
-There is a function /f˘/ called its “inverse” or “converse”
-such that for any functions $x, y$
-\eqn{inverse-Char₁}{ f ∘ x = y \equivS x = f˘ ∘ y}
+There is a function /f˘/ called its “inverse” or “converse” such that
+\eqn{inverse-Char}{ f ∘ f˘ = \Id \landS f˘ ∘ f = \Id}
 
-This immediately yields,
-
-\eqn{inverse-Cancellation}{ f ∘ f˘ = \Id \landS f˘ ∘ f = \Id}
-
-From which we regain the other `shunting rule'
-\eqn{inverse-Char₂}{ x ∘ f = y \equivS x = y ∘ f˘}
+To /construct/ $f˘$, we begin by identifying its type which may give
+insight into its necessary `shape' --e.g., as a sum or a product--
+then we pick one of these equations and try to reduce it as much as possible
+until we arrive at a definition of $f˘$, or its `components'. --E.g., the inverse of ~assoc~.
+  + E.g., $coassocr = [\Id + \inl, \inr ∘ \inr] : (A + B) + C ≅ A + (B + C)$, its inverse
+    /coassocl/ must be of the shape $[x, [y, z]]$ for unknowns $x,y,z$ which can be calculated
+    by solving the equation $[x, [y, z]] ∘ coassocr = \Id$ --Do it!
 
 If, for some reason, $f˘$ is found handier than isomorphism $f$
-in reasoning, then the shunting rules can be of help.
+in reasoning, then the following rules can be of help.
+
+\eqn{inverse-Shunting₁}{ f ∘ x = y \equivS x = f˘ ∘ y}
+\eqn{inverse-Shunting₂}{ x ∘ f = y \equivS x = y ∘ f˘}
 
 \room
 
@@ -1073,6 +1076,193 @@ then one write $A ≅ B$.
 Finally, note that all classes of functions referred to so far
 ---identities, constants, epics, monics, and isos---
 are closed under composition.
+
+* §2.8 Gluing functions which do not compose -- products
+
+Function composition has been presented above as a basis for gluing functions
+together in order to build more complex functions. However, not every two functions
+can be glued together by composition.
+
+\room
+
+# $f : A ← C$ and $g : B ← C$ 
+For instance, functions $A \overset{f}{\leftlongarrow} C \overset{g}{\rightlongarrow} B$
+do not compose with each other since the source of one is not the target of the other.
+
+Since $f$ and $g$ share the same source, their outputs can be paired: $c ↦ (f\, c, g\, c)$.
+We may think of the operation which pairs the outputs of $f$ and $g$ as a new function
+combinator: $⟨f, g⟩ = c ↦ (f\, c, g\, c)$ --read “$f$ /split/ $g$”.
+
+\room
+
+$⟨f, g⟩\, c$ duplicates $c$ so that $f$ and $g$ can be executed in “parallel” on it.
+
+\room
+
+Function $⟨f,g⟩$ keeps the information of both $f$ and $g$ in the same way
+Cartesian product $A × B$ keeps the information of $A$ and $B$.
+#
+So, in the same way that $A$ data or $B$ data can be retrieved from $A × B$ data
+via the projections $A \overset{\fst}{\leftlongarrow} A × B \overset{\snd}{\rightlongarrow} B$,
+$f$ and $g$ can be retrieved via the same projections:
+\eqn{Cancellation}{\fst ∘ ⟨f, g⟩ = f \lands \snd ∘ ⟨f, g⟩ = g}
+
+\room
+
+A /split/ arises wherever two functions do not compose but share the same source.
+
+\room
+
+How do we glue functions that fail such a requisite, say $f : A ← C$ and $g : B ← D$?
+We regard their sources as projections of a product:
+$A \overset{f ∘ \fst}{\leftlongarrow} C × D \overset{g ∘ \snd}{\rightlongarrow} B$.
+Now they have the same source and so the split combinator can be used:
+$f × g = (c, d) ↦ (f\, c, g\, d)$.
+#
+This corresponds to the “parallel” application of $f$ and $g$, each with its /own/ input.
+
+\room
+
+What is the /interplay/ among the functional combinators: Composition, split, product?
+The first two relate to each other via the fusion law
+\eqn{Fusion}{⟨f, g⟩ ∘ c = ⟨f ∘ c, g ∘ c⟩}
+Notice how it looks like the /definition/ of the split operator but all applications have
+been lifted to compositions! Woah!
+  + Moreover, the absorption property is just the lifting of the pointwise definition! Woah!
+
+All three combinators interact via the ×-absorption property.
+
+The following is self-inverse,
+\eqn{swap-Def}{swap = ⟨\snd, \fst⟩ : A × B ≅ B × A}
+
+* §2.9 Gluing functions which do not compose -- coproducts
+
+In the scenario $A \overset{f}{\rightlongarrow} C \overset{g}{\leftlongarrow} B$,
+it is clear that the kind of glue we need should make it possible to apply $f$
+if the input is from the “$A$ side” or apply $g$ if it is from the “$B$ side”.
+
+We denote this new combinator “either $f$ or $g$”, $[f, g] : A + B → C$, where the values of $A + B$
+can be thought of as “copies” of $A$ or $B$ values which are “stamped” with different
+tags in order to guarantee that values which are simultaneously in $A$ and $B$ do not
+get mixed up.
+
+Duality is of great /conceptual economy/ since everything that can be said of concept /X/
+can be rephrased for /co-X/. *That $\composition$-listing provides eloquent evidence of duality.*
+
+Notice that the fusion law,
+\eqn{Fusion}{ f ∘ [g, h] = [f ∘ g, f ∘ h]}
+Is essentially the definition: If we're in the left `g` then the result is `f` applied to it;
+otherwise if we're in the right `h` then the result is `f` applied to it! Woah: From pointwise to pointfree.
+
+* §2.10 Mixing products and coproducts
+
+Any $f : A + B → C × D$ can be expressed alternatively as an /either/
+or as a /split/. It turns out that both formats are identical:
+The exchange rule.
+
+For example, $undistr  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id × \inr] : (A × B) + (A × C) → A × (B + C)$.
+
+Also, by the exchange rule,
+\eqn{Cool-Property}{ [f × g, h × k] \;=\; ⟨ [f, h] ∘ (\fst + \fst), [g, k] ∘ (\snd + \snd)⟩ }
+\eqn{Co-cool-Property}{ ⟨f + g, h + k⟩ \;=\; [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)] }
+# Direct proof:
+# 
+#   [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)]
+# = [ ⟨inl ∘ f , inl ∘ h⟩, ⟨inr ∘ g, inr ∘ k⟩ ]      absorption
+# = ⟨ [inl ∘ f, inr ∘ g], [inl ∘ h, inr ∘ k]⟩       exchange
+# = ⟨ f + g, h + k ⟩                               defns
+
+Also, since constants ignore their inputs,
+\eqn{Exchange-with-constant}{ [⟨ f, \const{k} ⟩, ⟨ g , \const{k} ⟩] = ⟨ [f, g], \const{k} ⟩ }
+# Proof:
+#
+#   [⟨ f, _k_ ⟩, ⟨ g , _k_ ⟩]
+# = ⟨ [f, g], [ _k_ , _k_ ]⟩        exchange
+# = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
+# = ⟨ [f, g], _k_ ⟩               constants
+
+* §2.13 Universal Properties
+
+The compositional combinators put forward so far have been equipped with a concise /set of properties/
+which enable programmers to transform programs, reason about them, and perform useful calculations.
+This raises a /programming methodology/ which is scientific and stable.
+
+The relevance of universal properties, such as ℱ-Char, is that it offers a way of /solving equations/
+of the form $y = ℱ\, x$. For example, can the identity be expressed, or `reflected', using this combinator?
+We just solve the equation $\Id = ℱ\, x$ for unknown(s) $x$ by appealing to the universal property.
+
+* §2.14 Guards and McCarthy's conditional
+
+Define
+\eqn{?-Defn}{(p?)\, a = \mathsc{If}\, p\, a \,\mathsc{Then}\, \inl\, a \,\mathsc{Else}\, \inr\, a \mathsc{Fi}}
+
+We call $p? : A → A + A$ the /guard/ associated to predicated /p : A → 𝔹/.
+The guard is more informative than /p/ alone: It provides information about the outcome of testing /p/
+on some input /a/, encoded in terms of the sum injections, $\inl$ for /true/ and $\inr$ for /false/,
+without losing the input /a/ itself.
+
+\eqn{McCarthy-Conditional-Defn}{ p → g,h \quad=\quad [g, h] ∘ p?}
+
+Hence to reason about conditionals one may seek help in the algebra of sums.
+
+\eqn{conditional-Fusion₁}{ f ∘ (p → g, h) \quad=\quad p → f ∘ h, f ∘ h}
+
+\eqn{conditional-Fusion₂}{ (p → g, h) ∘ k \quad=\quad p ∘ k → g ∘ k, h ∘ k}
+
+\eqn{conditional-product-Fusion}{ k ∘ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ }
+#
+#   k ∘ ⟨ (p → f,h) , (p → g, i) ⟩ 
+# = k ∘ ⟨ [f,h] ∘ p? , [g, i] ∘ p? ⟩
+# = k ∘ ⟨ [f,h] , [g, i] ⟩ ∘ p?
+# = k ∘ [ ⟨f, g⟩ , ⟨h, i⟩ ] ∘ p?
+# = [ k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ ] ∘ p?
+# = p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩
+
+\eqn{conditional-Abides-Distributivity}{ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → ⟨f, g⟩ , ⟨h, i⟩ }
+
+\eqn{conditional-Idempotency}{p → f,f \eqs f}
+
+\eqn{conditional-⟨⟩-Distributivity}{ ⟨ f, (p → g, h)⟩ \quad=\quad p → ⟨f, g⟩, ⟨f, h⟩ }
+
+\eqn{conditional-×-Distributivity}{ (p → g, h) × f \quad=\quad p ∘ \fst → g × f, h × f}
+
+*As well as their duals!*
+
+* Wow --another example-- involving conditionals
+Just as in the case of proving /tails/ is a natural transformation *without* using
+any implementing definitions, here's a similar example.
+
+\room
+
+Here's an illustration of how /smart/ pointfree algebra can be in reasoning about
+functions that /one does not actually defined explicitly/. 
+
+It also shows how relevant the /natural properties/ are.
+
+The issue is that our definition of a guard, \ref{?-Defn}, is pointwise and most
+likely unsuitable to prove facts such as, for instance,
+\[ p? ∘ f = (f + f) ∘ (p ∘ f)? \]
+Thinking better, instead of `inventing' \ref{?-Defn}, we might --and perhaps should!--
+have defined 
+\eqn{two-Defn}{2  \;≅\; 1 + 1}
+\eqn{double-Defn}{2 × A \;≅\; A + A}
+\eqn{?-Defn-Pointfree}{ p? = double ∘ ⟨p, \Id⟩ }
+
+which actually express rather closely our strategy of switching from products
+to coproducts in the definition of $(p?)$.
+
+In particular, *we do not need to define /double/ explicitly*.
+From its type we immediately infer its natural, or free, property:
+\[ double ∘ (\Id × f) \eqs (f + f) ∘ double \]
+
+It turns out that this is the /knowledge/ we need about $double$
+in order to prove the above mentioned property.
+
+\room
+
+The less one has to write to solve a problem, the better.
+One saves time and one's brain, adding to productivity.
+This is often called /elegance/ when applying a scientific method.
 
 * FIX
 
@@ -1102,7 +1292,22 @@ are closed under composition.
    I think you meant /pointfree/ not /pointwise/ as clearly 2.18 involves
    no points.
 
+0. §2.13, ×-fusion calculation: In the final hint, perhaps add /after (2.63)/
+   so that it is clear which /derived above/ law is being referenced
+   --since its name is in the surrounding text and may not be easy to locate.
 
+0. §2.14, page 39, second paragraph: Typo /market/ should be /marked/.
+0. §2.14, page 39, diagram: Typos, left arrow should be labelled /g/ not /f/,
+   and the right arrow should be labelled /h/ not /g/.
+
+0. §2.14, exercise 2.21: It seems you have the accidental typos /λap/ appearing twice.
+
+
+* COMMENT ToDo's
+Include:
++ Page 23: Associativity of ~C~ product structs.
++ Page 25: Realisation of sums in ~C~.
++ Pages 31-32: Datatypes, void, unit, bool, maybe.
 
 * COMMENT ∞ Further Reads
 
