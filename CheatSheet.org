@@ -7,7 +7,7 @@
 #+DESCRIPTION: This document is written by Musa Al-hassy for his learning in the spring of 2018.
 #+STARTUP: hideblocks
 #+STARTUP: overview
-#+TODO: BEGIN-IGNORE(b) END-IGNORE(e) } | DONE(d)
+#+TODO: TODO { BEGIN-IGNORE(b) END-IGNORE(e) } | DONE(d)
 
 # Important shortcuts:
 # f7 preview changes
@@ -23,7 +23,7 @@
 #+INCLUDE: ~/Dropbox/MyUnicodeSymbols.org
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
 
-* TODO commit info                                                   :ignore:
+* TODO commit info                                                 :ignore:
 
 #+begin_tiny
   \vspace{-3.5em}
@@ -216,9 +216,11 @@ is, or represents, a structure that objects might have.
 As discussed before for the case /F : 𝒞 → 𝒮ℯ𝓉/, each /F A/ denotes a structured set
 and /F/ denotes the structure itself.
 
-\room
-
-For example, $\bin$ is the structure of pairs, /Seq/ is the structure of sequences,
+# \room
+#
+#+LaTeX: \paragraph{\footnotesize \textnormal{Example Structures}}\label{SeqPair-is-Pair-Seq}
+\hspace{-1em}:
+$\bin$ is the structure of pairs, /Seq/ is the structure of sequences,
 /Seq Seq/ the structure of sequences of sequences, 
 $\bin \, Seq$ the structure of pairs of sequences --which is naturally isomorphic
 to $Seq \, \bin$ the structure of sequences of pairs!--, and so on.
@@ -910,6 +912,198 @@ has made [[https://ctan.org/tex-archive/macros/latex/contrib/calculation][availa
 
 Clear, concise, and an illuminating read.
 
+\newpage
+Now notes from /Program Design by Calculation/ of J. Oliveira.
+* §2, upto §2.3, An Introduction to Pointfree Programming
+
+# Functional programming literally means “programming with functions”.
+The main emphasis is on /compositionality/, one of the main advantages
+of “thinking functionally”, explaining how to construct new functions
+out of other functions using a minimal set of predefined functional
+combinators. This leads to a style which is /pointfree/ in the sense that
+function descriptions dispense with variables --also known as /points/.
+
+Why do people look for compact notations?
+A compact notation leads to shorter documents, less lines of code
+in programming, in which patterns are easier to identify and reason
+about. Properties can be stated in clear-cut, one-line long equations
+which are easy to memorise. 
+#
+# Backus' FP and Iverson's APL are examples of pointfree programming
+# languages; look them up ;-)
+
+The notation “$f : A → B$” focuses on what is relevant about $f$
+and can it be regard as a kind of contract:
+#+BEGIN_QUOTE
+$f$ /commits itself/ to producing a /B/-value provided it is supplied
+with an /A/-value.
+#+END_QUOTE
+
+Types provide the “glue”, or interface, for putting functions
+together to obtain more complex functions.
+
+What do we want functions for?
+One wants functions for modelling and reasoning about the
+behaviour of real things.
+
+In order to switch between the pointwise and pointfree settings
+we need two “bridges”: One lifting equality to the function level
+and the other lifting function application.
+
+Two functions $f, g : A → B$ are the same function iff they agree
+at the pointwise level:
+\eqn{Extensionality}{ f = g \equivS \left(∀ a : A • f\, a = g\, a \right)}
+
+Function application is replaced by the more generic concept of
+functional /composition/ suggested by function-arrow chaining:
+Whenever we have two functions such that the target type of one
+of them, say $g : B ← A$ is the same as the source type of the other,
+say $f : C ← B$ then “$f$ after $g$”, their /composite function/,
+$f ∘ g : C ← A$ can be defined. It “glues” $f$ and $g$ together,
+“sequentially”:
+#+BEGIN_EXPORT latex
+\eqn{composition-Type}{ 
+  C \overset{f}{\longleftarrow} % B \lands 
+  B \overset{g}{\longleftarrow} A \impliesS
+  C \overset{\;f ∘ g}{\longleftarrow} A
+}
+#+END_EXPORT
+
+\newpage
+* §2.5 Constant functions
+
+Opposite to the identity functions which do not lose any information,
+we find functions which lose all, or almost all, information.
+Regardless of their input, the output of these functions is always the
+same value.
+
+Let $C$ be a nonempty data domain and let $c : C$.
+Then we define the /everywhere c/ function as follows, for arbitrary $A$:
+#+LaTeX: \eqn{constant-Defn}{\const{c}\, a = c}
+
+The following property defines constant functions at the pointfree level:
+#+LaTeX: \eqn{constant-Fusion}{\const{c} ∘ f = \const{c} \}
+
+Constant functions force any difference in behaviour for any two
+functions to disappear:
+#+LaTeX: \eqn{constant-Equality}{\const{c} ∘ f = \const{c} ∘ g}
+
+In 𝒮ℯ𝓉, we have that composition and application are bridged
+explicitly by the constant functions:
+#+BEGIN_EXPORT latex
+\eqn{𝒮ℯ𝓉-Bridge}{ f ∘ \const{c} = \const{f \, c}}
+#+END_EXPORT
+
+* §2.6 Monics and Epics
+
+Identity functions and constant functions are limit points of the 
+functional spectrum with respect to information preservation.
+All the other functions are in-between: They “lose” some information,
+which is regarded as uninteresting for some reason.
+
+How do functions lose information?
+Basically in two ways: They may be “blind” enough to confuse different
+inputs, by mapping them to the same output, or they may ignore values
+of their target. For instance, $\const{c}$ confuses all inputs
+by mapping them all onto $c$. Moreover, it ignores all values of its
+target apart from $c$.
+
+Functions which do not confuse their inputs are called /monics/:
+They are “post-cancellable”:
+
+#+BEGIN_EXPORT latex
+\eqn{monic-Defn}{ f \; \mathsf{monic} \equivS 
+  \left(∀ h,k \;•\; f ∘ h = f ∘ k \equivs h = k\right)
+}
+#+END_EXPORT
+
+Functions which do not ignore values of their target are called
+/epics/: They are “pre-cancellable”:
+#+BEGIN_EXPORT latex
+\eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
+  \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
+}
+#+END_EXPORT
+
+Intuitively, $h = k$ on all points of their source precisely when
+they are equal on all image points of $f$, since $f$ being epic means 
+it outputs all values of their source.
+
+It is easy to check that “the” identity function is monic and epic, 
+while any constant function $\const{c}$ is not monic and is only
+epic when its target consists only of $c$.
+
+* §2.7 Isos
+
+A function is an /iso/ iff it is invertible:
+There is a function /f˘/ called its “inverse” or “converse”
+such that for any functions $x, y$
+\eqn{inverse-Char₁}{ f ∘ x = y \equivS x = f˘ ∘ y}
+
+This immediately yields,
+
+\eqn{inverse-Cancellation}{ f ∘ f˘ = \Id \landS f˘ ∘ f = \Id}
+
+From which we regain the other `shunting rule'
+\eqn{inverse-Char₂}{ x ∘ f = y \equivS x = y ∘ f˘}
+
+If, for some reason, $f˘$ is found handier than isomorphism $f$
+in reasoning, then the shunting rules can be of help.
+
+\room
+
+Consequently, 
+Isos are necessarily monic and epic, but in general the other way
+around is not true.
+
+\room
+
+Isomorphisms are very important because they convert data from one
+“format”, say $A$, to another format, say $B$, without losing 
+information. So $f$ and $f˘$ are faithful protocols between the two
+formats $A$ and $B$. 
+*Of course, these formats contain the same “amount” of information although the same data adopts a “different” shape in each of them.*
+─c.f. \nameref{SeqPair-is-Pair-Seq}.
+
+\room
+
+Isomorphic data domains are regarded as “abstractly” the same;
+then one write $A ≅ B$.
+
+Finally, note that all classes of functions referred to so far
+---identities, constants, epics, monics, and isos---
+are closed under composition.
+
+* FIX
+
+0. §2.4, last line:  Should be /`natural'/ instead of /'natural'./
+
+0. §2.5, exercise 2.1: Maybe place this at the end of §2.4 since
+     it's a problem on identity functions,
+     rather than at the end of §2.5 which is on constant functions.
+
+0. §2.6, end: It's easy to see how monics generalise injective functions
+   but it's not as easy for the surjective-epic case. I've conjured up
+   the following explanation, which might be helpful to include.
+   #+BEGIN_QUOTE
+ 
+#+BEGIN_EXPORT latex
+\eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
+  \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
+}
+#+END_EXPORT
+
+   Intuitively, $h = k$ on all points of their source precisely when
+   they are equal on all image points of $f$, since $f$ being epic
+   means it outputs all values of their source.
+   #+END_QUOTE
+
+0. §2.7, before equation 2.18:
+   I think you meant /pointfree/ not /pointwise/ as clearly 2.18 involves
+   no points.
+
+
+
 * COMMENT ∞ Further Reads
 
 + Roland Backhouse
@@ -918,6 +1112,10 @@ Clear, concise, and an illuminating read.
 + Jaap van der Woude
 
 + /Adjunctions/ by Fokkinga and Meertens
+
++ Backus' FP and Iverson's APL are examples of pointfree programming
+  languages; look them up ;-)
+
 
 * newpage :ignore:
   \newpage
