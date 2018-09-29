@@ -1201,6 +1201,8 @@ The guard is more informative than /p/ alone: It provides information about the 
 on some input /a/, encoded in terms of the sum injections, $\inl$ for /true/ and $\inr$ for /false/,
 without losing the input /a/ itself.
 
+#+BEGIN_EXPORT latex
+\begineqns
 \eqn{McCarthy-Conditional-Defn}{ p → g,h \quad=\quad [g, h] ∘ p?}
 
 Hence to reason about conditionals one may seek help in the algebra of sums.
@@ -1210,13 +1212,14 @@ Hence to reason about conditionals one may seek help in the algebra of sums.
 \eqn{conditional-Fusion₂}{ (p → g, h) ∘ k \quad=\quad p ∘ k → g ∘ k, h ∘ k}
 
 \eqn{conditional-product-Fusion}{ k ∘ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ }
-#
-#   k ∘ ⟨ (p → f,h) , (p → g, i) ⟩ 
-# = k ∘ ⟨ [f,h] ∘ p? , [g, i] ∘ p? ⟩
-# = k ∘ ⟨ [f,h] , [g, i] ⟩ ∘ p?
-# = k ∘ [ ⟨f, g⟩ , ⟨h, i⟩ ] ∘ p?
-# = [ k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ ] ∘ p?
-# = p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩
+
+%
+%   k ∘ ⟨ (p → f,h) , (p → g, i) ⟩ 
+% = k ∘ ⟨ [f,h] ∘ p? , [g, i] ∘ p? ⟩
+% = k ∘ ⟨ [f,h] , [g, i] ⟩ ∘ p?
+% = k ∘ [ ⟨f, g⟩ , ⟨h, i⟩ ] ∘ p?
+% = [ k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ ] ∘ p?
+% = p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩
 
 \eqn{conditional-Abides-Distributivity}{ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → ⟨f, g⟩ , ⟨h, i⟩ }
 
@@ -1225,6 +1228,11 @@ Hence to reason about conditionals one may seek help in the algebra of sums.
 \eqn{conditional-⟨⟩-Distributivity}{ ⟨ f, (p → g, h)⟩ \quad=\quad p → ⟨f, g⟩, ⟨f, h⟩ }
 
 \eqn{conditional-×-Distributivity}{ (p → g, h) × f \quad=\quad p ∘ \fst → g × f, h × f}
+
+\endeqns
+#+END_EXPORT
+
+\room
 
 *As well as their duals!*
 
@@ -1264,6 +1272,28 @@ The less one has to write to solve a problem, the better.
 One saves time and one's brain, adding to productivity.
 This is often called /elegance/ when applying a scientific method.
 
+* §2.15 Gluing functions which do not compose --exponentials
+
+Functional application is the bridge between the pointfree and pointwise worlds.
+
+Suppose we are given the task to combine two functions, one binary
+$B \overset{f}{\leftlongarrow}{C × A}$ and the other unary $D \overset{g}{\leftlongarrow} A$.
+Clearly none of the combinations $f ∘ g, ⟨f, g⟩$, or $[f, g]$ is well-typed. Hence $f$ and $g$
+cannot be put together and require some extra interfacing.
+
+\room
+
+Note that $⟨f, g⟩$ would be well-defined in case the $C$ components of $f$'s source
+could be somehow “ignored”. Suppose, in fact, that in some particular context
+the first argument of $f$ happens to be “irrelevant”, or to be frozen to some $c : C$.
+It is easy to derive a new function $f_c : A → B : a ↦ f(c, a)$ from $f$, combines
+nicely with $g$ via the split combinator: $⟨f_c , g⟩$ is well-typed and bears the type
+$B × D ← A$.
+
+\room
+
+Since $f_c$ ... paragraph after (2.80). *working here*
+
 * FIX
 
 0. §2.4, last line:  Should be /`natural'/ instead of /'natural'./
@@ -1302,6 +1332,8 @@ This is often called /elegance/ when applying a scientific method.
 
 0. §2.14, exercise 2.21: It seems you have the accidental typos /λap/ appearing twice.
 
+0. §2.15, second paragraph: For $f : B ← C × A$, the phrase /f c ∈ B/ is ill-typed
+   and it may be incorrect to say it, /f c/, /denotes a value of type B/.
 
 * COMMENT ToDo's
 Include:
