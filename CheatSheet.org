@@ -1292,7 +1292,87 @@ $B × D ← A$.
 
 \room
 
-Since $f_c$ ... paragraph after (2.80). *working here*
+Since $f_c$ denotes a function of type $B ← A$, we will say $f_c : B^A$, where the exponential
+is an alternate notation for the arrow --the reason to adopt it is that it is functorial, as will be shown.
+
+We want functions so as to apply them, so it's natural to introduce the /apply/ operator which applies
+a function to an argument:
+\[ ap : B ← B^A × A \]
+\[ ap(f, a) = f \ a \]
+
+#+LaTeX: \def\transpose#1{ \overline{#1} }
+
+#+BEGIN_EXPORT latex
+The above “transpose” operation $f ↦ f_c$ is of type $B^A ← C$.
+It expresses $f$ as a kind of /C/-indexed family of functions $B ← A$.
+It will be denoted by $\transpose{f}$ with the definition $(\transpose{f}\, c)\, a = f(c, a)$.
+
+Observe that $\transpose{f}$ is more tolerant than $f$: The latter is a binary operator and so
+requires /both/ arguments $(c,a)$ to become available before application, whereas the former is happy
+to be produced with $c$ first  and with $a$ later on.
+
+\eqn{exponential-Char}{ k = \transpose{f} \equivS f = ap ∘ (k × \Id) }
+
+Pointwise, $(ap ∘ (\transpose{f} × \Id))\, (c, a) = ap \, (\transpose{f}\, c, a) = \transpose{f} \, c\, a$
+which should be equal to $f(c,a)$ and indeed it is --in pointfree form:
+
+\eqn{exponential-Cancellation}{ f = ap ∘ (\transpose{f} × \Id) }
+
+\eqn{exponential-Id}{ \transpose{ap} = \Id_{B^A} }
+
+\eqn{exponential-Fusion}{ \transpose{g ∘ (f × \Id)} \eqS \transpose{g} ∘ f }
+
+We can thus introduce a new functional combinator, which arises as the transpose
+of $f ∘ ap$:
+
+\eqn{exponential-Functor-Type}{ f^A : C^A ← B^A \providedS f : C ← B}
+
+$B^A$ can be thought of as a /syntactical/ representation of the /semantical/ $A → B$
+--they are the `same', but the way we treat them and think of them is different.
+[ This differs from $(-→-)$ when discussing adjunctions earlier, since that was
+  the `external hom-/set/'; this is the /internal/ hom! ]
+
+\eqn{exponential-Functor-Defn}{ f^A = \transpose{f ∘ ap} }
+#+END_EXPORT
+
+Pointwise: $f^A\, g = f ∘ g$ --so $f^A$ is the “compose with $f$” functional combinator.
+# Indeed:
+# 
+#     fᵃ = T(f . ap)
+# ≡   f . ap = ap ∘ (fᵃ × Id)                 exp-Char
+# ≡   f . ap (g, a) = ap ∘ (fᵃ × Id) (g, a)   extensionality
+# ≡   f (g a)       = ap ∘ (fᵃ g, a)          ×-simpl
+# ≡   f (g a)       = fᵃ g a                  ap-simpl
+# ≡   f ∘ g         = fᵃ g                    extensionality
+
+\eqn{exponential-Functorial}{ (g ∘ h)^A \eqs g^A ∘ h^A \landS \Id^A = \Id }
+
+*Interestingly:*
+
+#+BEGIN_EXPORT latex
+\eqn{Oh₀}{ \transpose{\snd} \eqs \const{\Id} }
+
+\eqn{Oh₁}{ \transpose{f}\, a \eqs f ∘ ⟨ \constant{a} , \Id ⟩ }
+
+\eqn{Oh₂}{ \const{g} \eqs \transpose{g ∘ \snd} }
+
+Also $\transpose{\snd}$ is a constant function:
+\eqn{Oh₃}{ \transpose{\snd} ∘ f \eqs \transpose{\snd} }
+#+END_EXPORT
+
+
+* §2.17 Initial and terminal datatypes
+
+All properties studied for binary /splits/ and binary /eithers/ extend to the
+finitary case. For the particular situation $n = 1$, we will have $⟨f⟩=[f]=f$
+and $\inl = \fst = \Id$, of course. 
+
+For the particular situation $n = 0$,
+finitary products “degenerate” to 1 and finitary sums “degenerate” to 0.
+The standard notation for the empty split $⟨⟩$ is $!_C$, where $C$ is the source.
+Dually, the standard notation for the empty either $[]$ is $?_C$.
+
+Exercise 2.30: Particularise the exchange law to empty products and empty coproducts; i.e., 1 and 0!
 
 * FIX
 
@@ -1335,11 +1415,28 @@ Since $f_c$ ... paragraph after (2.80). *working here*
 0. §2.15, second paragraph: For $f : B ← C × A$, the phrase /f c ∈ B/ is ill-typed
    and it may be incorrect to say it, /f c/, /denotes a value of type B/.
 
+0. §2.15, typing (2.81): The name /ap/ appears on the arrow, perhaps you do not want it appearing 
+   twice in one line like that.
+
+0. §2.15, first paragraph after (2.81): Perhaps it may be better to use a definite article:
+   /Back to the generic binary operator/ rather than /Back to generic binary operator/.
+
+0. §2.18, page 56: In the definition of type ~Point~, maybe mention that the Haskell ecosystem
+   uses distinct name-spaces for types and their constructors whence the overloading of ``Point''
+   is non-ambiguous.
+
+0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
+
 * COMMENT ToDo's
 Include:
 + Page 23: Associativity of ~C~ product structs.
 + Page 25: Realisation of sums in ~C~.
 + Pages 31-32: Datatypes, void, unit, bool, maybe.
++ Page 51: Table 2.1 Abstract notation versus programming language data-structures.
+
++ Go do all the exercises --we have a handy cheat-sheet to help! Let the exercises reinforce the learning!
+  - Some of the insightful, or fun ones, maybe include here ;-)
+  - §2.19 is all exercises!
 
 * COMMENT ∞ Further Reads
 
