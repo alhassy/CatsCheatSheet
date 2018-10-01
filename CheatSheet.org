@@ -23,7 +23,7 @@
 #+INCLUDE: ~/Dropbox/MyUnicodeSymbols.org
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
 
-* TODO commit info                                                 :ignore:
+* COMMENT TODO commit info                                           :ignore:
 
 #+begin_tiny
   \vspace{-3.5em}
@@ -64,6 +64,18 @@
 # LaTeX: \setlength{\parskip}{0.5em}
 
 #+LaTeX: \def\room{\vspace{0.5em}}
+
+* Importance of Compositional Combinators                            :ignore:
+
+# Paraphrasing Oliveira, §2.13
+\vspace{3ex}
+The compositional combinators put forward here are equipped with a concise /set of properties/
+which enable programmers to transform programs, reason about them, and perform useful calculations.
+This raises a /programming methodology/ which is scientific and stable.
+
+# The relevance of universal properties, such as ℱ-Char, is that it offers a way of /solving equations/
+# of the form $y = ℱ\, x$. For example, can the identity be expressed, or `reflected', using this combinator?
+# We just solve the equation $\Id = ℱ\, x$ for unknown(s) $x$ by appealing to the universal property.
 
 * Categories
 
@@ -914,7 +926,7 @@ Clear, concise, and an illuminating read.
 
 \newpage
 Now notes from /Program Design by Calculation/ of J. Oliveira.
-* §2, upto §2.3, An Introduction to Pointfree Programming
+* An Introduction to Pointfree Programming
 
 # Functional programming literally means “programming with functions”.
 The main emphasis is on /compositionality/, one of the main advantages
@@ -922,6 +934,8 @@ of “thinking functionally”, explaining how to construct new functions
 out of other functions using a minimal set of predefined functional
 combinators. This leads to a style which is /pointfree/ in the sense that
 function descriptions dispense with variables --also known as /points/.
+
+\room
 
 Why do people look for compact notations?
 A compact notation leads to shorter documents, less lines of code
@@ -932,6 +946,8 @@ which are easy to memorise.
 # Backus' FP and Iverson's APL are examples of pointfree programming
 # languages; look them up ;-)
 
+\room
+
 The notation “$f : A → B$” focuses on what is relevant about $f$
 and can it be regard as a kind of contract:
 #+BEGIN_QUOTE
@@ -939,16 +955,24 @@ $f$ /commits itself/ to producing a /B/-value provided it is supplied
 with an /A/-value.
 #+END_QUOTE
 
+\room
+
 Types provide the “glue”, or interface, for putting functions
 together to obtain more complex functions.
+
+\room
 
 What do we want functions for?
 One wants functions for modelling and reasoning about the
 behaviour of real things.
 
+\room
+
 In order to switch between the pointwise and pointfree settings
 we need two “bridges”: One lifting equality to the function level
 and the other lifting function application.
+
+\room
 
 Two functions $f, g : A → B$ are the same function iff they agree
 at the pointwise level:
@@ -969,13 +993,14 @@ $f ∘ g : C ← A$ can be defined. It “glues” $f$ and $g$ together,
 }
 #+END_EXPORT
 
-\newpage
-* §2.5 Constant functions
+* COMMENT Constant functions
 
 Opposite to the identity functions which do not lose any information,
 we find functions which lose all, or almost all, information.
 Regardless of their input, the output of these functions is always the
 same value.
+
+\room
 
 Let $C$ be a nonempty data domain and let $c : C$.
 Then we define the /everywhere c/ function as follows, for arbitrary $A$:
@@ -991,15 +1016,17 @@ functions to disappear:
 In 𝒮ℯ𝓉, we have that composition and application are bridged
 explicitly by the constant functions:
 #+BEGIN_EXPORT latex
-\eqn{𝒮ℯ𝓉-Bridge}{ f ∘ \const{c} = \const{f \, c}}
+\eqn{Set-Bridge}{ f ∘ \const{c} = \const{f \, c}}
 #+END_EXPORT
 
-* §2.6 Monics and Epics
+* Monics and Epics
 
 Identity functions and constant functions are limit points of the 
 functional spectrum with respect to information preservation.
 All the other functions are in-between: They “lose” some information,
 which is regarded as uninteresting for some reason.
+
+\room
 
 How do functions lose information?
 Basically in two ways: They may be “blind” enough to confuse different
@@ -1007,6 +1034,8 @@ inputs, by mapping them to the same output, or they may ignore values
 of their target. For instance, $\const{c}$ confuses all inputs
 by mapping them all onto $c$. Moreover, it ignores all values of its
 target apart from $c$.
+
+\room
 
 Functions which do not confuse their inputs are called /monics/:
 They are “post-cancellable”:
@@ -1029,11 +1058,13 @@ Intuitively, $h = k$ on all points of their source precisely when
 they are equal on all image points of $f$, since $f$ being epic means 
 it outputs all values of their source.
 
+\room
+
 It is easy to check that “the” identity function is monic and epic, 
 while any constant function $\const{c}$ is not monic and is only
 epic when its target consists only of $c$.
 
-* §2.7 Isos
+* COMMENT §2.7 Isos
 
 A function is an /iso/ iff it is invertible:
 There is a function /f˘/ called its “inverse” or “converse” such that
@@ -1077,7 +1108,7 @@ Finally, note that all classes of functions referred to so far
 ---identities, constants, epics, monics, and isos---
 are closed under composition.
 
-* §2.8 Gluing functions which do not compose -- products
+* Gluing functions which do not compose -- products
 
 Function composition has been presented above as a basis for gluing functions
 together in order to build more complex functions. However, not every two functions
@@ -1088,6 +1119,8 @@ can be glued together by composition.
 # $f : A ← C$ and $g : B ← C$ 
 For instance, functions $A \overset{f}{\leftlongarrow} C \overset{g}{\rightlongarrow} B$
 do not compose with each other since the source of one is not the target of the other.
+
+\room
 
 Since $f$ and $g$ share the same source, their outputs can be paired: $c ↦ (f\, c, g\, c)$.
 We may think of the operation which pairs the outputs of $f$ and $g$ as a new function
@@ -1130,31 +1163,41 @@ Notice how it looks like the /definition/ of the split operator but all applicat
 been lifted to compositions! Woah!
   + Moreover, the absorption property is just the lifting of the pointwise definition! Woah!
 
+\room
+
 All three combinators interact via the ×-absorption property.
 
-The following is self-inverse,
-\eqn{swap-Def}{swap = ⟨\snd, \fst⟩ : A × B ≅ B × A}
+# \room
+#
+# The following is self-inverse,
+# \eqn{swap-Def}{swap = ⟨\snd, \fst⟩ : A × B ≅ B × A}
 
-* §2.9 Gluing functions which do not compose -- coproducts
+* COMMENT Gluing functions which do not compose -- coproducts
 
 In the scenario $A \overset{f}{\rightlongarrow} C \overset{g}{\leftlongarrow} B$,
 it is clear that the kind of glue we need should make it possible to apply $f$
 if the input is from the “$A$ side” or apply $g$ if it is from the “$B$ side”.
+
+\room
 
 We denote this new combinator “either $f$ or $g$”, $[f, g] : A + B → C$, where the values of $A + B$
 can be thought of as “copies” of $A$ or $B$ values which are “stamped” with different
 tags in order to guarantee that values which are simultaneously in $A$ and $B$ do not
 get mixed up.
 
+\room
+
 Duality is of great /conceptual economy/ since everything that can be said of concept /X/
 can be rephrased for /co-X/. *That $\composition$-listing provides eloquent evidence of duality.*
+
+\room
 
 Notice that the fusion law,
 \eqn{Fusion}{ f ∘ [g, h] = [f ∘ g, f ∘ h]}
 Is essentially the definition: If we're in the left `g` then the result is `f` applied to it;
 otherwise if we're in the right `h` then the result is `f` applied to it! Woah: From pointwise to pointfree.
 
-* §2.10 Mixing products and coproducts
+* COMMENT §2.10 Mixing products and coproducts
 
 Any $f : A + B → C × D$ can be expressed alternatively as an /either/
 or as a /split/. It turns out that both formats are identical:
@@ -1181,17 +1224,7 @@ Also, since constants ignore their inputs,
 # = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
 # = ⟨ [f, g], _k_ ⟩               constants
 
-* §2.13 Universal Properties
-
-The compositional combinators put forward so far have been equipped with a concise /set of properties/
-which enable programmers to transform programs, reason about them, and perform useful calculations.
-This raises a /programming methodology/ which is scientific and stable.
-
-The relevance of universal properties, such as ℱ-Char, is that it offers a way of /solving equations/
-of the form $y = ℱ\, x$. For example, can the identity be expressed, or `reflected', using this combinator?
-We just solve the equation $\Id = ℱ\, x$ for unknown(s) $x$ by appealing to the universal property.
-
-* §2.14 Guards and McCarthy's conditional
+* COMMENT §2.14 Guards and McCarthy's conditional
 
 Define
 \eqn{?-Defn}{(p?)\, a = \mathsc{If}\, p\, a \,\mathsc{Then}\, \inl\, a \,\mathsc{Else}\, \inr\, a \mathsc{Fi}}
@@ -1236,7 +1269,7 @@ Hence to reason about conditionals one may seek help in the algebra of sums.
 
 *As well as their duals!*
 
-* Wow --another example-- involving conditionals
+* COMMENT Wow --another example-- involving conditionals
 Just as in the case of proving /tails/ is a natural transformation *without* using
 any implementing definitions, here's a similar example.
 
@@ -1272,7 +1305,7 @@ The less one has to write to solve a problem, the better.
 One saves time and one's brain, adding to productivity.
 This is often called /elegance/ when applying a scientific method.
 
-* §2.15 Gluing functions which do not compose --exponentials
+* COMMENT §2.15 Gluing functions which do not compose --exponentials
 
 Functional application is the bridge between the pointfree and pointwise worlds.
 
@@ -1360,8 +1393,7 @@ Also $\transpose{\snd}$ is a constant function:
 \eqn{Oh₃}{ \transpose{\snd} ∘ f \eqs \transpose{\snd} }
 #+END_EXPORT
 
-
-* §2.17 Initial and terminal datatypes
+* COMMENT §2.17 Initial and terminal datatypes
 
 All properties studied for binary /splits/ and binary /eithers/ extend to the
 finitary case. For the particular situation $n = 1$, we will have $⟨f⟩=[f]=f$
@@ -1374,58 +1406,232 @@ Dually, the standard notation for the empty either $[]$ is $?_C$.
 
 Exercise 2.30: Particularise the exchange law to empty products and empty coproducts; i.e., 1 and 0!
 
-* FIX
+* COMMENT §3 Recursion in the Pointfree Style
 
-0. §2.4, last line:  Should be /`natural'/ instead of /'natural'./
+This section provides a naive introduction to algorithm analysis and synthesis
+by showing how a quite elementary class of algorithms --equivalent to for-loops
+in C or any imperative language-- arise from elementary properties of the underlying
+maths domain.
 
-0. §2.5, exercise 2.1: Maybe place this at the end of §2.4 since
-     it's a problem on identity functions,
-     rather than at the end of §2.5 which is on constant functions.
+The /for-loop/ combinator is defined by
+\[ for \; f \; e \; 0 = e \]
+\[ for \; f \; e \; (n+1) = f (for \; f \; e \; n) \]
 
-0. §2.6, end: It's easy to see how monics generalise injective functions
-   but it's not as easy for the surjective-epic case. I've conjured up
-   the following explanation, which might be helpful to include.
-   #+BEGIN_QUOTE
- 
+Which can be implemented, in C:
+#+BEGIN_EXAMPLE
+T total = e;
+for(int j=0; j<n; j++)
+   total = f(total);
+#+END_EXAMPLE
+
+This is the catamorphism for ℕ!
+
 #+BEGIN_EXPORT latex
-\eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
-  \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
-}
+\eqn{in-ℕ}{ in = [ \const{0}, succ] : 1 + ℕ ≅ ℕ }
+
+The above witness: Every natural number is either 0 or the successor of another natural number.
+--That is, such $in$'s characterise inductive types!--
+
+\eqn{for-loop-universal}{ f = for \; g \; e \equivS f ∘ in = [ \const{k}, g] ∘ (\Id + f)] \eqs ⦇ [\const{k}, g] ⦈}
+
+\eqn{for-loop-Id}{ for\; succ\; 0 \eqs \Id}
+
+\eqn{for-loop-fusion}{ h ∘ for\; g\; k \eqs for\; j \; (h\, k) \providedS h ∘ g = j ∘ h}
+% Proof: Universal property along with fact (a+) ∘ Id = (a+).
 #+END_EXPORT
 
-   Intuitively, $h = k$ on all points of their source precisely when
-   they are equal on all image points of $f$, since $f$ being epic
-   means it outputs all values of their source.
-   #+END_QUOTE
+*Heuristic* Implement a given function $f$ as a for-loop by using for-loop-Id then for-loop-fusion
+and solving for unknown $j$ along the way; e.g.,
 
-0. §2.7, before equation 2.18:
-   I think you meant /pointfree/ not /pointwise/ as clearly 2.18 involves
-   no points.
+#+begin_calculation latex
+  f
+\step{ Identities and for-loop-Id }
+  f ∘ for\; succ\; 0
+\step{ For-loop-fusion, calculute for unknown $j$ in $f ∘ succ = j ∘ f$ }
+  for \; j \; (f\; 0)
+#+end_calculation
 
-0. §2.13, ×-fusion calculation: In the final hint, perhaps add /after (2.63)/
-   so that it is clear which /derived above/ law is being referenced
-   --since its name is in the surrounding text and may not be easy to locate.
+Really the $j$ is what $f$ does at the inductive step
+--we cover the base step by computing $f\; 0$ directly.
 
-0. §2.14, page 39, second paragraph: Typo /market/ should be /marked/.
-0. §2.14, page 39, diagram: Typos, left arrow should be labelled /g/ not /f/,
-   and the right arrow should be labelled /h/ not /g/.
+For example, in this way we obtain $(a+) = for\; succ\; a$.
 
-0. §2.14, exercise 2.21: It seems you have the accidental typos /λap/ appearing twice.
+Other fun stuff:
+#+BEGIN_EXPORT latex
+\eqn{simple-optimisation}{ for\; \const{k} \; k \eqs for\; \Id \; k}
+#+END_EXPORT
 
-0. §2.15, second paragraph: For $f : B ← C × A$, the phrase /f c ∈ B/ is ill-typed
-   and it may be incorrect to say it, /f c/, /denotes a value of type B/.
+* COMMENT §3.12 F-catamorphisms
 
-0. §2.15, typing (2.81): The name /ap/ appears on the arrow, perhaps you do not want it appearing 
-   twice in one line like that.
+For a polynomial functor $F$ a particular iso /F/-algebra always exists, which
+is denoted by $in : μF ← F (μF)$ and has special properties. First, its carrier
+is the smallest among the carriers of other iso /F/-algebras, and this is why it
+is denoted by $μF$ ---$μ$ for “minimal”.
 
-0. §2.15, first paragraph after (2.81): Perhaps it may be better to use a definite article:
-   /Back to the generic binary operator/ rather than /Back to generic binary operator/.
+#+BEGIN_EXPORT latex
+\eqn{cata-Char}{k = ⦇α⦈ \equivS k ∘ in = α ∘ F k }
 
-0. §2.18, page 56: In the definition of type ~Point~, maybe mention that the Haskell ecosystem
-   uses distinct name-spaces for types and their constructors whence the overloading of ``Point''
-   is non-ambiguous.
+\eqn{cata-Id}{ ⦇in⦈ = \Id_{μF} }
 
-0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
+
+\eqn{cata-cancellation}{⦇α⦈ ∘ in = α ∘ F ⦇α⦈}
+
+That is, since in is an iso, “Decompose input, via out, then recurse, then apply α”:
+
+\eqn{cata-cancellation}{⦇α⦈ = α ∘ F ⦇α⦈ ∘ out}
+
+\eqn{cata-Fusion}{ f ∘ ⦇α⦈ = ⦇β⦈ \providedS f ∘ α = β ∘ F f}
+#+END_EXPORT
+
+*Go back and re-read §3.13* Then do exercises 3.11, 3.16, 3.17.
+
+* COMMENT §3.13 Introducing Inductive Datatypes
+
+A comment on the particular choice of terminology: ~in~ suggests that we are
+going inside, or constructing values of the datatype; whereas ~out~ suggests
+that we are going out, or destructing, analysing, values of the datatype.
+
+A nifty duality.
+
+* COMMENT §3.16 The mutual-recursion law
+
+Suppose we are executing two (possibly mutually recursive) functions $f$ and $g$ in parallel, which may be catamorphisms
+and so somewhat costly. Could we turn these into a single function call to a catamorphism?
+
+Solving for $h, k$ in $⟨f, g⟩ = ⦇⟨h, k⟩⦈$ yields “Fokkinga's Law”, aka
+
+#+BEGIN_EXPORT latex
+\eqn{Mutual-Recursion-Law}{ ⟨f, g⟩ = ⦇⟨h, k⟩⦈ \equivS f ∘ in = h ∘ F ⟨f, g⟩ \landS g ∘ in = k ∘ F⟨f, g⟩}
+#+END_EXPORT
+
+This law is useful in combining two mutually recursive functions into a single catamorphism
+--with added efficiency by possibly using the exchange law.
+
+*Heuristic*
+We can apply this law to a single function by looking at an “inefficient” subpart and
+extracting that into its own function, then trying to apply the law, with possibly more extractions.
+
+ - Isn't the computing-cubes-in-linear-time problem solved this way?
+
+For example, there is much re-calculation in the definition of fib:
+\[ fib \; 0 = 1 \]
+\[ fib \; 1 = 1 \]
+\[ fib \; (n+2) = fib \; (n+1) + fib\; n \]
+Can we improve its performance?
+The clue is to regard the two instances of $fib$ in the recursive branch as mutually recursive
+over the natural numbers. The clue is /suggested/ not only by $fib$ having two base cases
+--so, perhaps it hides two functions-- but also by the lookahead $n + 2$ in the recursive clause.
+Introducing $f$ by the /specification/ $f\; n = fib(n + 1)$ then using that to obtain a recursive definition,
+possibly depending on $fib$, allows us to use the mutual recursive law to obtain a linear function
+from which $fib$ is obtained via a simple projection --say $\snd$.
+
+The mutual recursive law generalises to more than two mutually recursive functions, in this case three:
+#+BEGIN_EXPORT latex
+\eqn{Mutual-Recursion-Law}{ ⟨f₀, ⟨f₁, f₂⟩⟩ = ⦇⟨h₀, ⟨h₁, h₂⟩⟩⦈ \equivS ∀i:0..2 • fᵢ ∘ in = hᵢ ∘ F⟨f₀, ⟨f₁, f₂⟩⟩ }
+#+END_EXPORT
+
+Now go do exercises 3.23, 3.26, 3.28 ;-)
+
+An immediate consequence of Mutual-Recursion-Law is
+#+BEGIN_EXPORT latex
+\eqn{Banana-Split-Law}{ ⟨⦇i⦈, ⦇j⦈⟩ = ⦇(i × j) ∘ ⟨F \fst, F \snd⟩ ⦈ }
+
+This law provides us with a very useful tool for “parallel loop” fusion.
+#+END_EXPORT
+
+
+* COMMENT FIXES
+** §4 FIX
+
+ 0. §4.7, page 135: ?
+
+** §3 FIX
+ 0. §3.1, page 65: The code block is terminated by a superfluous semicolon, ~;~, as is the case for after (3.8) and
+     in exercise 3.5.
+
+ 0. §3.1, page 68, exercise 3.3: The arguments to the ~for~ are in the wrong order; moreover the notation
+    for multiplication is inconsistent with in (3.6).
+
+ 0. §3.3, page 79: The top-most code fragment mentions ~Eval T~ but nothing in the surrounding text mentions
+    ~Eval~. Is this a typo?
+
+ 0. §3.4, page 83: In the fourth equation in the bottom-most calculation, there seems to be a missing
+    ~cons~ tag on the right-hand side --c.f. (3.27)--. The right-most should be /Cons(a, x)/ instead of just /(a,x)/.
+
+ 0. §3.6, page 87: Right after (3.41), there is an inconsistency with the notation of multiplication, or there lack of.
+    Perhaps consider using a × or *, rather than just a space.
+
+ 0. §3.9, page 96, equation (3.63): Do you mean ${}_n C_p$ instead of ${}^n C_p$?
+    If so: It might also help to mention that this is the combinatorial choice operator
+    and is not the same as the coefficients $C_i$ of (3.62); otherwise the overloaded $C$ might
+    cause more trouble than desired. Alternatively maybe use notation $\binom{n}{p}$ instead.
+
+ 0. §3.9, page 97, exercise 3.10: At the end of the first line, you want $(1 + X)²$ rather than $(1 + X²)$.
+
+ 0. §3.12, page 99: When you first introduced isos back in §2, you said they were functions that were both
+    monic and epic, which is the case for your ambient category, Sets. However, in the first line of this
+    subsection, it seems you are stating that an /F/-algebra that is both epic and monoic is necessarily an iso
+    --which as far as I know is not true, even when the underling category is Set.
+
+ 0. §3.15, page 110: First sentence after the functor instance should include a definite article; it should be
+    /in the language's/.
+
+ 0. §3.16, page 115, line 10: Typo, /more that two/ should be /more than two/.
+
+ 0. §3.19, page 123, last paragraph, third line: Typo /such as discipline/ should be /such a discipline/.
+
+** §2 FIX
+
+ 0. §2.4, last line:  Should be /`natural'/ instead of /'natural'./
+
+ 0. §2.5, exercise 2.1: Maybe place this at the end of §2.4 since
+      it's a problem on identity functions,
+      rather than at the end of §2.5 which is on constant functions.
+
+ 0. §2.6, end: It's easy to see how monics generalise injective functions
+    but it's not as easy for the surjective-epic case. I've conjured up
+    the following explanation, which might be helpful to include.
+    #+BEGIN_QUOTE
+ 
+ #+BEGIN_EXPORT latex
+ \eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
+   \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
+ }
+ #+END_EXPORT
+
+    Intuitively, $h = k$ on all points of their source precisely when
+    they are equal on all image points of $f$, since $f$ being epic
+    means it outputs all values of their source.
+    #+END_QUOTE
+
+ 0. §2.7, before equation 2.18:
+    I think you meant /pointfree/ not /pointwise/ as clearly 2.18 involves
+    no points.
+
+ 0. §2.13, ×-fusion calculation: In the final hint, perhaps add /after (2.63)/
+    so that it is clear which /derived above/ law is being referenced
+    --since its name is in the surrounding text and may not be easy to locate.
+
+ 0. §2.14, page 39, second paragraph: Typo /market/ should be /marked/.
+ 0. §2.14, page 39, diagram: Typos, left arrow should be labelled /g/ not /f/,
+    and the right arrow should be labelled /h/ not /g/.
+
+ 0. §2.14, exercise 2.21: It seems you have the accidental typos /λap/ appearing twice.
+
+ 0. §2.15, second paragraph: For $f : B ← C × A$, the phrase /f c ∈ B/ is ill-typed
+    and it may be incorrect to say it, /f c/, /denotes a value of type B/.
+
+ 0. §2.15, typing (2.81): The name /ap/ appears on the arrow, perhaps you do not want it appearing 
+    twice in one line like that.
+
+ 0. §2.15, first paragraph after (2.81): Perhaps it may be better to use a definite article:
+    /Back to the generic binary operator/ rather than /Back to generic binary operator/.
+
+ 0. §2.18, page 56: In the definition of type ~Point~, maybe mention that the Haskell ecosystem
+    uses distinct name-spaces for types and their constructors whence the overloading of ``Point''
+    is non-ambiguous.
+
+ 0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
 
 * COMMENT ToDo's
 Include:
