@@ -65,18 +65,6 @@
 
 #+LaTeX: \def\room{\vspace{0.5em}}
 
-* Importance of Compositional Combinators                            :ignore:
-
-# Paraphrasing Oliveira, §2.13
-\vspace{3ex}
-The compositional combinators put forward here are equipped with a concise /set of properties/
-which enable programmers to transform programs, reason about them, and perform useful calculations.
-This raises a /programming methodology/ which is scientific and stable.
-
-# The relevance of universal properties, such as ℱ-Char, is that it offers a way of /solving equations/
-# of the form $y = ℱ\, x$. For example, can the identity be expressed, or `reflected', using this combinator?
-# We just solve the equation $\Id = ℱ\, x$ for unknown(s) $x$ by appealing to the universal property.
-
 * Categories
 
 A *category* 𝒞 consists of a collection of “objects” ~Obj 𝒞,~ a collection of
@@ -131,7 +119,7 @@ Example Categories.
 
 Even when morphisms are functions, the objects need not be sets:
 Sometimes the objects are /operations/ --with an appropriate definition
-of typing for the functions. The categories of F-algebras are an example
+of typing for the functions. The categories of /F/-algebras are an example
 of this.
 
 
@@ -926,63 +914,16 @@ Clear, concise, and an illuminating read.
 
 \newpage
 Now notes from /Program Design by Calculation/ of J. Oliveira.
-* An Introduction to Pointfree Programming
 
-# Functional programming literally means “programming with functions”.
-The main emphasis is on /compositionality/, one of the main advantages
-of “thinking functionally”, explaining how to construct new functions
-out of other functions using a minimal set of predefined functional
-combinators. This leads to a style which is /pointfree/ in the sense that
-function descriptions dispense with variables --also known as /points/.
+\vspace{-0.5em}
 
-\room
+* “Gluing” Morphisms Together
 
-Why do people look for compact notations?
-A compact notation leads to shorter documents, less lines of code
-in programming, in which patterns are easier to identify and reason
-about. Properties can be stated in clear-cut, one-line long equations
-which are easy to memorise. 
-#
-# Backus' FP and Iverson's APL are examples of pointfree programming
-# languages; look them up ;-)
-
-\room
-
-The notation “$f : A → B$” focuses on what is relevant about $f$
-and can it be regard as a kind of contract:
-#+BEGIN_QUOTE
-$f$ /commits itself/ to producing a /B/-value provided it is supplied
-with an /A/-value.
-#+END_QUOTE
-
-\room
-
-Types provide the “glue”, or interface, for putting functions
-together to obtain more complex functions.
-
-\room
-
-What do we want functions for?
-One wants functions for modelling and reasoning about the
-behaviour of real things.
-
-\room
-
-In order to switch between the pointwise and pointfree settings
-we need two “bridges”: One lifting equality to the function level
-and the other lifting function application.
-
-\room
-
-Two functions $f, g : A → B$ are the same function iff they agree
-at the pointwise level:
-\eqn{Extensionality}{ f = g \equivS \left(∀ a : A • f\, a = g\, a \right)}
-
-Function application is replaced by the more generic concept of
-functional /composition/ suggested by function-arrow chaining:
-Whenever we have two functions such that the target type of one
+Traditional function application is replaced by the more generic concept of
+functional /composition/ suggested by morphism-arrow chaining:
+Whenever we have two morphisms such that the target type of one
 of them, say $g : B ← A$ is the same as the source type of the other,
-say $f : C ← B$ then “$f$ after $g$”, their /composite function/,
+say $f : C ← B$ then “$f$ after $g$”, their /composite morphism/,
 $f ∘ g : C ← A$ can be defined. It “glues” $f$ and $g$ together,
 “sequentially”:
 #+BEGIN_EXPORT latex
@@ -992,6 +933,86 @@ $f ∘ g : C ← A$ can be defined. It “glues” $f$ and $g$ together,
   C \overset{\;f ∘ g}{\longleftarrow} A
 }
 #+END_EXPORT
+
+Composition is the basis for gluing morphisms together to build more complex morphisms.
+However, not every two morphisms can be glued together by composition.
+
+\room
+
+Types provide the interface for putting morphisms together to obtain more complex functions.
+
+\room
+
+A /split/ arises wherever two morphisms do not compose but share the same source.
+  - Since they share the same source, their outputs can be paired: $c ↦ (f\, c, g\, c)$.
+  - This duplicates the input so that the functions can be executed in “parallel” on it.
+
+\room
+
+A /product/ appears when there is no explicit relationship between the types of the morphisms.
+  - We regard their sources as projections of a product, whence they can be seen as /splits/.
+  - This $(c, d) ↦ (f\, c, g\, d)$ corresponds to the “parallel” application of $f$ and $g$, 
+     each with its /own/ input.
+
+\room
+
+An /either/ arises wherever two morphisms do not compose but share the same target.
+  - Apply $f$ if the input is from the “$A$ side” or apply $g$ if it is from the “$B$ side”.
+  - This is a “case analysis” of the input with branches being either $f$ or $g$.
+
+\room
+
+A /sum/ appears when there is no explicit relationship between the types of the morphisms.
+  - We regard their targets as injections into a sum, whence they can be seen as /eithers/.
+
+\room
+
+#+LaTeX: \def\transpose#1{ \overline{#1} }
+A /transpose/ arises when we need to combine a binary morphism with a unary morphism.
+  - I.e., it arises when a composition chain is interrupted by an extra product argument.
+  - Express $f$ as a /C/-indexed family, $f_c : A → B$, of morphisms such that applying a function at any index
+    behaves like $f$; i.e., $f_c \, a = f(c, a)$. Each $f_c$ can now be composed with $g$.
+    Let $\transpose{(\;)}$ denote the operation $f ↦ f_c$.
+
+\vspace{-0.5em}
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{split-Type}{ A \overset{f}{\longleftarrow} C \overset{g}{\longrightarrow} B 
+ \hspace{5.8em}\equivS A × B \overset{\;\;⟨f,g⟩}{\xleftarrow{\hspace*{0.5cm}}} C }
+
+\eqn{$\times$-Type}{ A \overset{f}{\longleftarrow} C \lands B \overset{g}{\longleftarrow} D
+ \hspace{1.9em} \equivS A × B \overset{f × g}{\xleftarrow{\hspace*{0.5cm}}} C × D }
+
+\eqn{either-Type}{ A \overset{f}{\longrightarrow} C \overset{g}{\longleftarrow} B
+ \hspace{5.9em}\equivS A + B \overset{[f,g]}{\xrightarrow{\hspace*{0.5cm}}} C }
+
+\eqn{+-Type}{ A \overset{f}{\longrightarrow} C \lands B \overset{g}{\longrightarrow} D
+ \hspace{2em} \equivS A + B \overset{f + g}{\xrightarrow{\hspace*{0.5cm}}} C + D }
+
+\eqn{transpose-Type}{
+  B \overset{f}{\longleftarrow}{C × A} 
+  \hspace{6.9em} \equivS
+  B^A \overset{\transpose{f}}{\longleftarrow} C
+  }
+
+\eqn{transpose-combination}{
+  B \overset{f}{\longleftarrow}{C × A} 
+  \lands
+  C \overset{g}{\longleftarrow} D
+  \impliesS
+  B^A \overset{\transpose{f} ∘ g}{\xleftarrow{\hspace*{1cm}}} D
+  }
+\endeqns
+#+END_EXPORT
+
+\vspace{1em}
+
+The fusion laws for $[]$ and $⟨⟩$ give us a pointfree rendition of their usual pointwise
+definitions: All applications have been lifted to compositions!
+Likewise for the absorption laws.
+
 
 * COMMENT Constant functions
 
@@ -1019,7 +1040,7 @@ explicitly by the constant functions:
 \eqn{Set-Bridge}{ f ∘ \const{c} = \const{f \, c}}
 #+END_EXPORT
 
-* Monics and Epics
+* COMMENT Monics and Epics
 
 Identity functions and constant functions are limit points of the 
 functional spectrum with respect to information preservation.
@@ -1064,7 +1085,7 @@ It is easy to check that “the” identity function is monic and epic,
 while any constant function $\const{c}$ is not monic and is only
 epic when its target consists only of $c$.
 
-* COMMENT §2.7 Isos
+* COMMENT Isos
 
 A function is an /iso/ iff it is invertible:
 There is a function /f˘/ called its “inverse” or “converse” such that
@@ -1108,96 +1129,7 @@ Finally, note that all classes of functions referred to so far
 ---identities, constants, epics, monics, and isos---
 are closed under composition.
 
-* Gluing functions which do not compose -- products
-
-Function composition has been presented above as a basis for gluing functions
-together in order to build more complex functions. However, not every two functions
-can be glued together by composition.
-
-\room
-
-# $f : A ← C$ and $g : B ← C$ 
-For instance, functions $A \overset{f}{\leftlongarrow} C \overset{g}{\rightlongarrow} B$
-do not compose with each other since the source of one is not the target of the other.
-
-\room
-
-Since $f$ and $g$ share the same source, their outputs can be paired: $c ↦ (f\, c, g\, c)$.
-We may think of the operation which pairs the outputs of $f$ and $g$ as a new function
-combinator: $⟨f, g⟩ = c ↦ (f\, c, g\, c)$ --read “$f$ /split/ $g$”.
-
-\room
-
-$⟨f, g⟩\, c$ duplicates $c$ so that $f$ and $g$ can be executed in “parallel” on it.
-
-\room
-
-Function $⟨f,g⟩$ keeps the information of both $f$ and $g$ in the same way
-Cartesian product $A × B$ keeps the information of $A$ and $B$.
-#
-So, in the same way that $A$ data or $B$ data can be retrieved from $A × B$ data
-via the projections $A \overset{\fst}{\leftlongarrow} A × B \overset{\snd}{\rightlongarrow} B$,
-$f$ and $g$ can be retrieved via the same projections:
-\eqn{Cancellation}{\fst ∘ ⟨f, g⟩ = f \lands \snd ∘ ⟨f, g⟩ = g}
-
-\room
-
-A /split/ arises wherever two functions do not compose but share the same source.
-
-\room
-
-How do we glue functions that fail such a requisite, say $f : A ← C$ and $g : B ← D$?
-We regard their sources as projections of a product:
-$A \overset{f ∘ \fst}{\leftlongarrow} C × D \overset{g ∘ \snd}{\rightlongarrow} B$.
-Now they have the same source and so the split combinator can be used:
-$f × g = (c, d) ↦ (f\, c, g\, d)$.
-#
-This corresponds to the “parallel” application of $f$ and $g$, each with its /own/ input.
-
-\room
-
-What is the /interplay/ among the functional combinators: Composition, split, product?
-The first two relate to each other via the fusion law
-\eqn{Fusion}{⟨f, g⟩ ∘ c = ⟨f ∘ c, g ∘ c⟩}
-Notice how it looks like the /definition/ of the split operator but all applications have
-been lifted to compositions! Woah!
-  + Moreover, the absorption property is just the lifting of the pointwise definition! Woah!
-
-\room
-
-All three combinators interact via the ×-absorption property.
-
-# \room
-#
-# The following is self-inverse,
-# \eqn{swap-Def}{swap = ⟨\snd, \fst⟩ : A × B ≅ B × A}
-
-* COMMENT Gluing functions which do not compose -- coproducts
-
-In the scenario $A \overset{f}{\rightlongarrow} C \overset{g}{\leftlongarrow} B$,
-it is clear that the kind of glue we need should make it possible to apply $f$
-if the input is from the “$A$ side” or apply $g$ if it is from the “$B$ side”.
-
-\room
-
-We denote this new combinator “either $f$ or $g$”, $[f, g] : A + B → C$, where the values of $A + B$
-can be thought of as “copies” of $A$ or $B$ values which are “stamped” with different
-tags in order to guarantee that values which are simultaneously in $A$ and $B$ do not
-get mixed up.
-
-\room
-
-Duality is of great /conceptual economy/ since everything that can be said of concept /X/
-can be rephrased for /co-X/. *That $\composition$-listing provides eloquent evidence of duality.*
-
-\room
-
-Notice that the fusion law,
-\eqn{Fusion}{ f ∘ [g, h] = [f ∘ g, f ∘ h]}
-Is essentially the definition: If we're in the left `g` then the result is `f` applied to it;
-otherwise if we're in the right `h` then the result is `f` applied to it! Woah: From pointwise to pointfree.
-
-* COMMENT §2.10 Mixing products and coproducts
+* COMMENT Mixing products and coproducts
 
 Any $f : A + B → C × D$ can be expressed alternatively as an /either/
 or as a /split/. It turns out that both formats are identical:
@@ -1224,176 +1156,7 @@ Also, since constants ignore their inputs,
 # = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
 # = ⟨ [f, g], _k_ ⟩               constants
 
-* COMMENT §2.14 Guards and McCarthy's conditional
-
-Define
-\eqn{?-Defn}{(p?)\, a = \mathsc{If}\, p\, a \,\mathsc{Then}\, \inl\, a \,\mathsc{Else}\, \inr\, a \mathsc{Fi}}
-
-We call $p? : A → A + A$ the /guard/ associated to predicated /p : A → 𝔹/.
-The guard is more informative than /p/ alone: It provides information about the outcome of testing /p/
-on some input /a/, encoded in terms of the sum injections, $\inl$ for /true/ and $\inr$ for /false/,
-without losing the input /a/ itself.
-
-#+BEGIN_EXPORT latex
-\begineqns
-\eqn{McCarthy-Conditional-Defn}{ p → g,h \quad=\quad [g, h] ∘ p?}
-
-Hence to reason about conditionals one may seek help in the algebra of sums.
-
-\eqn{conditional-Fusion₁}{ f ∘ (p → g, h) \quad=\quad p → f ∘ h, f ∘ h}
-
-\eqn{conditional-Fusion₂}{ (p → g, h) ∘ k \quad=\quad p ∘ k → g ∘ k, h ∘ k}
-
-\eqn{conditional-product-Fusion}{ k ∘ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ }
-
-%
-%   k ∘ ⟨ (p → f,h) , (p → g, i) ⟩ 
-% = k ∘ ⟨ [f,h] ∘ p? , [g, i] ∘ p? ⟩
-% = k ∘ ⟨ [f,h] , [g, i] ⟩ ∘ p?
-% = k ∘ [ ⟨f, g⟩ , ⟨h, i⟩ ] ∘ p?
-% = [ k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ ] ∘ p?
-% = p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩
-
-\eqn{conditional-Abides-Distributivity}{ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → ⟨f, g⟩ , ⟨h, i⟩ }
-
-\eqn{conditional-Idempotency}{p → f,f \eqs f}
-
-\eqn{conditional-⟨⟩-Distributivity}{ ⟨ f, (p → g, h)⟩ \quad=\quad p → ⟨f, g⟩, ⟨f, h⟩ }
-
-\eqn{conditional-×-Distributivity}{ (p → g, h) × f \quad=\quad p ∘ \fst → g × f, h × f}
-
-\endeqns
-#+END_EXPORT
-
-\room
-
-*As well as their duals!*
-
-* COMMENT Wow --another example-- involving conditionals
-Just as in the case of proving /tails/ is a natural transformation *without* using
-any implementing definitions, here's a similar example.
-
-\room
-
-Here's an illustration of how /smart/ pointfree algebra can be in reasoning about
-functions that /one does not actually defined explicitly/. 
-
-It also shows how relevant the /natural properties/ are.
-
-The issue is that our definition of a guard, \ref{?-Defn}, is pointwise and most
-likely unsuitable to prove facts such as, for instance,
-\[ p? ∘ f = (f + f) ∘ (p ∘ f)? \]
-Thinking better, instead of `inventing' \ref{?-Defn}, we might --and perhaps should!--
-have defined 
-\eqn{two-Defn}{2  \;≅\; 1 + 1}
-\eqn{double-Defn}{2 × A \;≅\; A + A}
-\eqn{?-Defn-Pointfree}{ p? = double ∘ ⟨p, \Id⟩ }
-
-which actually express rather closely our strategy of switching from products
-to coproducts in the definition of $(p?)$.
-
-In particular, *we do not need to define /double/ explicitly*.
-From its type we immediately infer its natural, or free, property:
-\[ double ∘ (\Id × f) \eqs (f + f) ∘ double \]
-
-It turns out that this is the /knowledge/ we need about $double$
-in order to prove the above mentioned property.
-
-\room
-
-The less one has to write to solve a problem, the better.
-One saves time and one's brain, adding to productivity.
-This is often called /elegance/ when applying a scientific method.
-
-* COMMENT §2.15 Gluing functions which do not compose --exponentials
-
-Functional application is the bridge between the pointfree and pointwise worlds.
-
-Suppose we are given the task to combine two functions, one binary
-$B \overset{f}{\leftlongarrow}{C × A}$ and the other unary $D \overset{g}{\leftlongarrow} A$.
-Clearly none of the combinations $f ∘ g, ⟨f, g⟩$, or $[f, g]$ is well-typed. Hence $f$ and $g$
-cannot be put together and require some extra interfacing.
-
-\room
-
-Note that $⟨f, g⟩$ would be well-defined in case the $C$ components of $f$'s source
-could be somehow “ignored”. Suppose, in fact, that in some particular context
-the first argument of $f$ happens to be “irrelevant”, or to be frozen to some $c : C$.
-It is easy to derive a new function $f_c : A → B : a ↦ f(c, a)$ from $f$, combines
-nicely with $g$ via the split combinator: $⟨f_c , g⟩$ is well-typed and bears the type
-$B × D ← A$.
-
-\room
-
-Since $f_c$ denotes a function of type $B ← A$, we will say $f_c : B^A$, where the exponential
-is an alternate notation for the arrow --the reason to adopt it is that it is functorial, as will be shown.
-
-We want functions so as to apply them, so it's natural to introduce the /apply/ operator which applies
-a function to an argument:
-\[ ap : B ← B^A × A \]
-\[ ap(f, a) = f \ a \]
-
-#+LaTeX: \def\transpose#1{ \overline{#1} }
-
-#+BEGIN_EXPORT latex
-The above “transpose” operation $f ↦ f_c$ is of type $B^A ← C$.
-It expresses $f$ as a kind of /C/-indexed family of functions $B ← A$.
-It will be denoted by $\transpose{f}$ with the definition $(\transpose{f}\, c)\, a = f(c, a)$.
-
-Observe that $\transpose{f}$ is more tolerant than $f$: The latter is a binary operator and so
-requires /both/ arguments $(c,a)$ to become available before application, whereas the former is happy
-to be produced with $c$ first  and with $a$ later on.
-
-\eqn{exponential-Char}{ k = \transpose{f} \equivS f = ap ∘ (k × \Id) }
-
-Pointwise, $(ap ∘ (\transpose{f} × \Id))\, (c, a) = ap \, (\transpose{f}\, c, a) = \transpose{f} \, c\, a$
-which should be equal to $f(c,a)$ and indeed it is --in pointfree form:
-
-\eqn{exponential-Cancellation}{ f = ap ∘ (\transpose{f} × \Id) }
-
-\eqn{exponential-Id}{ \transpose{ap} = \Id_{B^A} }
-
-\eqn{exponential-Fusion}{ \transpose{g ∘ (f × \Id)} \eqS \transpose{g} ∘ f }
-
-We can thus introduce a new functional combinator, which arises as the transpose
-of $f ∘ ap$:
-
-\eqn{exponential-Functor-Type}{ f^A : C^A ← B^A \providedS f : C ← B}
-
-$B^A$ can be thought of as a /syntactical/ representation of the /semantical/ $A → B$
---they are the `same', but the way we treat them and think of them is different.
-[ This differs from $(-→-)$ when discussing adjunctions earlier, since that was
-  the `external hom-/set/'; this is the /internal/ hom! ]
-
-\eqn{exponential-Functor-Defn}{ f^A = \transpose{f ∘ ap} }
-#+END_EXPORT
-
-Pointwise: $f^A\, g = f ∘ g$ --so $f^A$ is the “compose with $f$” functional combinator.
-# Indeed:
-# 
-#     fᵃ = T(f . ap)
-# ≡   f . ap = ap ∘ (fᵃ × Id)                 exp-Char
-# ≡   f . ap (g, a) = ap ∘ (fᵃ × Id) (g, a)   extensionality
-# ≡   f (g a)       = ap ∘ (fᵃ g, a)          ×-simpl
-# ≡   f (g a)       = fᵃ g a                  ap-simpl
-# ≡   f ∘ g         = fᵃ g                    extensionality
-
-\eqn{exponential-Functorial}{ (g ∘ h)^A \eqs g^A ∘ h^A \landS \Id^A = \Id }
-
-*Interestingly:*
-
-#+BEGIN_EXPORT latex
-\eqn{Oh₀}{ \transpose{\snd} \eqs \const{\Id} }
-
-\eqn{Oh₁}{ \transpose{f}\, a \eqs f ∘ ⟨ \constant{a} , \Id ⟩ }
-
-\eqn{Oh₂}{ \const{g} \eqs \transpose{g ∘ \snd} }
-
-Also $\transpose{\snd}$ is a constant function:
-\eqn{Oh₃}{ \transpose{\snd} ∘ f \eqs \transpose{\snd} }
-#+END_EXPORT
-
-* COMMENT §2.17 Initial and terminal datatypes
+* COMMENT Initial and terminal datatypes
 
 All properties studied for binary /splits/ and binary /eithers/ extend to the
 finitary case. For the particular situation $n = 1$, we will have $⟨f⟩=[f]=f$
@@ -1406,138 +1169,457 @@ Dually, the standard notation for the empty either $[]$ is $?_C$.
 
 Exercise 2.30: Particularise the exchange law to empty products and empty coproducts; i.e., 1 and 0!
 
-* COMMENT §3 Recursion in the Pointfree Style
 
-This section provides a naive introduction to algorithm analysis and synthesis
-by showing how a quite elementary class of algorithms --equivalent to for-loops
-in C or any imperative language-- arise from elementary properties of the underlying
-maths domain.
+* COMMENT Maybe move to README
+** Gluing functions which do not compose -- products         :move_to_readme:
 
-The /for-loop/ combinator is defined by
-\[ for \; f \; e \; 0 = e \]
-\[ for \; f \; e \; (n+1) = f (for \; f \; e \; n) \]
+ Composition is the basis for gluing morphisms together to build more complex morphisms.
+ However, not every two morphisms can be glued together by composition.
 
-Which can be implemented, in C:
-#+BEGIN_EXAMPLE
+ # $f : A ← C$ and $g : B ← C$ 
+ For instance, functions $A \overset{f}{\longleftarrow} C \overset{g}{\longrightarrow} B$
+ do not compose with each other since the source of one is not the target of the other.
+
+ \room
+
+ Since $f$ and $g$ share the same source, their outputs can be paired: $c ↦ (f\, c, g\, c)$.
+ We may think of the operation which pairs the outputs of $f$ and $g$ as a new function
+ combinator: $⟨f, g⟩ = c ↦ (f\, c, g\, c)$ --read “$f$ /split/ $g$”.
+
+ \room
+
+ $⟨f, g⟩\, c = ⟨f\, c, g\, c⟩$ duplicates $c$ so that $f$ and $g$ can be executed in “parallel” on it.
+
+ \room
+
+ Function $⟨f,g⟩$ keeps the information of both $f$ and $g$ in the same way
+ Cartesian product $A × B$ keeps the information of $A$ and $B$.
+ So, in the same way that $A$ data or $B$ data can be retrieved from $A × B$ data
+ via the projections $A \overset{\fst}{\longleftarrow} A × B \overset{\snd}{\longrightarrow} B$,
+ $f$ and $g$ can be retrieved via the same projections:
+ \eqn{Cancellation}{\fst ∘ ⟨f, g⟩ = f \lands \snd ∘ ⟨f, g⟩ = g}
+
+ \room
+
+ A /split/ arises wherever two functions do not compose but share the same source.
+
+ \room
+
+ How do we glue functions that fail such a requisite, say $f : A ← C$ and $g : B ← D$?
+ We regard their sources as projections of a product:
+ $A \overset{f ∘ \fst}{\longleftarrow} C × D \overset{g ∘ \snd}{\longrightarrow} B$.
+ Now they have the same source and so the split combinator can be used:
+ $f × g = (c, d) ↦ (f\, c, g\, d)$.
+ #
+ This corresponds to the “parallel” application of $f$ and $g$, each with its /own/ input.
+
+ \room
+
+ What is the /interplay/ among the functional combinators: Composition, split, product?
+ The first two relate to each other via the fusion law
+ \eqn{Fusion}{⟨f, g⟩ ∘ c = ⟨f ∘ c, g ∘ c⟩}
+ Notice how it looks like the /definition/ of the split operator but all applications have
+ been lifted to compositions! Woah!
+   + Moreover, the absorption property is just the lifting of the pointwise definition! Woah!
+
+ \room
+
+ All three combinators interact via the ×-absorption property.
+
+ # \room
+ #
+ # The following is self-inverse,
+ # \eqn{swap-Def}{swap = ⟨\snd, \fst⟩ : A × B ≅ B × A}
+
+** Gluing functions which do not compose -- coproducts       :move_to_readme:
+
+ In the scenario $A \overset{f}{\rightlongarrow} C \overset{g}{\leftlongarrow} B$,
+ it is clear that the kind of glue we need should make it possible to apply $f$
+ if the input is from the “$A$ side” or apply $g$ if it is from the “$B$ side”.
+
+ \room
+
+ We denote this new combinator “either $f$ or $g$”, $[f, g] : A + B → C$, where the values of $A + B$
+ can be thought of as “copies” of $A$ or $B$ values which are “stamped” with different
+ tags in order to guarantee that values which are simultaneously in $A$ and $B$ do not
+ get mixed up.
+
+ \room
+
+ Duality is of great /conceptual economy/ since everything that can be said of concept /X/
+ can be rephrased for /co-X/. *That $\composition$-listing provides eloquent evidence of duality.*
+
+ \room
+
+ Notice that the fusion law,
+ \eqn{Fusion}{ f ∘ [g, h] = [f ∘ g, f ∘ h]}
+ Is essentially the definition: If we're in the left `g` then the result is `f` applied to it;
+ otherwise if we're in the right `h` then the result is `f` applied to it! Woah: From pointwise to pointfree.
+** COMMENT An Introduction to Pointfree Programming
+
+ # Functional programming literally means “programming with functions”.
+ The main emphasis is on /compositionality/, one of the main advantages
+ of “thinking functionally”, explaining how to construct new functions
+ out of other functions using a minimal set of predefined functional
+ combinators. This leads to a style which is /pointfree/ in the sense that
+ function descriptions dispense with variables --also known as /points/.
+
+ \room
+
+ Why do people look for compact notations?
+ A compact notation leads to shorter documents, less lines of code
+ in programming, in which patterns are easier to identify and reason
+ about. Properties can be stated in clear-cut, one-line long equations
+ which are easy to memorise. 
+ #
+ # Backus' FP and Iverson's APL are examples of pointfree programming
+ # languages; look them up ;-)
+
+ \room
+
+ The notation “$f : A → B$” focuses on what is relevant about $f$
+ and can it be regard as a kind of contract:
+ #+BEGIN_QUOTE
+ $f$ /commits itself/ to producing a /B/-value provided it is supplied
+ with an /A/-value.
+ #+END_QUOTE
+
+ \room
+
+ Types provide the “glue”, or interface, for putting functions
+ together to obtain more complex functions.
+
+ \room
+
+ What do we want functions for?
+ One wants functions for modelling and reasoning about the
+ behaviour of real things.
+
+ \room
+
+ In order to switch between the pointwise and pointfree settings
+ we need two “bridges”: One lifting equality to the function level
+ and the other lifting function application.
+
+ \room
+
+ Two functions $f, g : A → B$ are the same function iff they agree
+ at the pointwise level:
+ \eqn{Extensionality}{ f = g \equivS \left(∀ a : A • f\, a = g\, a \right)}
+
+** COMMENT Gluing functions which do not compose --exponentials
+
+ Functional application is the bridge between the pointfree and pointwise worlds.
+
+ Suppose we are given the task to combine two functions, one binary
+ $B \overset{f}{\leftlongarrow}{C × A}$ and the other unary $D \overset{g}{\leftlongarrow} A$.
+ Clearly none of the combinations $f ∘ g, ⟨f, g⟩$, or $[f, g]$ is well-typed. Hence $f$ and $g$
+ cannot be put together and require some extra interfacing.
+
+ \room
+
+ Note that $⟨f, g⟩$ would be well-defined in case the $C$ components of $f$'s source
+ could be somehow “ignored”. Suppose, in fact, that in some particular context
+ the first argument of $f$ happens to be “irrelevant”, or to be frozen to some $c : C$.
+ It is easy to derive a new function $f_c : A → B : a ↦ f(c, a)$ from $f$, combines
+ nicely with $g$ via the split combinator: $⟨f_c , g⟩$ is well-typed and bears the type
+ $B × D ← A$. ---MA: The typing looks erroneous.
+
+ \room
+
+ Since $f_c$ denotes a function of type $B ← A$, we will say $f_c : B^A$, where the exponential
+ is an alternate notation for the arrow --the reason to adopt it is that it is functorial, as will be shown.
+
+ We want functions so as to apply them, so it's natural to introduce the /apply/ operator which applies
+ a function to an argument:
+ \[ ap : B ← B^A × A \]
+ \[ ap(f, a) = f \ a \]
+
+ #+LaTeX: \def\transpose#1{ \overline{#1} }
+
+ #+BEGIN_EXPORT latex
+ The above “transpose” operation $f ↦ f_c$ is of type $B^A ← C$.
+ It expresses $f$ as a kind of /C/-indexed family of functions $B ← A$.
+ It will be denoted by $\transpose{f}$ with the definition $(\transpose{f}\, c)\, a = f(c, a)$.
+
+ Observe that $\transpose{f}$ is more tolerant than $f$: The latter is a binary operator and so
+ requires /both/ arguments $(c,a)$ to become available before application, whereas the former is happy
+ to be produced with $c$ first  and with $a$ later on.
+
+ \eqn{exponential-Char}{ k = \transpose{f} \equivS f = ap ∘ (k × \Id) }
+
+ Pointwise, $(ap ∘ (\transpose{f} × \Id))\, (c, a) = ap \, (\transpose{f}\, c, a) = \transpose{f} \, c\, a$
+ which should be equal to $f(c,a)$ and indeed it is --in pointfree form:
+
+ \eqn{exponential-Cancellation}{ f = ap ∘ (\transpose{f} × \Id) }
+
+ \eqn{exponential-Id}{ \transpose{ap} = \Id_{B^A} }
+
+ \eqn{exponential-Fusion}{ \transpose{g ∘ (f × \Id)} \eqS \transpose{g} ∘ f }
+
+ We can thus introduce a new functional combinator, which arises as the transpose
+ of $f ∘ ap$:
+
+ \eqn{exponential-Functor-Type}{ f^A : C^A ← B^A \providedS f : C ← B}
+
+ $B^A$ can be thought of as a /syntactical/ representation of the /semantical/ $A → B$
+ --they are the `same', but the way we treat them and think of them is different.
+ [ This differs from $(-→-)$ when discussing adjunctions earlier, since that was
+   the `external hom-/set/'; this is the /internal/ hom! ]
+
+ \eqn{exponential-Functor-Defn}{ f^A = \transpose{f ∘ ap} }
+ #+END_EXPORT
+
+ Pointwise: $f^A\, g = f ∘ g$ --so $f^A$ is the “compose with $f$” functional combinator.
+ # Indeed:
+ # 
+ #     fᵃ = T(f . ap)
+ # ≡   f . ap = ap ∘ (fᵃ × Id)                 exp-Char
+ # ≡   f . ap (g, a) = ap ∘ (fᵃ × Id) (g, a)   extensionality
+ # ≡   f (g a)       = ap ∘ (fᵃ g, a)          ×-simpl
+ # ≡   f (g a)       = fᵃ g a                  ap-simpl
+ # ≡   f ∘ g         = fᵃ g                    extensionality
+
+ \eqn{exponential-Functorial}{ (g ∘ h)^A \eqs g^A ∘ h^A \landS \Id^A = \Id }
+
+ *Interestingly:*
+
+ #+BEGIN_EXPORT latex
+ \eqn{Oh₀}{ \transpose{\snd} \eqs \const{\Id} }
+
+ \eqn{Oh₁}{ \transpose{f}\, a \eqs f ∘ ⟨ \constant{a} , \Id ⟩ }
+
+ \eqn{Oh₂}{ \const{g} \eqs \transpose{g ∘ \snd} }
+
+ Also $\transpose{\snd}$ is a constant function:
+ \eqn{Oh₃}{ \transpose{\snd} ∘ f \eqs \transpose{\snd} }
+ #+END_EXPORT
+* COMMENT Maybe move to a different project
+  F-Algebras: “Recursion in the Pointfree Style”
+** COMMENT §3 Recursion in the Pointfree Style
+
+ This section provides a naive introduction to algorithm analysis and synthesis
+ by showing how a quite elementary class of algorithms --equivalent to for-loops
+ in C or any imperative language-- arise from elementary properties of the underlying
+ maths domain.
+
+ The /for-loop/ combinator is defined by
+ \[ for \; f \; e \; 0 = e \]
+ \[ for \; f \; e \; (n+1) = f (for \; f \; e \; n) \]
+
+ Which can be implemented, in C:
+ #+BEGIN_EXAMPLE
 T total = e;
 for(int j=0; j<n; j++)
    total = f(total);
-#+END_EXAMPLE
+ #+END_EXAMPLE
 
-This is the catamorphism for ℕ!
+ This is the catamorphism for ℕ!
 
-#+BEGIN_EXPORT latex
-\eqn{in-ℕ}{ in = [ \const{0}, succ] : 1 + ℕ ≅ ℕ }
+ #+BEGIN_EXPORT latex
+ \eqn{in-ℕ}{ in = [ \const{0}, succ] : 1 + ℕ ≅ ℕ }
 
-The above witness: Every natural number is either 0 or the successor of another natural number.
---That is, such $in$'s characterise inductive types!--
+ The above witness: Every natural number is either 0 or the successor of another natural number.
+ --That is, such $in$'s characterise inductive types!--
 
-\eqn{for-loop-universal}{ f = for \; g \; e \equivS f ∘ in = [ \const{k}, g] ∘ (\Id + f)] \eqs ⦇ [\const{k}, g] ⦈}
+ \eqn{for-loop-universal}{ f = for \; g \; e \equivS f ∘ in = [ \const{k}, g] ∘ (\Id + f)] \eqs ⦇ [\const{k}, g] ⦈}
 
-\eqn{for-loop-Id}{ for\; succ\; 0 \eqs \Id}
+ \eqn{for-loop-Id}{ for\; succ\; 0 \eqs \Id}
 
-\eqn{for-loop-fusion}{ h ∘ for\; g\; k \eqs for\; j \; (h\, k) \providedS h ∘ g = j ∘ h}
-% Proof: Universal property along with fact (a+) ∘ Id = (a+).
-#+END_EXPORT
+ \eqn{for-loop-fusion}{ h ∘ for\; g\; k \eqs for\; j \; (h\, k) \providedS h ∘ g = j ∘ h}
+ % Proof: Universal property along with fact (a+) ∘ Id = (a+).
+ #+END_EXPORT
 
-*Heuristic* Implement a given function $f$ as a for-loop by using for-loop-Id then for-loop-fusion
-and solving for unknown $j$ along the way; e.g.,
+ *Heuristic* Implement a given function $f$ as a for-loop by using for-loop-Id then for-loop-fusion
+ and solving for unknown $j$ along the way; e.g.,
 
-#+begin_calculation latex
-  f
-\step{ Identities and for-loop-Id }
-  f ∘ for\; succ\; 0
-\step{ For-loop-fusion, calculute for unknown $j$ in $f ∘ succ = j ∘ f$ }
-  for \; j \; (f\; 0)
-#+end_calculation
+ #+begin_calculation latex
+   f
+ \step{ Identities and for-loop-Id }
+   f ∘ for\; succ\; 0
+ \step{ For-loop-fusion, calculute for unknown $j$ in $f ∘ succ = j ∘ f$ }
+   for \; j \; (f\; 0)
+ #+end_calculation
 
-Really the $j$ is what $f$ does at the inductive step
---we cover the base step by computing $f\; 0$ directly.
+ Really the $j$ is what $f$ does at the inductive step
+ --we cover the base step by computing $f\; 0$ directly.
 
-For example, in this way we obtain $(a+) = for\; succ\; a$.
+ For example, in this way we obtain $(a+) = for\; succ\; a$.
 
-Other fun stuff:
-#+BEGIN_EXPORT latex
-\eqn{simple-optimisation}{ for\; \const{k} \; k \eqs for\; \Id \; k}
-#+END_EXPORT
+ Other fun stuff:
+ #+BEGIN_EXPORT latex
+ \eqn{simple-optimisation}{ for\; \const{k} \; k \eqs for\; \Id \; k}
+ #+END_EXPORT
 
-* COMMENT §3.12 F-catamorphisms
+** COMMENT §3.12 F-catamorphisms
 
-For a polynomial functor $F$ a particular iso /F/-algebra always exists, which
-is denoted by $in : μF ← F (μF)$ and has special properties. First, its carrier
-is the smallest among the carriers of other iso /F/-algebras, and this is why it
-is denoted by $μF$ ---$μ$ for “minimal”.
+ For a polynomial functor $F$ a particular iso /F/-algebra always exists, which
+ is denoted by $in : μF ← F (μF)$ and has special properties. First, its carrier
+ is the smallest among the carriers of other iso /F/-algebras, and this is why it
+ is denoted by $μF$ ---$μ$ for “minimal”.
 
-#+BEGIN_EXPORT latex
-\eqn{cata-Char}{k = ⦇α⦈ \equivS k ∘ in = α ∘ F k }
+ #+BEGIN_EXPORT latex
+ \eqn{cata-Char}{k = ⦇α⦈ \equivS k ∘ in = α ∘ F k }
 
-\eqn{cata-Id}{ ⦇in⦈ = \Id_{μF} }
+ \eqn{cata-Id}{ ⦇in⦈ = \Id_{μF} }
 
 
-\eqn{cata-cancellation}{⦇α⦈ ∘ in = α ∘ F ⦇α⦈}
+ \eqn{cata-cancellation}{⦇α⦈ ∘ in = α ∘ F ⦇α⦈}
 
-That is, since in is an iso, “Decompose input, via out, then recurse, then apply α”:
+ That is, since in is an iso, “Decompose input, via out, then recurse, then apply α”:
 
-\eqn{cata-cancellation}{⦇α⦈ = α ∘ F ⦇α⦈ ∘ out}
+ \eqn{cata-cancellation}{⦇α⦈ = α ∘ F ⦇α⦈ ∘ out}
 
-\eqn{cata-Fusion}{ f ∘ ⦇α⦈ = ⦇β⦈ \providedS f ∘ α = β ∘ F f}
-#+END_EXPORT
+ \eqn{cata-Fusion}{ f ∘ ⦇α⦈ = ⦇β⦈ \providedS f ∘ α = β ∘ F f}
+ #+END_EXPORT
 
-*Go back and re-read §3.13* Then do exercises 3.11, 3.16, 3.17.
+ *Go back and re-read §3.13* Then do exercises 3.11, 3.16, 3.17.
 
-* COMMENT §3.13 Introducing Inductive Datatypes
+** COMMENT §3.13 Introducing Inductive Datatypes
 
-A comment on the particular choice of terminology: ~in~ suggests that we are
-going inside, or constructing values of the datatype; whereas ~out~ suggests
-that we are going out, or destructing, analysing, values of the datatype.
+ A comment on the particular choice of terminology: ~in~ suggests that we are
+ going inside, or constructing values of the datatype; whereas ~out~ suggests
+ that we are going out, or destructing, analysing, values of the datatype.
 
-A nifty duality.
+ A nifty duality.
 
-* COMMENT §3.16 The mutual-recursion law
+** COMMENT §3.16 The mutual-recursion law
 
-Suppose we are executing two (possibly mutually recursive) functions $f$ and $g$ in parallel, which may be catamorphisms
-and so somewhat costly. Could we turn these into a single function call to a catamorphism?
+ Suppose we are executing two (possibly mutually recursive) functions $f$ and $g$ in parallel, which may be catamorphisms
+ and so somewhat costly. Could we turn these into a single function call to a catamorphism?
 
-Solving for $h, k$ in $⟨f, g⟩ = ⦇⟨h, k⟩⦈$ yields “Fokkinga's Law”, aka
+ Solving for $h, k$ in $⟨f, g⟩ = ⦇⟨h, k⟩⦈$ yields “Fokkinga's Law”, aka
 
-#+BEGIN_EXPORT latex
-\eqn{Mutual-Recursion-Law}{ ⟨f, g⟩ = ⦇⟨h, k⟩⦈ \equivS f ∘ in = h ∘ F ⟨f, g⟩ \landS g ∘ in = k ∘ F⟨f, g⟩}
-#+END_EXPORT
+ #+BEGIN_EXPORT latex
+ \eqn{Mutual-Recursion-Law}{ ⟨f, g⟩ = ⦇⟨h, k⟩⦈ \equivS f ∘ in = h ∘ F ⟨f, g⟩ \landS g ∘ in = k ∘ F⟨f, g⟩}
+ #+END_EXPORT
 
-This law is useful in combining two mutually recursive functions into a single catamorphism
---with added efficiency by possibly using the exchange law.
+ This law is useful in combining two mutually recursive functions into a single catamorphism
+ --with added efficiency by possibly using the exchange law.
 
-*Heuristic*
-We can apply this law to a single function by looking at an “inefficient” subpart and
-extracting that into its own function, then trying to apply the law, with possibly more extractions.
+ *Heuristic*
+ We can apply this law to a single function by looking at an “inefficient” subpart and
+ extracting that into its own function, then trying to apply the law, with possibly more extractions.
 
- - Isn't the computing-cubes-in-linear-time problem solved this way?
+  - Isn't the computing-cubes-in-linear-time problem solved this way?
 
-For example, there is much re-calculation in the definition of fib:
-\[ fib \; 0 = 1 \]
-\[ fib \; 1 = 1 \]
-\[ fib \; (n+2) = fib \; (n+1) + fib\; n \]
-Can we improve its performance?
-The clue is to regard the two instances of $fib$ in the recursive branch as mutually recursive
-over the natural numbers. The clue is /suggested/ not only by $fib$ having two base cases
---so, perhaps it hides two functions-- but also by the lookahead $n + 2$ in the recursive clause.
-Introducing $f$ by the /specification/ $f\; n = fib(n + 1)$ then using that to obtain a recursive definition,
-possibly depending on $fib$, allows us to use the mutual recursive law to obtain a linear function
-from which $fib$ is obtained via a simple projection --say $\snd$.
+ For example, there is much re-calculation in the definition of fib:
+ \[ fib \; 0 = 1 \]
+ \[ fib \; 1 = 1 \]
+ \[ fib \; (n+2) = fib \; (n+1) + fib\; n \]
+ Can we improve its performance?
+ The clue is to regard the two instances of $fib$ in the recursive branch as mutually recursive
+ over the natural numbers. The clue is /suggested/ not only by $fib$ having two base cases
+ --so, perhaps it hides two functions-- but also by the lookahead $n + 2$ in the recursive clause.
+ Introducing $f$ by the /specification/ $f\; n = fib(n + 1)$ then using that to obtain a recursive definition,
+ possibly depending on $fib$, allows us to use the mutual recursive law to obtain a linear function
+ from which $fib$ is obtained via a simple projection --say $\snd$.
 
-The mutual recursive law generalises to more than two mutually recursive functions, in this case three:
-#+BEGIN_EXPORT latex
-\eqn{Mutual-Recursion-Law}{ ⟨f₀, ⟨f₁, f₂⟩⟩ = ⦇⟨h₀, ⟨h₁, h₂⟩⟩⦈ \equivS ∀i:0..2 • fᵢ ∘ in = hᵢ ∘ F⟨f₀, ⟨f₁, f₂⟩⟩ }
-#+END_EXPORT
+ The mutual recursive law generalises to more than two mutually recursive functions, in this case three:
+ #+BEGIN_EXPORT latex
+ \eqn{Mutual-Recursion-Law}{ ⟨f₀, ⟨f₁, f₂⟩⟩ = ⦇⟨h₀, ⟨h₁, h₂⟩⟩⦈ \equivS ∀i:0..2 • fᵢ ∘ in = hᵢ ∘ F⟨f₀, ⟨f₁, f₂⟩⟩ }
+ #+END_EXPORT
 
-Now go do exercises 3.23, 3.26, 3.28 ;-)
+ Now go do exercises 3.23, 3.26, 3.28 ;-)
 
-An immediate consequence of Mutual-Recursion-Law is
-#+BEGIN_EXPORT latex
-\eqn{Banana-Split-Law}{ ⟨⦇i⦈, ⦇j⦈⟩ = ⦇(i × j) ∘ ⟨F \fst, F \snd⟩ ⦈ }
+ An immediate consequence of Mutual-Recursion-Law is
+ #+BEGIN_EXPORT latex
+ \eqn{Banana-Split-Law}{ ⟨⦇i⦈, ⦇j⦈⟩ = ⦇(i × j) ∘ ⟨F \fst, F \snd⟩ ⦈ }
 
-This law provides us with a very useful tool for “parallel loop” fusion.
-#+END_EXPORT
+ This law provides us with a very useful tool for “parallel loop” fusion.
+ #+END_EXPORT
+
+** COMMENT §2.14 Guards and McCarthy's conditional
+
+ Define
+ \eqn{?-Defn}{(p?)\, a = \mathsc{If}\, p\, a \,\mathsc{Then}\, \inl\, a \,\mathsc{Else}\, \inr\, a \mathsc{Fi}}
+
+ We call $p? : A → A + A$ the /guard/ associated to predicated /p : A → 𝔹/.
+ The guard is more informative than /p/ alone: It provides information about the outcome of testing /p/
+ on some input /a/, encoded in terms of the sum injections, $\inl$ for /true/ and $\inr$ for /false/,
+ without losing the input /a/ itself.
+
+ #+BEGIN_EXPORT latex
+ \begineqns
+ \eqn{McCarthy-Conditional-Defn}{ p → g,h \quad=\quad [g, h] ∘ p?}
+
+ Hence to reason about conditionals one may seek help in the algebra of sums.
+
+ \eqn{conditional-Fusion₁}{ f ∘ (p → g, h) \quad=\quad p → f ∘ h, f ∘ h}
+
+ \eqn{conditional-Fusion₂}{ (p → g, h) ∘ k \quad=\quad p ∘ k → g ∘ k, h ∘ k}
+
+ \eqn{conditional-product-Fusion}{ k ∘ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ }
+
+ %
+ %   k ∘ ⟨ (p → f,h) , (p → g, i) ⟩ 
+ % = k ∘ ⟨ [f,h] ∘ p? , [g, i] ∘ p? ⟩
+ % = k ∘ ⟨ [f,h] , [g, i] ⟩ ∘ p?
+ % = k ∘ [ ⟨f, g⟩ , ⟨h, i⟩ ] ∘ p?
+ % = [ k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ ] ∘ p?
+ % = p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩
+
+ \eqn{conditional-Abides-Distributivity}{ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → ⟨f, g⟩ , ⟨h, i⟩ }
+
+ \eqn{conditional-Idempotency}{p → f,f \eqs f}
+
+ \eqn{conditional-⟨⟩-Distributivity}{ ⟨ f, (p → g, h)⟩ \quad=\quad p → ⟨f, g⟩, ⟨f, h⟩ }
+
+ \eqn{conditional-×-Distributivity}{ (p → g, h) × f \quad=\quad p ∘ \fst → g × f, h × f}
+
+ \endeqns
+ #+END_EXPORT
+
+ \room
+
+ *As well as their duals!*
+
+** COMMENT Wow --another example-- involving conditionals
+  Just as in the case of proving /tails/ is a natural transformation *without* using
+  any implementing definitions, here's a similar example.
+
+  \room
+
+  Here's an illustration of how /smart/ pointfree algebra can be in reasoning about
+  functions that /one does not actually defined explicitly/. 
+
+  It also shows how relevant the /natural properties/ are.
+
+  The issue is that our definition of a guard, \ref{?-Defn}, is pointwise and most
+  likely unsuitable to prove facts such as, for instance,
+  \[ p? ∘ f = (f + f) ∘ (p ∘ f)? \]
+  Thinking better, instead of `inventing' \ref{?-Defn}, we might --and perhaps should!--
+  have defined 
+  \eqn{two-Defn}{2  \;≅\; 1 + 1}
+  \eqn{double-Defn}{2 × A \;≅\; A + A}
+  \eqn{?-Defn-Pointfree}{ p? = double ∘ ⟨p, \Id⟩ }
+
+  which actually express rather closely our strategy of switching from products
+  to coproducts in the definition of $(p?)$.
+
+  In particular, *we do not need to define /double/ explicitly*.
+  From its type we immediately infer its natural, or free, property:
+  \[ double ∘ (\Id × f) \eqs (f + f) ∘ double \]
+
+  It turns out that this is the /knowledge/ we need about $double$
+  in order to prove the above mentioned property.
+
+  \room
+
+  The less one has to write to solve a problem, the better.
+  One saves time and one's brain, adding to productivity.
+  This is often called /elegance/ when applying a scientific method.
+** Importance of Compositional Combinators                           :ignore:
+
+ # Paraphrasing Oliveira, §2.13
+ \vspace{3ex}
+ The compositional combinators put forward here are equipped with a concise /set of properties/
+ which enable programmers to transform programs, reason about them, and perform useful calculations.
+ This raises a /programming methodology/ which is scientific and stable.
+
+ # The relevance of universal properties, such as ℱ-Char, is that it offers a way of /solving equations/
+ # of the form $y = ℱ\, x$. For example, can the identity be expressed, or `reflected', using this combinator?
+ # We just solve the equation $\Id = ℱ\, x$ for unknown(s) $x$ by appealing to the universal property.
 
 
 * COMMENT FIXES
@@ -1656,8 +1738,7 @@ Include:
 + Backus' FP and Iverson's APL are examples of pointfree programming
   languages; look them up ;-)
 
-
-* newpage :ignore:
+* COMMENT newpage                                                    :ignore:
   \newpage
 * COMMENT footer
 
