@@ -152,6 +152,98 @@ of this.
 
 \newpage
 
+* “Gluing” Morphisms Together
+
+Traditional function application is replaced by the more generic concept of
+functional /composition/ suggested by morphism-arrow chaining:
+Whenever we have two morphisms such that the target type of one
+of them, say $g : B ← A$ is the same as the source type of the other,
+say $f : C ← B$ then “$f$ after $g$”, their /composite morphism/,
+$f ∘ g : C ← A$ can be defined. It “glues” $f$ and $g$ together,
+“sequentially”:
+#+BEGIN_EXPORT latex
+\eqn{composition-Type}{ 
+  C \overset{f}{\longleftarrow} % B \lands 
+  B \overset{g}{\longleftarrow} A \impliesS
+  C \overset{\;f ∘ g}{\longleftarrow} A
+}
+#+END_EXPORT
+
+Composition is the basis for gluing morphisms together to build more complex morphisms.
+However, not every two morphisms can be glued together by composition.
+
+\room
+
+Types provide the interface for putting morphisms together to obtain more complex functions.
+
+\room
+
+A /split/ arises wherever two morphisms do not compose but share the same source.
+  - Since they share the same source, their outputs can be paired: $c ↦ (f\, c, g\, c)$.
+  - This duplicates the input so that the functions can be executed in “parallel” on it.
+
+\room
+
+A /product/ appears when there is no explicit relationship between the types of the morphisms.
+  - We regard their sources as projections of a product, whence they can be seen as /splits/.
+  - This $(c, d) ↦ (f\, c, g\, d)$ corresponds to the “parallel” application of $f$ and $g$, 
+     each with its /own/ input.
+
+\room
+
+An /either/ arises wherever two morphisms do not compose but share the same target.
+  - Apply $f$ if the input is from the “$A$ side” or apply $g$ if it is from the “$B$ side”.
+  - This is a “case analysis” of the input with branches being either $f$ or $g$.
+
+\room
+
+A /sum/ appears when there is no explicit relationship between the types of the morphisms.
+  - We regard their targets as injections into a sum, whence they can be seen as /eithers/.
+
+\room
+
+#+LaTeX: \def\transpose#1{ \overline{#1} }
+A /transpose/ arises when we need to combine a binary morphism with a unary morphism.
+  - I.e., it arises when a composition chain is interrupted by an extra product argument.
+  - Express $f$ as a /C/-indexed family, $f_c : A → B$, of morphisms such that applying a function at any index
+    behaves like $f$; i.e., $f_c \, a = f(c, a)$. Each $f_c$ can now be composed with $g$.
+    Let $\transpose{(\;)}$ denote the operation $f ↦ f_c$.
+
+\vspace{-0.5em}
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{split-Type}{ A \overset{f}{\longleftarrow} C \overset{g}{\longrightarrow} B 
+ \hspace{5.8em}\equivS A × B \overset{\;\;⟨f,g⟩}{\xleftarrow{\hspace*{0.5cm}}} C }
+
+\eqn{$\times$-Type}{ A \overset{f}{\longleftarrow} C \lands B \overset{g}{\longleftarrow} D
+ \hspace{1.9em} \equivS A × B \overset{f × g}{\xleftarrow{\hspace*{0.5cm}}} C × D }
+
+\eqn{either-Type}{ A \overset{f}{\longrightarrow} C \overset{g}{\longleftarrow} B
+ \hspace{5.9em}\equivS A + B \overset{[f,g]}{\xrightarrow{\hspace*{0.5cm}}} C }
+
+\eqn{+-Type}{ A \overset{f}{\longrightarrow} C \lands B \overset{g}{\longrightarrow} D
+ \hspace{2em} \equivS A + B \overset{f + g}{\xrightarrow{\hspace*{0.5cm}}} C + D }
+
+\eqn{transpose-Type}{
+  B \overset{f}{\longleftarrow}{C × A} 
+  \hspace{6.9em} \equivS
+  B^A \overset{\transpose{f}}{\longleftarrow} C
+  }
+
+\eqn{transpose-combination}{
+  B \overset{f}{\longleftarrow}{C × A} 
+  \lands
+  C \overset{g}{\longleftarrow} D
+  \impliesS
+  B^A \overset{\transpose{f} ∘ g}{\xleftarrow{\hspace*{1cm}}} D
+  }
+\endeqns
+#+END_EXPORT
+
+\vspace{1em}
+
 * Functors
 
 A *functor* /F : 𝒜 → ℬ/ is a pair of mappings, denoted by one name,
@@ -320,11 +412,17 @@ The identity transformation is indeed an identity for transformation composition
 \room
 
 *Heuristic* To prove $φ = φ₁ ﹔ ⋯ ﹔ φₙ : F →̣ G$ is a natural transformation, it suffices
-to show that each $φᵢ$ is a natural transformation.
+to show that each $φᵢ$ is a natural transformation. 
+E.g., without even knowing the definitions, naturality of
+/tails = rev ﹔ inits ﹔ Seq rev/  can be proven --just type checking!
+# thanks to \eqref{ntrf-Compose}!
+
+\iffalse
  + Theorem \eqref{ntrf-Compose} renders proofs of semantic properties to be trivial type checking!
  + E.g., It's trivial to prove /tails = rev ﹔ inits ﹔ Seq rev/ is a natural transformation
    by type checking, but to prove the naturality equation by using the naturality equations of
    /rev/ and /inits/ --no definitions required-- necessitates more writing, and worse: Actual thought! 
+\fi
 
 * Adjunctions
 
@@ -663,6 +761,7 @@ preserves colimits.
 
 \vspace{-1em}
 
+\newpage
 * Limits
 
 Dually, the category $⋀D$ has objects being “cones” $γ : \const{C} →̣ D$ where $C =: \src\, γ$
@@ -813,6 +912,11 @@ $(F\,\inl, F\,\inr, F(A+B))$ form a sum of $F\,A$ and $F\, B$.
 \endeqns
 #+END_EXPORT
 
+The fusion laws for $[]$ and $⟨⟩$ give us a pointfree rendition of their usual pointwise
+definitions: All applications have been lifted to compositions!
+Likewise for the absorption laws.
+
+\newpage
 * Duality: Sums & Products
 
 #+BEGIN_EXPORT latex
@@ -921,7 +1025,7 @@ For categories in which sums and products exist, we define for $f : A → B$ and
 
 Notice that the last law above is self-dual.
 
-* Reference
+* References
 
 #+LaTeX: {\color{white}.}
 
@@ -939,106 +1043,16 @@ has made [[https://ctan.org/tex-archive/macros/latex/contrib/calculation][availa
 
 Clear, concise, and an illuminating read.
 
-\newpage
-Now notes from /Program Design by Calculation/ of J. Oliveira.
-
-\vspace{-0.5em}
-
-* “Gluing” Morphisms Together
-
-Traditional function application is replaced by the more generic concept of
-functional /composition/ suggested by morphism-arrow chaining:
-Whenever we have two morphisms such that the target type of one
-of them, say $g : B ← A$ is the same as the source type of the other,
-say $f : C ← B$ then “$f$ after $g$”, their /composite morphism/,
-$f ∘ g : C ← A$ can be defined. It “glues” $f$ and $g$ together,
-“sequentially”:
-#+BEGIN_EXPORT latex
-\eqn{composition-Type}{ 
-  C \overset{f}{\longleftarrow} % B \lands 
-  B \overset{g}{\longleftarrow} A \impliesS
-  C \overset{\;f ∘ g}{\longleftarrow} A
-}
-#+END_EXPORT
-
-Composition is the basis for gluing morphisms together to build more complex morphisms.
-However, not every two morphisms can be glued together by composition.
-
-\room
-
-Types provide the interface for putting morphisms together to obtain more complex functions.
-
-\room
-
-A /split/ arises wherever two morphisms do not compose but share the same source.
-  - Since they share the same source, their outputs can be paired: $c ↦ (f\, c, g\, c)$.
-  - This duplicates the input so that the functions can be executed in “parallel” on it.
-
-\room
-
-A /product/ appears when there is no explicit relationship between the types of the morphisms.
-  - We regard their sources as projections of a product, whence they can be seen as /splits/.
-  - This $(c, d) ↦ (f\, c, g\, d)$ corresponds to the “parallel” application of $f$ and $g$, 
-     each with its /own/ input.
-
-\room
-
-An /either/ arises wherever two morphisms do not compose but share the same target.
-  - Apply $f$ if the input is from the “$A$ side” or apply $g$ if it is from the “$B$ side”.
-  - This is a “case analysis” of the input with branches being either $f$ or $g$.
-
-\room
-
-A /sum/ appears when there is no explicit relationship between the types of the morphisms.
-  - We regard their targets as injections into a sum, whence they can be seen as /eithers/.
-
-\room
-
-#+LaTeX: \def\transpose#1{ \overline{#1} }
-A /transpose/ arises when we need to combine a binary morphism with a unary morphism.
-  - I.e., it arises when a composition chain is interrupted by an extra product argument.
-  - Express $f$ as a /C/-indexed family, $f_c : A → B$, of morphisms such that applying a function at any index
-    behaves like $f$; i.e., $f_c \, a = f(c, a)$. Each $f_c$ can now be composed with $g$.
-    Let $\transpose{(\;)}$ denote the operation $f ↦ f_c$.
-
-\vspace{-0.5em}
-
-#+BEGIN_EXPORT latex
-\begineqns
-
-\eqn{split-Type}{ A \overset{f}{\longleftarrow} C \overset{g}{\longrightarrow} B 
- \hspace{5.8em}\equivS A × B \overset{\;\;⟨f,g⟩}{\xleftarrow{\hspace*{0.5cm}}} C }
-
-\eqn{$\times$-Type}{ A \overset{f}{\longleftarrow} C \lands B \overset{g}{\longleftarrow} D
- \hspace{1.9em} \equivS A × B \overset{f × g}{\xleftarrow{\hspace*{0.5cm}}} C × D }
-
-\eqn{either-Type}{ A \overset{f}{\longrightarrow} C \overset{g}{\longleftarrow} B
- \hspace{5.9em}\equivS A + B \overset{[f,g]}{\xrightarrow{\hspace*{0.5cm}}} C }
-
-\eqn{+-Type}{ A \overset{f}{\longrightarrow} C \lands B \overset{g}{\longrightarrow} D
- \hspace{2em} \equivS A + B \overset{f + g}{\xrightarrow{\hspace*{0.5cm}}} C + D }
-
-\eqn{transpose-Type}{
-  B \overset{f}{\longleftarrow}{C × A} 
-  \hspace{6.9em} \equivS
-  B^A \overset{\transpose{f}}{\longleftarrow} C
-  }
-
-\eqn{transpose-combination}{
-  B \overset{f}{\longleftarrow}{C × A} 
-  \lands
-  C \overset{g}{\longleftarrow} D
-  \impliesS
-  B^A \overset{\transpose{f} ∘ g}{\xleftarrow{\hspace*{1cm}}} D
-  }
-\endeqns
-#+END_EXPORT
-
 \vspace{1em}
 
-The fusion laws for $[]$ and $⟨⟩$ give us a pointfree rendition of their usual pointwise
-definitions: All applications have been lifted to compositions!
-Likewise for the absorption laws.
+I've also consulted the delightful read /Program Design by Calculation/ of J. Oliveira.
+
+\vspace{0.5em}
+
+Very accessible for anyone who wants an introduction to functional programming!
+The category theory is mostly implicit, but presented elegantly!
+
+\vspace{-0.5em}
 
 
 * COMMENT Constant functions
