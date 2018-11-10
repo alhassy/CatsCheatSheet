@@ -810,53 +810,52 @@ The component morphisms $γ_A$ are \emph{jointly monic}.
 
 \vspace{-1em}
 
-* TODO Coequaliser
+* Coequaliser
 
 # $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
 #
 Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
 where $f,g : A → B$ are given. 
-# Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
-# with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $δ_A ∘ \const{C} h = D h ∘ δ_B$; in-particular
-# $q' = f ∘ q = q ∘ g$ whence $q'$ is fully-determined by $q$ alone.
+Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
+with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $δ_A ∘ \const{C} h = D h ∘ δ_B$; in-particular
+$q' = f ∘ q = g ∘ q$ whence $q'$ is fully-determined by $q$ alone.
 
-Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $p╲-$ in-place of $γ╲-$, then the ╲-laws
-yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $p╲-$ such that /CoEq-Type/ and
+Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $-p╱$ in-place of $-╱γ$, then the ╱-laws
+yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $-╱p$ such that /CoEq-Type/ and
 /CoEq-Char/ hold.
 
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{CoEq-Type}{ q ﹔ f =  q ﹔ g \impliesS p╲q : \tgt\, p → \tgt\,q}
-
+\eqn{CoEq-Type}{ f ∘ q =  g ∘ q \impliesS q╱p : \tgt\, p → \tgt\,q}
 
 \vspace{2ex}
 Well-formedness convention: In each law the variables are quantified
 in such a way that the premise of \ref{CoEq-Type} is met.
-The notation $⋯╲q$ is only senseful if $q﹔f=q﹔g$,
-like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 0.
+The notation $q╱⋯$ is only senseful if $f ∘ q = g ∘ q$,
+like in arithmetic where the notation $m ÷ n$ is only sensful if $n$ differs from 0.
 
-\eqn{CoEq-Char}{ p ﹔ x = q \equivS x = p ╲ q }
+\eqn{CoEq-Char}{ x ∘ p = q \equivS x = q ╱ p }
 
-\eqn{CoEq-Self}{ p ; p╲q = q}
+\eqn{CoEq-Self}{ q╱p ∘ p = q}
 
-\eqn{CoEq-Id}{p╲p = \Id}
+\eqn{CoEq-Id}{p╱p = \Id}
 
-\eqn{CoEq-Fusion}{p╲q ﹔x = p╲(q ﹔ x)}
+\eqn{CoEq-Fusion}{x ∘ q╱p = (x ∘ q)╱p}
 
-\eqn{CoEq-Unique}{p ﹔ x = p ﹔ y \impliesS x = y}
+\eqn{CoEq-Unique}{x ∘ p = y ∘ p \impliesS x = y}
 
-\eqn{CoEq-Compose}{p╲q ﹔ q╲r = p╲r}
+\eqn{CoEq-Compose}{r╱q ∘ q╱p = r╱p}
 %%
-%% \eqn{?╲-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
+%% \eqn{?╲-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
 %% 
-%% \eqn{?╲-Pre-Functor-Elim}{γF╲δF = γ╲δ}
+%% \eqn{?╲-Pre-Functor-Elim}{δF╱γF = δ╱γ}
 %%
 \endeqns
 #+END_EXPORT
 
 \newpage
-* TODO Sums
+* Sums
 #+LaTeX: \def\inl{\mathsf{inl}} 
 #+LaTeX: \def\inr{\mathsf{inr}}
 
@@ -876,15 +875,15 @@ such that \ref{[]-Type} and \ref{[]-Char} hold.
 
 \eqn{[]-Type}{f : A → C \lands g : B → C \impliesS [f, g] : A + B → C}
 
-\eqn{[]-Char}{ \inl ﹔ x = f \lands \inr ﹔ x = g \equivS x = [f, g] }
+\eqn{[]-Char}{ x ∘ \inl = f \lands x ∘ \inr = g \equivS x = [f, g] }
 
-\eqn{[]-Cancellation; []-Self}{ \inl ﹔ [f, g] = f \landS \inr ﹔ [f, g] = g}
+\eqn{[]-Cancellation; []-Self}{ [f, g] ∘ \inl = f \landS [f, g] ∘ \inr = g}
 
 \eqn{[]-Id}{ [\inl, \inr] = \Id}
 
-\eqn{[]-Unique}{ \inl ﹔ x = \inl ﹔ y \lands \inr ﹔ x = \inr ﹔ y \impliesS x = y}
+\eqn{[]-Unique}{ x ∘ \inl = y ∘ \inl \lands x ∘ \inr = y ∘ \inr \impliesS x = y}
 
-\eqn{[]-Fusion}{ [f , g] ﹔ x = [f﹔ x, g ﹔ x] }
+\eqn{[]-Fusion}{ x ∘ [f , g] = [x ∘ f, x ∘ g] }
 
 \vspace{2ex}
 The implicit well-formedness condition in the next law is that
@@ -913,12 +912,104 @@ $(F\,\inl, F\,\inr, F(A+B))$ form a sum of $F\,A$ and $F\, B$.
 \endeqns
 #+END_EXPORT
 
-The fusion laws for $[]$ and $⟨⟩$ give us a pointfree rendition of their usual pointwise
+\room
+
+# for $[]$ and $⟨⟩$
+The fusion laws give us a pointfree rendition of their usual pointwise
 definitions: All applications have been lifted to compositions!
 Likewise for the absorption laws.
 
+\room
+
+For categories in which sums exist, we define for $f : A → B$ and $g : C → D$,
+
+\begineqns
+
+\eqn{+-Definition}{ f + g = [ \inl ∘ f, \inr ∘ g] : A + C → B + D}
+
+\eqn{Injections-Naturality}{ (f + g) ∘ \inl = f ∘ \inl \landS (f + g) ∘ \inr = \inr ∘ g }
+
+\eqn{Extensionality}{ [h ∘ \inl , h ∘ \inr] = h}
+
+\eqn{Absorption}{ [h, j] ∘ (f + g) = [h ∘ f, j ∘ g] }
+
+\eqn{+-BiFunctoriality}{ \Id + \Id = \Id \landS (f + g) ∘ (h + j) = (f ∘ h) + (g ∘ j)}
+
+\eqn{Structural Equality}{ [f,g] = [h, j] \equivS f = h \lands g = j }
+
+\eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
+
+\endeqns
+
 \newpage
-* COMMENT TODO Duality: Sums & Products
+
+* Products
+
+#+BEGIN_EXPORT latex
+\def\fst{\mathsf{fst}}
+\def\snd{\mathsf{snd}}
+#+END_EXPORT
+
+Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \;\;\; \overset{B}{•} \right)$.
+Then a cone δ for $D$ is a two-member family $δ = (f, g)$ with
+$f : C → A$ and $g : C → B$, where $C = \tgt\, δ$.
+
+\room
+
+Let $γ=(\fst, \snd)$ be a limit for $D$, let $A + B = \tgt\,γ$, and write
+$⟨f, g⟩$ in-place of $(f, g)╱γ$, then the ╱-laws yield:
+/$(\fst, \snd, A × B)$ form a product of A and B/ if there is an operation
+$⟨-,-⟩$ satisfying the Char and Type laws below; from which we obtain a host of corollaries.
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{$\langle\rangle$-Type}{f : C → A \lands g : C → B \impliesS ⟨f, g⟩ : C → A × B}
+
+\eqn{$\langle\rangle$-Char}{ \fst ∘ x = f \lands \snd ∘ x = g \equivS x = ⟨f, g⟩ }
+
+\eqn{$\langle\rangle$-Cancellation; $\langle\rangle$-Self}{ \fst ∘ ⟨f, g⟩ = f \landS \snd ∘ ⟨f, g⟩ = g}
+
+\eqn{$\langle\rangle$-Id}{ ⟨\fst, \snd⟩ = \Id}
+
+\eqn{$\langle\rangle$-Unique}{ \fst ∘ x = \fst ∘ y  \lands \snd ∘ x = \snd ∘ y \impliesS x = y}
+
+\eqn{$\langle\rangle$-Fusion}{ ⟨f , g⟩ ∘ x = ⟨f ∘ x , g ∘ x⟩ }
+
+\eqn{$\langle\rangle$-Functor-Dist}{F \, ⟨f, g⟩_𝒞 = ⟨F \, f , F \, g⟩_𝒟 \qquad\text{ where } F : 𝒞 → 𝒟}
+
+\endeqns
+#+END_EXPORT
+
+\room
+
+These are essentially a re-write of the sum laws.
+
+\room
+
+For categories in which products exist, we define for $f : A → B$ and $g : C → D$,
+
+\begineqns
+
+\eqn{$\times$-Definition}{ f × g = ⟨ f ∘ \fst, g ∘ \snd ⟩ : A × C → B × D}
+
+\eqn{Projections-Naturality}{ \fst ∘ (f × g) = f ∘ \fst \landS \snd ∘ (f × g) = g ∘ \snd }
+
+\eqn{Extensionality}{ ⟨\fst ∘ h, \snd ∘ h⟩ = h}
+
+\eqn{Absorption}{ (f × g) ∘ ⟨h, j⟩ = ⟨f ∘ h, g ∘ j⟩ }
+
+\eqn{$\times$-BiFunctoriality}{ \Id × \Id = \Id \landS (f × g) ∘ (h × j) = (f ∘ h) × (g ∘ j)}
+
+\eqn{Structural Equality}{ ⟨f,g⟩ = ⟨h, j⟩ \equivS f = h \lands g = j }
+
+\eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
+
+\endeqns
+
+# Notice that the last law above is self-dual.
+
+* COMMENT Duality: Sums & Products :uniform_notation:
 
 #+BEGIN_EXPORT latex
 \def\fst{\mathsf{fst}}
@@ -1046,7 +1137,7 @@ Clear, concise, and an illuminating read.
 
 \vspace{1em}
 
-I've also consulted the delightful read /Program Design by Calculation/ of J. Oliveira.
+I've also consulted the delightful read [[http://www4.di.uminho.pt/~jno/ps/pdbc_part.pdf][Program Design by Calculation]] of [[http://www4.di.uminho.pt/~jno/][José Oliveira]].
 
 \vspace{0.5em}
 
