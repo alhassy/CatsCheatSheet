@@ -81,7 +81,7 @@ A *category* 𝒞 consists of a collection of “objects” $\Obj\, 𝒞$,
   --also denoted “$a \,\to_𝒞\, b$”--,
   an operation $\Id$ associating a morphism $\Idₐ : \Hom(a,a)$ to each object $a$,
   and a dependently-typed “composition” operation
-  $\_﹔\_ : ∀\{A \, B \, C : \Obj\} → \Hom(A,B) → \Hom(B,C) → \Hom(A,C)$
+  $\_∘\_ : ∀\{A \, B \, C : \Obj\} → \Hom(B,C) → \Hom(A,B) → \Hom(A,C)$
   that is required to be associative with $\Id$ as identity.
  
 # For other approaches see https://tex.stackexchange.com/a/12035/69371
@@ -113,7 +113,7 @@ rather than just $f$.
 \room
 
 Here's an equivalence-preserving property that is useful in algebraic calculations,
-#+LaTeX: \eqn{Composition}{ f : A → B \lands g : B → A \equivs f﹔g : A → A \lands g﹔f : B → B}
+#+LaTeX: \eqn{Composition}{ f : A → B \lands g : B → A \equivs g ∘ f : A → A \lands f ∘ g : B → B}
 
 # A categorical statement is an expression built from notations for objects,
 # typing, morphisms, composition, and identities by means of the usual logical
@@ -257,7 +257,7 @@ it respects the categorical structure:
 
 \eqn{Functor}{F\, \Id_A \;=\; \Id_{F\, A}} 
 
-\eqn{Functor}{F\, (f ﹔ g) \;=\; F\, f ﹔ F\, g}
+\eqn{Functor}{F\, (f ∘ g) \;=\; F\, f \circ F\, g}
 
 }
 #+END_EXPORT
@@ -265,8 +265,8 @@ it respects the categorical structure:
 \vspace{1em}
 
 The two axioms are equivalent to the single statement that 
-/functors distribute over finite compositions, with $\Id$ being the empty composition/
-\[ F(f ﹔ \cdots ﹔ g) \;=\; F\, f ﹔ \cdots ﹔ F\, g \]
+/functors distribute over finite compositions, with $\Id$ being the empty composition:/
+\[ F(f_0 ∘ \cdots ∘ f_{n-1}) \;=\; F\, f_0 ∘ \cdots ∘ F\, f_{n-1} \]
 
 Use of Functors.
 + In the definition of a category, “objects” are “just things” for which no internal
@@ -306,7 +306,9 @@ Category $𝒜lℊ(F)$
 
   \eqn{id-Homomorphism}{ \Id : ⊕ →_F ⊕ }
 
-  \eqn{comp-Homomorhism}{ f ﹔ g : ⊕ →_F ⊙ \qquad\Leftarrow\qquad f : ⊕ →_F ⊗ \;\land\; g : ⊗ →_F ⊙}
+  \def\providedS{\qquad\Leftarrow\qquad}
+
+  \eqn{comp-Homomorhism}{ g ∘ f : ⊙ ←_F ⊕ \providedS g : ⊙ ←_F ⊗ \;\land\; f : ⊗ ←_F ⊕}
   }
   #+END_EXPORT
 
@@ -359,7 +361,7 @@ from an /F/-structure to a /G/-structure.
 # That is, $F\, f ﹔ t_B \;=\; t_A ﹔ G\, f$ for all /f : A → B./
 
 \vspace{-2em}
-#+LaTeX: \eqn{ntrf-Def}{ η : F →̣ G \quad\equiv\quad ∀ f \,•\, F\, f ﹔ η_{\tgt\, f}\;=\; η_{\src\, f} ﹔ G\, f }
+#+LaTeX: \eqn{ntrf-Def}{ η : F →̣ G \quad\equiv\quad ∀ f \;•\; η_{\tgt\, f} ∘ F\, f \;=\; G\, f ∘ η_{\src\, f} }
 
 This is `naturally' remembered: Morphism $η_{\tgt\, f}$ has type $F (\tgt\, f) → G(\tgt\, f)$ and therefore
 appears at the target side of an occurrence of /f/; similarly $η_{\src\, f}$ occurs at the source side of an /f/.
@@ -396,8 +398,8 @@ Example natural transformations
 
 \eqn{ntrf-Id}{ \Id_F : F →̣ F \text{\hspace{12em} where } (\Id_F)_A ≔ \Id_{(F\, A)} }
 
-\eqn{ntrf-Compose}{ ε ﹔ η : F →̣ H \hspace{2ex}\providedS ε : F →̣ G \lands η : G →̣ H 
-\\ \text{ where } (ε ﹔ η)_A = ε_A ﹔ η_A
+\eqn{ntrf-Compose}{ η ∘ ε : H ←̣ F \hspace{2ex}\providedS η : H ←̣ G \lands ε : G ←̣ F
+\\ \text{ where } (η ∘ ε)_A = η_A ∘ ε_A
  }
 
 \endeqns
@@ -411,10 +413,10 @@ The identity transformation is indeed an identity for transformation composition
 
 \room
 
-*Heuristic* To prove $φ = φ₁ ﹔ ⋯ ﹔ φₙ : F →̣ G$ is a natural transformation, it suffices
-to show that each $φᵢ$ is a natural transformation. 
+*Heuristic* To prove $φ = φ₁ ∘ ⋯ ∘ φₙ : F →̣ G$ is a natural transformation, it suffices
+to show that each $φᵢ$ is a natural transformation.
 E.g., without even knowing the definitions, naturality of
-/tails = rev ﹔ inits ﹔ Seq rev/  can be proven --just type checking!
+/tails = Seq rev ∘ inits ∘ rev/ can be proven --just type checking!
 # thanks to \eqref{ntrf-Compose}!
 
 \iffalse
@@ -439,11 +441,11 @@ $η : \Id → RL$ and $ε : LR → \Id$ such that
 
 #+BEGIN_EXPORT latex
 \eqn{Adjunction}{\text{\tiny Provided $f : A →_𝒜 R B$ and $g : L A →_ℬ B$ }
- \\ f = η_A ﹔ R g \equivS L f ﹔ ε_B = g
+ \\ f = R g ∘ η_A \equivS ε_B ∘ L f = g
 }
 #+END_EXPORT
 
-Reading right-to-left: In the equation $L f ﹔ ε_B = g$ there is a unique solution to the unknown $f$.
+Reading right-to-left: In the equation $ε_B ∘ L f = g$ there is a unique solution to the unknown $f$.
 Dually for the other direction.
 
 \room
@@ -461,8 +463,8 @@ by their restriction to the singleton sequences.
 \room
 
 We may call $f$ the restriction, or lowering, of $g$ to the “unital case”
-and write $f = ⌊g⌋ = η_A ﹔ R g$. Also, we may call $g$ the extension, or raising,
-of $f$ to an /L/-homomorphism and write $g = ⌈f⌉ = L f ﹔ ε_B$. The above equivalence
+and write $f = ⌊g⌋ = R g ∘ η_A$. Also, we may call $g$ the extension, or raising,
+of $f$ to an /L/-homomorphism and write $g = ⌈f⌉ = ε_B ∘ L f$. The above equivalence
 now reads:
 
 #+BEGIN_EXPORT latex
@@ -470,11 +472,11 @@ now reads:
 
 \eqn{Adjunction-Inverse}{f = ⌊g⌋ \equivS ⌈f⌉ = g}
 
-\eqn{lad-Type}{⌊g⌋_{A,B} = η_A ﹔ R g \; : \; A →_𝒜 R B
+\eqn{lad-Type}{⌊g⌋_{A,B} = R g ∘ η_A \; : \; A →_𝒜 R B
  \text{ where } g : L A →_ℬ B
  }
 
-\eqn{rad-Type}{⌈f⌉_{A,B} = L f ﹔ ε_B \; : \; L A →_ℬ B
+\eqn{rad-Type}{⌈f⌉_{A,B} = ε_B ∘ L f \; : \; L A →_ℬ B
  \text{ where } f : A →_𝒜 R B
  }
 
@@ -512,9 +514,9 @@ the more complicated concrete issue via ⌊⌋, lad.
 \vspace{2ex}
 “zig-zag laws” The unit has a post-inverse while the counit has a pre-inverse:
 
-\eqn{unit-Inverse}{ \Id = η   ﹔ R ε}
+\eqn{unit-Inverse}{ \Id = R ε ∘ η}
 
-\eqn{Inverse-counit}{ \Id = L η ﹔ ε} 
+\eqn{Inverse-counit}{ \Id = ε ∘ L η} 
 
 \vspace{2ex}
 The unit and counit can be regained from the adjunction inverses,
@@ -526,9 +528,9 @@ The unit and counit can be regained from the adjunction inverses,
 \vspace{2ex}
 Lad and rad themselves are solutions to the problems of interest, \eqref{Adjunction}.
 
-\eqn{lad-Self}{L ⌊g⌋ ﹔ ε = g}
+\eqn{lad-Self}{ε ∘ L ⌊g⌋ = g}
 
-\eqn{rad-Self}{η ﹔ R ⌈f⌉ = f }
+\eqn{rad-Self}{R ⌈f⌉ ∘ η = f }
 
 \vspace{2ex}
 The following laws assert a kind of
@@ -536,19 +538,19 @@ monoic-ness for ε and a kind of epic-ness for η.
 Pragmatically they allow us to prove an equality
 by shifting to a possibly easier equality obligation.
 
-\eqn{lad-Unique}{ η ﹔ R g = η ﹔ R g′ \equivS g = g′}
+\eqn{lad-Unique}{ R g ∘ η = R g′ ∘ η \equivS g = g′}
 
-\eqn{rad-Unique}{L f ﹔ ε \,= L f′ ﹔ ε \,\equivS f = f′}
+\eqn{rad-Unique}{ε ∘ L f \,= ε ∘ L f′ \,\equivS f = f′}
 
 \vspace{2ex}
 Lad and rad are natural transformations in the category $ℱ𝓊𝓃𝒸(𝒜ᵒᵖ × ℬ, 𝒮ℯ𝓉)$ realising
 $(L X → Y) ≅ (X → G Y)$ where $X, Y$ are the first and second projection functors
-and $(-→-) : 𝒞ᵒᵖ × 𝒞 → 𝒮ℯ𝓉$ is the hom-functor such that $(f → g) h = f ﹔ h ﹔ g$.
+and $(-→-) : 𝒞ᵒᵖ × 𝒞 → 𝒮ℯ𝓉$ is the hom-functor such that $(f → g) h = g ∘ h ∘ f$.
 \\ By extensionality in 𝒮ℯ𝓉, their naturality amounts to the laws:
 
-\eqn{lad-Fusion}{⌊ L x ﹔ g ﹔   y ⌋ \;=\; x   ﹔ ⌊g⌋ ﹔ R y }
+\eqn{lad-Fusion}{⌊ y ∘ g ∘ L x  ⌋ \;=\; R y ∘ ⌊g⌋ ∘ x }
 
-\eqn{rad-Fusion}{⌈   x ﹔ f ﹔ R y ⌉ \;=\; L x ﹔ ⌈f⌉ ﹔   y }
+\eqn{rad-Fusion}{⌈ R y ∘ f ∘  x ⌉ \;=\; y ∘ ⌈f⌉ ∘ L x }
 
 \room
 \endeqns
@@ -630,17 +632,17 @@ dependency on 0 explicit.
 
 \eqn{initial-Uniq}{ f, g : 0 → B \impliesS f = g }
 
-\eqn{initial-Fusion}{ f : B → C \impliesS ⦇ B ⦈ ﹔ f = ⦇ C ⦈ }
+\eqn{initial-Fusion}{ f : B → C \impliesS f ∘ ⦇ B ⦈ = ⦇ C ⦈ }
 
 \vspace{2ex}
 {\tiny Provided objects $B, C$ are both in 𝒜 and ℬ,
 which are full subcategories of some category 𝒞:}
-\eqn{initial-Compose}{ ⦇A → B⦈_𝒜 ﹔ ⦇ B → C ⦈_ℬ = ⦇ A → C⦈_𝒜 }
+\eqn{initial-Compose}{ ⦇ C ← B ⦈_ℬ ∘ ⦇B ← A⦈_𝒜 = ⦇ C ← A⦈_𝒜 }
 %
 % Recall: 𝒟 is a full-subcategory of 𝒞 means: 𝒟(x,y) = 𝒞(x,y) for x,y : Obj 𝒟.
 
 \vspace{2ex}
-{\tiny Provided 𝒟 is built on top of 𝒞: 𝒟-objects are composite entities in 𝒞 } 
+{\tiny Provided 𝒟 is built on top of 𝒞; i.e., 𝒟-objects are composite entities in 𝒞: } 
 \eqn{initial-Type}{ B \text{ is an object in 𝒟 } \impliesS ⦇ B ⦈ \text{ is a morphism in 𝒞} }
 
 \endeqns
@@ -652,7 +654,7 @@ These laws become much more interesting when the category is built upon another
 one and the typing is expressed as one or more equations in the underlying
 category. In particular the importance of fusion laws cannot be over-emphasised;
 it is proven by a strengthening step of the form
-$⦇B⦈ ﹔ f : 0 → C \providedS ⦇B⦈ : 0 → B \lands f : B → C$.
+$f ∘ ⦇B⦈ : 0 → C \providedS ⦇B⦈ : 0 → B \lands f : B → C$.
 
 \room
 
@@ -674,7 +676,7 @@ proof has the following format, or a circular implication thereof: For arbitrary
     ⋮
 \step[≡]{}
     f = \text{“an expression not involving $f$”}
-\step[≡]{ 𝒹ℯ𝒻𝒾𝓃ℯ $⦇ B ⦈$ to be the rhs of the previous equation }
+\step[≡]{ 𝒹ℯ𝒻𝒾𝓃ℯ $⦇ B ⦈$ to be the right side of the previous equation }
     f = ⦇ B ⦈
 #+end_calculation
 
@@ -692,40 +694,40 @@ Each colimit is a certain initial object, and each initial object is a certain c
   transformation $\const{g} = x \mapsto g : \const{A} →̣ \const{B}$.
 
 + The category $⋁D$, built upon 𝒞, has objects $γ : D →̣ \const{C}$ called “co-cones”, for
-  some object $C =: \tgt\, γ$, and a morphism from $γ$ to $δ$ is a 𝒞-morphism $x$ such that $γ ﹔ \const{x} = δ$.
+  some object $C =: \tgt\, γ$, and a morphism from $γ$ to $δ$ is a 𝒞-morphism $x$ such that $\const{x} ∘ γ = δ$.
  
 + A /colimit for D/ is an initial object in $⋁ D$; which may or may not exist.
 
 \room
 
-Writing $γ╲-$ for $⦇-⦈$ and working out the definition of co-cone in terms of equations in 𝒞,
-  we obtain: /$γ : Obj(⋁D)$ is a colimit for $D$/ if there is a mapping $γ╲-$ such that /╲-Type/ and
-/╲-Char/ hold.
+Writing $-╱γ$ for $⦇-⦈$ and working out the definition of co-cone in terms of equations in 𝒞,
+  we obtain: /$γ : Obj(⋁D)$ is a colimit for $D$/ if there is a mapping $-╱γ$ such that /╱-Type/ and
+/╱-Char/ hold.
 
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{$\backslash$-Type}{ δ \text{ cocone for } D \impliesS γ╲δ : \tgt\, γ → \tgt\,δ}
+\eqn{$\slash$-Type}{ δ \text{ cocone for } D \impliesS γ╲δ : \tgt\, γ → \tgt\,δ}
 
 \vspace{2ex}
 Well-formedness convention: In each law the variables are quantified
-in such a way that the premise of $\backslash$-Type is met.
-The notation $⋯╲δ$ is only senseful if δ is a co-cone for $D$,
-like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 0.
+in such a way that the premise of $\slash$-Type is met.
+The notation $δ╱⋯$ is only senseful if δ is a co-cone for $D$,
+like in arithmetic where the notation $m ÷ n$ is only sensful if $n$ differs from 0.
 
-\eqn{$\backslash$-Char}{ γ ﹔ \const{x} = δ \equivS x = γ ╲ δ }
+\eqn{$\slash$-Char}{ \const{x} ∘ γ = δ \equivS x = δ ╱ γ }
 
 \vspace{2ex}
-Notice that for given $x : C → C'$ the equation $γ ╲ δ = x$ \underline{defines}
-δ, since by $\backslash$-Char that one equation equivales the family of equations
-$δ_A = γ_A ﹔ x$. This allows us to define a natural transformation --or `eithers' in
+Notice that for given $x : C → C'$ the equation $δ ╱ γ = x$ \underline{defines}
+δ, since by $\slash$-Char that one equation equivales the family of equations
+$δ_A = x ∘ γ_A$. This allows us to define a natural transformation --or `eithers' in
 the case of sums-- using a single function \emph{having} the type of the mediating arrow.
 
-\eqn{$\backslash$-Self}{ γ ; \const{γ╲δ} = δ}
+\eqn{$\slash$-Self-Cancellation}{ \const{δ╱γ} ∘ γ = δ}
 
-\eqn{$\backslash$-Id}{γ╲γ = \Id}
+\eqn{$\slash$-Id}{γ╱γ = \Id}
 
-\eqn{$\backslash$-Fusion}{γ╲δ ﹔x = γ╲(δ ﹔ \const{x})}
+\eqn{$\slash$-Fusion}{x ∘ δ╱γ = (\const{x} ∘ δ) ╱ γ}
 % Direct Proof:
 %
 %    γ╲δ ﹔ x = γ ╲ (δ ﹔ _x_)
@@ -734,7 +736,7 @@ the case of sums-- using a single function \emph{having} the type of the mediati
 % ≡  δ ﹔ _x_ = δ ﹔ _x_                         ╲-self
 % ≡ true                                        =-reflexivity
 
-\eqn{$\backslash$-Unique}{γ ﹔ \const{x} = γ ﹔ \const{y} \impliesS x = y}
+\eqn{$\slash$-Unique}{\const{x} ∘ γ = \const{y} ∘ γ \impliesS x = y}
 
 \vspace{2ex}
 This expresses that colimits γ have an epic-like property: \\
@@ -743,21 +745,20 @@ The component morphisms $γ_A$ are \emph{jointly epic}.
 \vspace{2ex}
 The following law confirms the choice of notation once more.
 
-\eqn{$\backslash$-Compose}{γ╲δ ﹔ δ╲ε = γ╲ε}
+\eqn{$\slash$-Compose}{ε╱δ ∘ δ╱γ  = ε╱γ}
 
 \vspace{2ex}
-The next law tells us that functors distribute over the ╲-notation
+The next law tells us that functors distribute over the ╱-notation
 provided the implicit well-formedness condition that 
 $Fγ$ is a colimit holds --clearly this condition is valid when $F$
 preserves colimits.
 
-\eqn{$\backslash$-Functor-Dist}{F(γ╲δ) = Fγ ╲ Fδ}
+\eqn{$\slash$-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
 
-\eqn{$\backslash$-Pre-Functor-Elim}{γF╲δF = γ╲δ}
+\eqn{$\slash$-Pre-Functor-Elim}{δF╱γF = δ╱γ}
 
 \endeqns
 #+END_EXPORT
-
 
 \vspace{-1em}
 
@@ -765,11 +766,11 @@ preserves colimits.
 * Limits
 
 Dually, the category $⋀D$ has objects being “cones” $γ : \const{C} →̣ D$ where $C =: \src\, γ$
-is a 𝒞-object, and a morphism to $γ$ /from/ $δ$ is a 𝒞-morphism $x$ such that $\const{x} ﹔ γ = δ$.
-In terms of 𝒞, /$γ : Obj(⋀ D)$ is a limit for $D$/ if there is a mapping $γ╱-$ such that
-the following ╱-Type and ╱-Char hold, from which we obtain a host of corollaries.
+is a 𝒞-object, and a morphism to $γ$ /from/ $δ$ is a 𝒞-morphism $x$ such that $γ ∘ \const{x} = δ$.
+In terms of 𝒞, /$γ : Obj(⋀ D)$ is a limit for $D$/ if there is a mapping $γ╲-$ such that
+the following ╲-Type and ╲-Char hold, from which we obtain a host of corollaries.
 As usual, there is the implicit well-formedness condition. 
-\ref{/-Unique} expresses that limits γ have an monic-like property:
+Theorem ╲-Unique expresses that limits γ have an monic-like property:
 The component morphisms $γ_A$ are \emph{jointly monic}.
 #
 # Well-formedness convention: In each law the variables are quantified
@@ -780,21 +781,21 @@ The component morphisms $γ_A$ are \emph{jointly monic}.
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{/-Type}{ δ \text{ cone for } D \impliesS δ╱γ : \src\, δ → \src\,γ}
+\eqn{$\backslash$-Type}{ δ \text{ cone for } D \impliesS γ ╲ δ : \src\, δ → \src\,γ}
 
-\eqn{/-Char}{ \const{x} ﹔ γ = δ \equivS x = δ ╱ γ }
+\eqn{$\backslash$-Char}{ γ ∘ \const{x}  = δ \equivS x = γ ╲ δ }
 
-\eqn{/-Self}{ \const{δ ╱ γ} ﹔ γ = δ}
+\eqn{$\backslash$-Self}{ γ ∘ \const{γ ╲ δ}  = δ}
 
-\eqn{/-Id}{γ╱γ = \Id}
+\eqn{$\backslash$-Id}{γ╲γ = \Id}
 
-\eqn{/-Fusion}{x ﹔ δ ╱ γ = (\const{x} ﹔ δ) ╱ γ}
+\eqn{$\backslash$-Fusion}{γ╲δ  ∘ x = γ ╲ (δ ∘ \const{x})}
 
-\eqn{/-Unique}{\const{x} ﹔ γ = \const{y} ﹔ γ \impliesS x = y}
+\eqn{$\backslash$-Unique}{γ ∘ \const{x} = γ ∘ \const{y} \impliesS x = y}
 
-\eqn{/-Functor-Dist}{F(δ ╱ γ) = Fδ ╱ Fγ}
+\eqn{$\backslash$-Functor-Dist}{F(γ ╲ δ) = Fγ ╲ Fδ}
 
-\eqn{/-Pre-Functor-Elim}{δF╱γF = δ╱γ}
+\eqn{$\backslash$-Pre-Functor-Elim}{γF ╲ δF = γ╲δ}
 % Direct proof:
 %
 %    δF╱γF = δ╱γ
@@ -807,17 +808,17 @@ The component morphisms $γ_A$ are \emph{jointly monic}.
 \endeqns
 #+END_EXPORT
 
-
 \vspace{-1em}
 
-* Coequaliser
+* TODO Coequaliser
 
 # $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
 #
 Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
-where $f,g : A → B$ are given. Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
-with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $\const{C} h ﹔ δ_A = δ_B ﹔ D h$; in-particular
-$q' = q ﹔ f = g ﹔ q$ whence $q'$ is fully-determined by $q$ alone.
+where $f,g : A → B$ are given. 
+# Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
+# with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $δ_A ∘ \const{C} h = D h ∘ δ_B$; in-particular
+# $q' = f ∘ q = q ∘ g$ whence $q'$ is fully-determined by $q$ alone.
 
 Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $p╲-$ in-place of $γ╲-$, then the ╲-laws
 yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $p╲-$ such that /CoEq-Type/ and
@@ -855,7 +856,7 @@ like in arithmetic where the notation $m/n$ is only sensful if $n$ differs from 
 #+END_EXPORT
 
 \newpage
-* Sums
+* TODO Sums
 #+LaTeX: \def\inl{\mathsf{inl}} 
 #+LaTeX: \def\inr{\mathsf{inr}}
 
@@ -917,7 +918,7 @@ definitions: All applications have been lifted to compositions!
 Likewise for the absorption laws.
 
 \newpage
-* Duality: Sums & Products
+* COMMENT TODO Duality: Sums & Products
 
 #+BEGIN_EXPORT latex
 \def\fst{\mathsf{fst}}
@@ -1221,6 +1222,99 @@ The standard notation for the empty split $⟨⟩$ is $!_C$, where $C$ is the so
 Dually, the standard notation for the empty either $[]$ is $?_C$.
 
 Exercise 2.30: Particularise the exchange law to empty products and empty coproducts; i.e., 1 and 0!
+
+
+* COMMENT FIXES
+** §4 FIX
+
+ 0. §4.7, page 135: ?
+
+** §3 FIX
+ 0. §3.1, page 68, exercise 3.3: The arguments to the ~for~ are in the wrong order; moreover the notation
+    for multiplication is inconsistent with in (3.6).
+
+ 0. §3.3, page 79: The top-most code fragment mentions ~Eval T~ but nothing in the surrounding text mentions
+    ~Eval~. Is this a typo?
+
+ 0. §3.4, page 83: In the fourth equation in the bottom-most calculation, there seems to be a missing
+    ~cons~ tag on the right-hand side --c.f. (3.27)--. The right-most should be /Cons(a, x)/ instead of just /(a,x)/.
+
+ 0. §3.6, page 87: Right after (3.41), there is an inconsistency with the notation of multiplication, or there lack of.
+    Perhaps consider using a × or *, rather than just a space.
+
+ 0. §3.9, page 96, equation (3.63): Do you mean ${}_n C_p$ instead of ${}^n C_p$?
+    If so: It might also help to mention that this is the combinatorial choice operator
+    and is not the same as the coefficients $C_i$ of (3.62); otherwise the overloaded $C$ might
+    cause more trouble than desired. Alternatively maybe use notation $\binom{n}{p}$ instead.
+
+ 0. §3.9, page 97, exercise 3.10: At the end of the first line, you want $(1 + X)²$ rather than $(1 + X²)$.
+
+ 0. §3.12, page 99: When you first introduced isos back in §2, you said they were functions that were both
+    monic and epic, which is the case for your ambient category, Sets. However, in the first line of this
+    subsection, it seems you are stating that an /F/-algebra that is both epic and monoic is necessarily an iso
+    --which as far as I know is not true, even when the underling category is Set.
+
+ 0. §3.15, page 110: First sentence after the functor instance should include a definite article; it should be
+    /in the language's/.
+
+ 0. §3.16, page 115, line 10: Typo, /more that two/ should be /more than two/.
+
+ 0. §3.19, page 123, last paragraph, third line: Typo /such as discipline/ should be /such a discipline/.
+
+** §2 FIX
+
+ 0. §2.4, last line:  Should be /`natural'/ instead of /'natural'./
+
+ 0. §2.5, exercise 2.1: Maybe place this at the end of §2.4 since
+      it's a problem on identity functions,
+      rather than at the end of §2.5 which is on constant functions.
+
+ 0. §2.6, end: It's easy to see how monics generalise injective functions
+    but it's not as easy for the surjective-epic case. I've conjured up
+    the following explanation, which might be helpful to include.
+    #+BEGIN_QUOTE
+ 
+ #+BEGIN_EXPORT latex
+ \eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
+   \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
+ }
+ #+END_EXPORT
+
+    Intuitively, $h = k$ on all points of their source precisely when
+    they are equal on all image points of $f$, since $f$ being epic
+    means it outputs all values of their source.
+    #+END_QUOTE
+
+ 0. §2.7, before equation 2.18:
+    I think you meant /pointfree/ not /pointwise/ as clearly 2.18 involves
+    no points.
+
+ 0. §2.13, ×-fusion calculation: In the final hint, perhaps add /after (2.63)/
+    so that it is clear which /derived above/ law is being referenced
+    --since its name is in the surrounding text and may not be easy to locate.
+
+ 0. §2.14, page 39, second paragraph: Typo /market/ should be /marked/.
+ 0. §2.14, page 39, diagram: Typos, left arrow should be labelled /g/ not /f/,
+    and the right arrow should be labelled /h/ not /g/.
+
+ 0. §2.14, exercise 2.21: It seems you have the accidental typos /λap/ appearing twice.
+
+ 0. §2.15, second paragraph: For $f : B ← C × A$, the phrase /f c ∈ B/ is ill-typed
+    and it may be incorrect to say it, /f c/, /denotes a value of type B/.
+
+ 0. §2.15, typing (2.81): The name /ap/ appears on the arrow, perhaps you do not want it appearing 
+    twice in one line like that.
+
+ 0. §2.15, first paragraph after (2.81): Perhaps it may be better to use a definite article:
+    /Back to the generic binary operator/ rather than /Back to generic binary operator/.
+
+ 0. §2.18, page 56: In the definition of type ~Point~, maybe mention that the Haskell ecosystem
+    uses distinct name-spaces for types and their constructors whence the overloading of ``Point''
+    is non-ambiguous.
+
+ 0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
+
+
 
 
 * COMMENT Maybe move to README
