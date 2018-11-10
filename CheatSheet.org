@@ -1774,6 +1774,255 @@ The category theory is mostly implicit, but presented elegantly!
  [Dangerous] Convention:
  free variables are quantified implicitly in such a way that the laws in which they appear
  are well-defined.
+* COMMENT Content from older repo
+** Compact Notation
+
+ Why do people look for compact notations? A compact notation leads to
+ shorter documents (less lines of code in programming) in which patterns are easier
+ to identify and to reason about. Properties can be stated in clear-cut, one-line long
+ equations which are easy to memorize. And diagrams such as (2.4) can be easily
+ drawn which enable us to visualize maths in a graphical format.
+
+** Functions and Contracts
+
+ What do we want functions for? If we ask this question to a physician or engineer
+ the answer is very likely to be: one wants functions for modelling and reasoning
+ about the behaviour of real things.
+
+ So we get a naive purpose of functions: we want them to be applied to arguments
+ in order to obtain results.
+
+ A function /f : B ⟵ A/ can be regarded as a kind of “contract”: /f/ commits
+ itself to producing a /B/-value provided it is supplied with an /A/-value. How is such
+ a value produced? In many situations one wishes to ignore it because one is just
+ using function /f/. In others, however, one may want to inspect the internals of the
+ “black box” in order to know the function’s computation rule.
+
+ How free are we to fulfill the “give me an /A/ and I will give you a /B/ ” contract of
+ declaration /f : B ⟵ A/? In general, the choice of /f/ is not unique. Some /f/s will do as little
+ as possible while others will laboriously compute non-trivial outputs. At one of
+ the extremes, we find functions which “do nothing” for us, that is, the added-value
+ of their output when compared to their input amounts to nothing:
+ /f a = a/.
+ In this case /B = A/, of course, and /f/ is said to be the identity function on /A/.
+
+ Observe that “naturality laws” /f · h = h · f = f/ have a unique solution for /h/: “the” id-entity function.
+
+** Constants
+
+ #+BEGIN_QUOTE
+ Opposite to the identity functions, which do not lose any information, we find
+ functions which lose all (or almost all) information. Regardless of their input, the
+ output of these functions is always the same value.
+
+ Let C be a nonempty data domain and let and /c ∈ C/. Then we define the
+ /everywhere c/ function as follows, for arbitrary /A/:
+ /c : A → C/,
+ /_c_ a = c/
+ #+END_QUOTE
+
+ Observe that /Constant arrows that are epic necessarily target a terminal object./
+
+** Epics and Monics
+
+ #+BEGIN_QUOTE
+ Identity functions and constant functions are limit points of the functional spectrum
+ with respect to information preservation. All the other functions are in between:
+ they lose “some” information, which is regarded as uninteresting for some
+ reason. This remark supports the following aphorism about a facet of functional
+ programming: it is the art of transforming or losing information in a controlled
+ and precise way. That is to say, the art of constructing the exact observation of
+ data which fits in a particular context or requirement.
+
+ How do functions lose information? Basically in two different ways: they may
+ be “blind” enough to confuse different inputs, by mapping them onto the same
+ output, or they may ignore values of their codomain. For instance, /_c_/ confuses all
+ inputs by mapping them all onto /c/. Moreover, it ignores all values of its codomain
+ apart from /c/.
+
+ Functions which do not confuse inputs are called monics (or injective functions)
+
+ Functions which do not ignore values of their codomain are called epics (or
+ surjective functions).
+ #+END_QUOTE
+
+** Isos
+ #+BEGIN_QUOTE
+ Isomorphisms are very important functions because they convert data from
+ one “format”, say /A/, to another format, say /B/, without losing information. 
+
+ So /f/ and /f⁻¹/ are faithful protocols between the two formats /A/ and /B/. Of course,
+ these formats contain the same “amount” of information, although the same data
+ adopts a different “shape” in each of them. In mathematics, one says that /A/ is
+ isomorphic to /B/ and one writes /A ≅ B/ to express this fact.
+
+ Isomorphic data domains are regarded as “abstractly” the same. Note that, in
+ general, there is a wide range of isos between two isomorphic data domains.
+ #+END_QUOTE
+
+** Sums
+ Given two functions /f : C ⟵ A/ and /g : C ⟵ B/ with a common target, we can “glue” them
+ together to obtain a function “either /f/ or /g/” /[f , g] : C ⟵ A + B/ to that same common target but whose
+ source is the sum of the sources. This function behaves like /f/ when the input comes from the
+ “/A/-side” and behaves like /g/ when the input comes from the “/B/-side”.
+
+ The inputs can be “injected” into this new composite source via two new combinators:
+ /inl : A + B ⟵ A/ and /inr : A + B ⟵ B/.
+
+ The gluing is specfied by the equation: /h = [f , g]  ≡  h . inl = f ∧ h . inr = g/
+ Read, “/h/ is the sum of /f/ and /g/ precisely when it behaves like /f/ when following a left
+ injection and behaves like /g/ when following a right injection.”
+
+ # From this property it follows that the injections do not confuse inputs, i.e., are jointly-injective.
+ Indeed the property above could be thought of as ensuring /no-junk and no-confusion/.
+ - /no-junk/: Everything starting at a sum /h : C ⟵ A + B/ is necessarily expressible as a case: /h = [ h . inl , h . inr].
+ - /no-confusion/: Casing does not mix-up distinct inputs, /[f , g] = [h , k] ⇒ f = h ∧ g = k/.
+
+** Products
+
+ When two morphisms do not compose but instead have a common source then we can /glue/
+ them with the /pairing/ combinator /⟨-,-⟩/ by forming the product of their targets.
+ When the morphisms are not necessarily related, we can still /glue/ them together via the /product/ combinator;
+ namely if /f : A ⟵ C/ and /g : B ⟵ D/ then, /product of f and g/, /f × g : A × B ⟵ C × D/.
+
+ Both gluing combinators maintain the information of their individual arguments, in the same way
+ (Cartesian) product /A × B/ keeps the information of /A/ and /B/.
+
+ + Product is essentially symmetric
+   - /swap := ⟨ snd , fst ⟩/ is an involution witnessing /A × B ≅ B × A/
+   - In programming, where products are records, /swap/ can be re-interpreted as a guarantee that one
+     does not lose (or gain) anything in swapping fields in struct or record datatypes. 
+
+ + Product is essentially associative
+   - “associate to the right”, /assocr := ⟨ fst . fst , snd × Id ⟩ : A × (B × C) ⟵ (A × B) × C/
+   - This is an isomorphism with inverse /assocl := ⟨ Id × fst , snd ∙ snd ⟩ : (A × B) × C ⟵ A × (B × C)/.
+
+** The Exchange Law
+
+ /Datatype constructions, such as A + B and A × B, arise as devices for expressing
+ the types of the results of gluing given morphisms./
+
+ Two morphisms /A′ ⟵ A/ and /B′ ⟵ B/ can thus be combined by our combinators to
+ obtain a morphism /A′ × B′ ⟵ A + B/. Since such a morphism has source a sum, it
+ can be obtained via the casing combinators; conversely, since it has target a product,
+ it can be obtained via the pairing combinators. Naturally both forms coincide due to
+ the /Exchange Law/ which expressed the equivalence of case-of-pairs and pair-of-cases:
+ /[ ⟨f,g⟩ , ⟨h,k⟩ ]  =  ⟨ [f,h] , [g,k] ⟩/.
+
+ For example, applying this rule to the expression /⟨ [ fst , fst ] , [ inl . snd , inr . snd] ⟩/
+ yields the familiar /un-distribute-right/ operation /undistr = [ Id × inl , Id × inr ] : A × (B + C) ⟵ (A × B) + (A × C)/.
+
+** material to be included
+
+ *types*
+
+  Formally, a “type checking” discipline can be expressed in terms of compositional rules which
+ check for functional expression wellformedness.
+
+ *?*
+
+ A case arises wherever two functions do not compose but share the same codomain.
+ [...] then we use the sum combinator.
+
+ Composition is certainly the most basic of all functional combinators. It is the
+ first kind of “glue” which comes to mind when programmers need to combine, or
+ chain functions (or processes) to obtain more elaborate functions (or processes).
+ This is because of one of its most relevant properties, associtivity: /(f · g) · h = f · (g · h)/.
+
+ (
+
+ I really like this approach you are promoting: Construing high-order combinators as
+ variations on composition. I particularly like this idea when we get to the product
+ and sum functors. Excellent! :-)
+
+ )
+
+** LaTeX Matter To Utilise
+
+%{{{ header
+
+\documentclass[11pt]{article}
+
+\usepackage[hmargin=10mm, vmargin=10mm, landscape]{geometry}
+\usepackage{multicol}
+
+\usepackage[svgnames]{xcolor}
+%
+% See Section-4 for colors by name at:
+% ftp://ftp.mackichan.com/swandswp55/tcitex/doc/latex/contrib/xcolor/xcolor.pdf
+
+\usepackage{amsmath,amssymb}
+
+\usepackage{CalcStyleV9} % http://calccheck.mcmaster.ca/ 
+\usepackage{calculation} % https://ctan.org/pkg/calculation
+\parindent0pt\parskip0.6ex % Better for literate code.
+
+\pagestyle{empty}
+
+%{{{ main control macros
+
+% bold item and place it in a box; intended to section-off related theorems
+\def\heading#1{\fbox{\bf #1}}
+
+% handy-dandy things to try in this domain we're learning.
+\newcommand\heuristic[1][]{ {\color{red} \bf Heuristic \if#1\empty\else\ldq#1\rdq\fi:} }
+
+% a notice ``to do'' sign for current construction sites
+\def\todo{ {\color{DarkSlateBlue}\;\fbox{\sc \textbf{To Do ::}}\;} }
+
+% 1 number or referencing item
+% 2 name of theorem
+% 3 theorem statement
+\def\theorem#1#2#3{\parbox{3em}{#1} \ \textbf{#2:} \ \ {#3}}
+
+%}}}
+%{{{ logical operators with padding
+
+% suffixes:
+% 's' for a ``little'' bit    of space
+% 'S' for a ``large''  amount of space
+ 
+\def\equivS{\qquad \equiv \qquad}
+
+\def\eqs{\quad = \quad}
+
+\def\lands{\quad \land \quad}
+\def\landS{\qquad \land \qquad}
+
+%}}}
+%{{{ category theory identifiers
+
+% identity morphism
+\def\Id{\mathsf{id}}
+
+% source and target
+\def\src{\mathsf{src}\,}
+\def\tgt{\mathsf{tgt}\,}
+
+% converse morphism notation
+\def\from{\leftarrow}
+
+% natural transformation
+\def\natTo{\mathrel{\ooalign{\,$\longrightarrow$\cr\quad.}}}
+%}}}
+
+\theorem{}{Principle of Duality}{
+  A statement $S$ is true about $\mathcal{C}$
+  iff it's dual $S[\fcmp \,:=\, \circ]$ is true about $\mathcal{C}^{op}$. }
+
+\theorem{}{{\color{gray} Cancellation / } Projection Definitions}{ $\fst \cdot \< f , g \> = f \landS \snd \cdot \< f , g \> = g$ }
+
+\theorem{}{{\color{gray}Fusion / } Pointwise Definition of Pairing}{ $\<f , g \> \cdot h \eqs \<f \cdot h , g \cdot h\>$ }
+
+\theorem{}{Axiom, Product bi-map definition}{ $f \x g \,:=\, \< f \cdot \fst , g \cdot \snd \>$ }
+
+\theorem{}{{\color{gray} Induced} Pointwise Definition of Product bi-map }
+        { \hspace{-1em} $(f \x g) \cdot \<i , j \> \eqs \<f \cdot i , g \cdot j\>$ }
+
+\theorem{}{{\color{gray}Absorption /} Induced Definition of Casing}
+        { $\[ f , g \] \cdot (i \+ j) = \[ f \cdot i , g \cdot j \]$ }
+
+
 * COMMENT Maybe move to README
 ** Gluing functions which do not compose -- products         :move_to_readme:
 
