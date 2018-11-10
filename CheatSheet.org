@@ -25,6 +25,22 @@
 
 # https://en.wikipedia.org/wiki/Linguistic_relativity#Programming_languages
 
+* COMMENT In Defence of Backwards Composition :for_future_self:
+
+For some time, I've preferred forwards composition as in Z notation.
+Especially since my academic setting has people using that notation as well.
+
+However here are some reasons I've decided to switch to the traditional format:
+
++ It is much more ubiquitous; therefore easier to understand without the necessary simple explanation.
+
++ It is Haskell's notion of function composition, therefore allowing the immediate translation
+  of categorically derived programs to be implemented in Haskell. It also permits a nice
+  implementation of some categorical concepts without must trouble.
+
++ I want to motivate the “calculational style”, so I do not want to deviate in orthogonal
+  directions.
+
 * COMMENT TODO commit info                                           :ignore:
 
 #+begin_tiny
@@ -560,6 +576,167 @@ Also,
 + Left adjoints preserve colimits such as initial objects and sums.
 + Right adjoints preserve limits such as terminal objects and products.
 
+
+* Constant Combinators
+
+#+LaTeX: \def\const#1{ \underline{#1} }
+
+Opposite to the identity functions which do not lose any information,
+we find functions which lose all, or almost all, information.
+Regardless of their input, the output of these functions is always the
+same value.
+
+\room
+
+#+LaTeX: \def\K{\mathcal{K}}
+The Constant Combinator $\K : 𝒞 → ℱ𝓊𝓃𝒸(𝒟,𝒞)$
++ For objects $x$, the ``constant functor'': \\
+   $\K{x}\, y = x$ and $\K{x}\, f = \Id_x$ for objects $y$ and morphisms $f$.
++ For morphisms $f$, the ``constant natural transformation'': \\
+   $\K{f} : \K{(\src f)} →̣ \K{(\tgt f)}$
+   sending objects $y$ to morphism $\K{f}\, y = f$.
+
+\room
+Sometimes it is convenient to notate $\const{c} = \K \, c$
+and refer to this as the /everywhere c/ operation.
+#+LaTeX: \eqn{constant-Defn}{\const{c}\, a = c}
+
+The following property defines constant functions at the `pointfree level':
+#+LaTeX: \eqn{constant-Fusion}{\const{c} ∘ f = \const{c} }
+
+Constant functions force any difference in behaviour for any two
+functions to disappear:
+#+LaTeX: \eqn{constant-Equality}{\const{c} ∘ f = \const{c} ∘ g}
+
+Interestingly in 𝒮ℯ𝓉, composition and application
+are bridged explicitly by the constant functions:
+#+BEGIN_EXPORT latex
+\eqn{Set-Bridge}{ f ∘ \const{c} = \const{f \, c}}
+#+END_EXPORT
+
+\newpage
+* Monics and Epics
+
+Identity functions and constant functions are limit points of the 
+functional spectrum with respect to information preservation.
+All the other functions are in-between: They “lose” some information,
+which is regarded as uninteresting for some reason.
+
+\room
+
+How do functions lose information?
+Basically in two ways: They may be “blind” enough to confuse different
+inputs, by mapping them to the same output, or they may ignore values
+of their target. For instance, $\const{c}$ confuses all inputs
+by mapping them all onto $c$. Moreover, it ignores all values of its
+target apart from $c$.
+
+\room
+
+Functions which do not confuse their inputs are called /monics/:
+They are “post-cancellable”:
+
+#+BEGIN_EXPORT latex
+\eqn{monic-Defn}{ f \; \mathsf{monic} \equivS 
+  \left(∀ h,k \;•\; f ∘ h = f ∘ k \equivs h = k\right)
+}
+#+END_EXPORT
+
+Functions which do not ignore values of their target are called
+/epics/: They are “pre-cancellable”:
+#+BEGIN_EXPORT latex
+\eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
+  \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
+}
+#+END_EXPORT
+
+Intuitively, $h = k$ on all points of their source precisely when
+they are equal on all image points of $f$, since $f$ being epic means 
+it outputs all values of their source.
+
+\room
+
+It is easy to check that “the” identity function is monic and epic, 
+while any constant function $\const{c}$ is not monic and is only
+epic when its target consists only of $c$.
+
+* Isos
+
+#+LaTeX: \def\inverse{^{-1}}
+
+An arrow is an /iso/ iff it is invertible; i.e., there is an “inverse” morphism
+$f\inverse$ with
+\eqn{inverse-Char}{ f ∘ f\inverse = \Id \landS f\inverse ∘ f = \Id}
+
+To /construct/ $f\inverse$, we begin by identifying its type which may give
+insight into its necessary `shape' --e.g., as a sum or a product--
+then we pick one of these equations and try to reduce it as much as possible
+until we arrive at a definition of $f˘$, or its `components'.
+  + E.g., $coassocr = [\Id + \inl, \inr ∘ \inr] : (A + B) + C ≅ A + (B + C)$, its inverse
+    /coassocl/ must be of the shape $[x, [y, z]]$ for unknowns $x,y,z$ which can be calculated
+    by solving the equation $[x, [y, z]] ∘ coassocr = \Id$ --Do it!
+
+# --E.g., the inverse of ~assoc~.
+
+\room
+
+The following rules can be of help if $f\inverse$ is found handier than isomorphism $f$
+in reasoning,
+
+\begineqns
+
+\eqn{inverse-Shunting1}{ f ∘ x = y \equivS x = f\inverse ∘ y}
+
+\eqn{inverse-Shunting2}{ x ∘ f = y \equivS x = y ∘ f\inverse}
+
+\endeqns
+
+\room
+\room
+
+Isos are necessarily monic and epic, but in general the other way
+around is not true.
+
+\room
+
+Isomorphisms are very important because they convert data from one
+“format”, say $A$, to another format, say $B$, without losing 
+information. So $f$ and $f˘$ are faithful protocols between the two
+formats $A$ and $B$. 
+Of course, these formats contain the same “amount” of information
+although the same data adopts a “different” shape in each of them.
+─c.f. \nameref{SeqPair-is-Pair-Seq}.
+
+\room
+
+Isomorphic data domains are regarded as “abstractly” the same;
+then one write $A ≅ B$.
+
+Finally, note that all classes of functions referred to so far
+---identities, constants, epics, monics, and isos---
+are closed under composition.
+
+
+
+Monics to the initial object are necessarily isos! 
+# Simialr to the bottom of a poset.
+
+* COMMENT More Morphism Properties
+
+# \NTHM{}{Monic}{ compositionally post-cancellable ---nearly the same formulation as injective! }
+
+If a composition is monic then its first arrow is monic.
+
+\NTHM{}{Epic}{ compositionally pre-cancellable }
+
+If a composition is epic then its last arrow is epic.
+
+\NTHM{}{Split Monic}{ compositionally post-invertible }
+
+\NTHM{}{Split Epic}{ compositionally pre-invertible }
+
+\NTHM{}{Iso}{ Both epic and monic ; i.e., monic and split epic }
+
 * Skolemisation
 # “Up to Isomorphism”
 
@@ -613,6 +790,7 @@ $=, ﹔, \Id$. Also note that Self says there's at least one solution and Uniq s
 at most one solution, so together they are equivalent to ℱ-Char --however those two proofs
 are usually not easier nor more elegant than a proof of ℱ-Char directly.
 
+\newpage
 * Initiality
 
 # Convenient definition: 
@@ -628,11 +806,12 @@ dependency on 0 explicit.
 
 \eqn{initial-Self}{ ⦇ B ⦈ : 0 → B }
 
-\eqn{initial-Id}{ id₀ = ⦇ 0 ⦈ }
+\eqn{initial-Id}{ \Id₀ = ⦇ 0 ⦈ }
 
 \eqn{initial-Uniq}{ f, g : 0 → B \impliesS f = g }
 
-\eqn{initial-Fusion}{ f : B → C \impliesS f ∘ ⦇ B ⦈ = ⦇ C ⦈ }
+% Pre-absorption
+\eqn{initial-Fusion{ f : B → C \impliesS f ∘ ⦇ B ⦈ = ⦇ C ⦈ }
 
 \vspace{2ex}
 {\tiny Provided objects $B, C$ are both in 𝒜 and ℬ,
@@ -682,9 +861,15 @@ proof has the following format, or a circular implication thereof: For arbitrary
 
 \vspace{-2em}
 
-* Colimits
+# With the characterisation and init-Identity rules, one can show that initial objects are unique
+# up to isomorphism and so I've opted out to naming a representative `0`. Dually, for final objects.
+# %
+# % See page 38, par 2.22 of Fokkinga's gentle introduction for a nice calculational proof.
+# 
 
-#+LaTeX: \def\const#1{ \underline{#1} }
+\newpage
+
+* Colimits
 
 Each colimit is a certain initial object, and each initial object is a certain colimit.
 
@@ -855,6 +1040,31 @@ like in arithmetic where the notation $m ÷ n$ is only sensful if $n$ differs fr
 #+END_EXPORT
 
 \newpage
+
+
+# CoEqualisers generalise the notion of induced equivalence relation.
+
+\iffalse
+
+  Taking $D$ and $\mathcal{D}$ as suggested by
+  $D\,\mathcal{D}:$
+  $ \raisebox{6pt}{$\spot$}
+  \overset{ \overset{f}{\text{\tiny$\longrightarrow$}}
+    }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
+  \raisebox{6pt}{$\spot$}
+  $
+  
+Now call the category $\bigvee D$ by the name $\bigvee(f \,|\!|\, g)$:
+it has objects morphisms that post-equalise $f$ and $g$, and morphisms
+$x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q$ 
+
+A \emph{coequaliser} of $f,g$ is an initial object in
+$\bigvee(f \,|\!|\, g)$.
+
+\fi
+
+# coEqualiser-Fusion, ``Composition into Numerator''
+
 * Sums
 #+LaTeX: \def\inl{\mathsf{inl}} 
 #+LaTeX: \def\inr{\mathsf{inr}}
@@ -913,11 +1123,13 @@ $(F\,\inl, F\,\inr, F(A+B))$ form a sum of $F\,A$ and $F\, B$.
 #+END_EXPORT
 
 \room
+\room
 
-# for $[]$ and $⟨⟩$
-The fusion laws give us a pointfree rendition of their usual pointwise
-definitions: All applications have been lifted to compositions!
-Likewise for the absorption laws.
+In the pointwise setting, notice that the cancellation law serves to define the casing construct [-,-].
+Then that casing is a form of conditional can be read from the characterisation.
+With this view, fusion, post-distributivity of composition over casing is just
+the usual law that function application distributes over conditionals
+and the casing extensionality law is the body-idempotency of conditionals.
 
 \room
 
@@ -982,8 +1194,24 @@ $⟨-,-⟩$ satisfying the Char and Type laws below; from which we obtain a host
 #+END_EXPORT
 
 \room
+\room
 
-These are essentially a re-write of the sum laws.
+The characterisation says that the essential properties of ordered pairs 
+is that their components are retrievable and they are
+completely determined by their components.
+
+\room
+
+Notice that the cancellation rule is essentially the /definitions of projections/ in the pointwise setting;
+likewise absorption is akin to the pointwise definition of the product bi-map.
+
+\room
+
+The fusion laws give us a pointfree rendition of their usual pointwise
+definitions: All applications have been lifted to compositions!
+# Likewise for the absorption laws.
+
+# These are essentially a re-write of the sum laws.
 
 \room
 
@@ -1003,120 +1231,67 @@ For categories in which products exist, we define for $f : A → B$ and $g : C �
 
 \eqn{Structural Equality}{ ⟨f,g⟩ = ⟨h, j⟩ \equivS f = h \lands g = j }
 
-\eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
+# \eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
 
 \endeqns
 
 # Notice that the last law above is self-dual.
 
-* COMMENT Duality: Sums & Products :uniform_notation:
+\newpage
 
-#+BEGIN_EXPORT latex
-\def\fst{\mathsf{fst}}
-\def\snd{\mathsf{snd}}
-#+END_EXPORT
+* Finitary Sums and Products
 
-#+LaTeX_HEADER: \usepackage{stackengine} 
-#
-# \topinset{*}{O}{1pt}{}
-#
-#+LaTeX: \def\composition{ \topinset{﹔}{∘}{0.4pt}{} }
-
-In category theory there are two popular notations for composition,
-$f ﹔ g = g ∘ f$, and there are two arrow notations $A → B \;=\; B \leftarrow A$,
-known as the “forwards” and “backwards” notations.
+All properties studied for binary /splits/ and binary /eithers/ extend to the
+finitary case. For the particular situation $n = 1$, we will have $⟨f⟩=[f]=f$
+and $\inl = \fst = \Id$, of course.
 
 \room
 
-Some people prefer one notation and stick with it; however having both in-hand
-allows us to say: The /dual/ of a categorical statement formed with 
-$﹔,→$ is obtained by syntactically replacing these two with $∘, \leftarrow$ respectively
-while leaving variables and $\Id$'s alone.
+For the particular situation $n = 0$,
+finitary products “degenerate” to terminal object 1 and finitary sums “degenerate” to initial object 0.
+The standard notation for the empty split $⟨⟩$ is $!_C$, where $C$ is the source.
+Dually, the standard notation for the empty either $[]$ is $?_C$.
 
-\room
+# Exercise 2.30: Particularise the exchange law to empty products and empty coproducts; i.e., 1 and 0!
 
-#+LaTeX: \def\dual{\mathsf{dual}}
-#
-#
-For example, applying this process to sums yields /products/:
-\vspace{-0.5em}
-#+begin_calculation latex 
-   h = ⟨f, g⟩
-\step{  We define products as dual to sums }
-   h = \dual [f, g]
-\step{  dual operation definition }
-  \dual\left( h = [f,g] \right)
-\step{  []-Char and Leibniz }
-  \dual\left( \inl ﹔ h = f  \lands  \inr ﹔ h = g\right) 
-\step{  dual operation definition }
-  \dual\left(\inl ﹔ h\right) = f  \lands  \dual\left(\inr ﹔ h\right) = g) 
-\step{  dual operation definition }
-  \dual \text{ } \inl ∘ h = f  \lands  \dual \text{ }  \inr ∘ h = g
-\step{  Define: $\fst = \dual\, \inl$, $\snd = \dual\, \inr$ }
-  \fst ∘ h = f  \lands  \snd ∘ h = g
-\step{  Switch back to ﹔-notation }
-   h ﹔ \fst = f  \lands  h ﹔ \snd = g
-#+end_calculation
+\eqn{Empty Exchange Rule}{ ⟨⟩_0 = []_1 }
 
-# Dualising the other sum artefacts yields:
-/$(\fst, \snd, A × B)$ form a product of A and B/ if there is an operation
-$⟨-,-⟩$ satisfying the Char and Type laws below; from which we obtain a host of corollaries.
+# \newpage
 
-#+BEGIN_EXPORT latex
+* Mixing products and coproducts
+
+Any $f : A + B → C × D$ can be expressed alternatively as an /either/
+or as a /split/. It turns out that both formats are identical: 
+# The Interchange rule.
+\vspace{-1.5em}
+\eqn{Exchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
+
+E.g., $\mathsf{undistr}  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id × \inr] : (A × B) + (A × C) → A × (B + C)$.
+
+# Also, by the exchange rule,
 \begineqns
 
-\eqn{$\langle\rangle$-Type}{f : C → A \lands g : C → B \impliesS ⟨f, g⟩ : C → A × B}
+\eqn{Cool-Property}{ [f × g, h × k] \;=\; ⟨ [f, h] ∘ (\fst + \fst), [g, k] ∘ (\snd + \snd)⟩ }
 
-\eqn{$\langle\rangle$-Char}{ x ﹔ \fst = f \lands x ﹔ \snd = g \equivS x = ⟨f, g⟩ }
-
-\eqn{$\langle\rangle$-Cancellation; $\langle\rangle$-Self}{ ⟨f, g⟩ ﹔ \fst = f \landS ⟨f, g⟩ ﹔ \snd = g}
-
-\eqn{$\langle\rangle$-Id}{ ⟨\fst, \snd⟩ = \Id}
-
-\eqn{$\langle\rangle$-Unique}{ x ﹔ \fst = y ﹔\fst  \lands x; \snd = y ﹔ \snd \impliesS x = y}
-
-\eqn{$\langle\rangle$-Fusion}{ x ﹔ ⟨f , g⟩ = ⟨x﹔f, x ﹔ g⟩ }
-
-\eqn{$\langle\rangle$-Functor-Dist}{F \, ⟨f, g⟩_𝒞 = ⟨F \, f , F \, g⟩_𝒟 \qquad\text{ where } F : 𝒞 → 𝒟}
-
-\endeqns
-#+END_EXPORT
-
-\room
-
-These are essentially a re-write of the sum laws; let's write the next set of laws only once.
-
-\room
-
-Let the tuple “⟅ ⟆, ⋆, $l$, $r$, $\composition$” be either
-“⟨ ⟩, ×, $\fst$, $\snd$, $∘$” or “[ ], +, $\inl$, $\inr$, $﹔$”.
-
-\room
-
-For categories in which sums and products exist, we define for $f : A → B$ and $g : C → D$,
-
-\begineqns
-
-\eqn{$\star$-Definition}{ f ⋆ g = ⟅ f \composition l, g \composition r⟆ : A ⋆ C → B ⋆ D}
-
-\eqn{$l,r$-Naturality}{ l \composition (f ⋆ g) = f \composition l \landS r \composition (f ⋆ g) = g \composition r }
-
-\eqn{Extensionality}{ ⟅l \composition h, r \composition h⟆ = h}
-
-\eqn{Absorption}{ (f ⋆ g) \composition ⟅h, j⟆ = ⟅f \composition h, g \composition j⟆ }
-
-\eqn{$\star$-Bi-Functoriality}{ \Id ⋆ \Id = \Id \landS (f ⋆ g) \composition (h ⋆ j) = (f \composition h) ⋆ (g \composition j)}
-
-\eqn{Structural Equality}{ ⟅f,g⟆ = ⟅h, j⟆ \equivS f = h \lands g = j }
-
-\eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
-
+\eqn{Co-cool-Property}{ ⟨f + g, h + k⟩ \;=\; [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)] }
+# Direct proof:
+# 
+#   [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)]
+# = [ ⟨inl ∘ f , inl ∘ h⟩, ⟨inr ∘ g, inr ∘ k⟩ ]      absorption
+# = ⟨ [inl ∘ f, inr ∘ g], [inl ∘ h, inr ∘ k]⟩       exchange
+# = ⟨ f + g, h + k ⟩                               defns
 \endeqns
 
 \room
 
-Notice that the last law above is self-dual.
-
+Also, since constants ignore their inputs,
+#+LaTeX: \eqn{Exchange-with-constant}{ [⟨ f, \const{k} ⟩, ⟨ g , \const{k} ⟩] = ⟨ [f, g], \const{k} ⟩ }
+# Proof:
+#
+#   [⟨ f, _k_ ⟩, ⟨ g , _k_ ⟩]
+# = ⟨ [f, g], [ _k_ , _k_ ]⟩        exchange
+# = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
+# = ⟨ [f, g], _k_ ⟩               constants
 * References
 
 #+LaTeX: {\color{white}.}
@@ -1134,6 +1309,11 @@ has made [[https://ctan.org/tex-archive/macros/latex/contrib/calculation][availa
 \vspace{1em}
 
 Clear, concise, and an illuminating read.
+
+\vspace{1em}
+
+I've deviated from his exposition by using backwards composition `∘' rather
+than diagrammatic composition `;', as such my limit notation is his colimit notation! Be careful.
 
 \vspace{1em}
 
@@ -1157,163 +1337,6 @@ The category theory is mostly implicit, but presented elegantly!
 
  + Backus' FP and Iverson's APL are examples of pointfree programming
    languages; look them up ;-)
-
-
-* COMMENT Constant functions
-
-Opposite to the identity functions which do not lose any information,
-we find functions which lose all, or almost all, information.
-Regardless of their input, the output of these functions is always the
-same value.
-
-\room
-
-Let $C$ be a nonempty data domain and let $c : C$.
-Then we define the /everywhere c/ function as follows, for arbitrary $A$:
-#+LaTeX: \eqn{constant-Defn}{\const{c}\, a = c}
-
-The following property defines constant functions at the pointfree level:
-#+LaTeX: \eqn{constant-Fusion}{\const{c} ∘ f = \const{c} \}
-
-Constant functions force any difference in behaviour for any two
-functions to disappear:
-#+LaTeX: \eqn{constant-Equality}{\const{c} ∘ f = \const{c} ∘ g}
-
-In 𝒮ℯ𝓉, we have that composition and application are bridged
-explicitly by the constant functions:
-#+BEGIN_EXPORT latex
-\eqn{Set-Bridge}{ f ∘ \const{c} = \const{f \, c}}
-#+END_EXPORT
-
-* COMMENT Monics and Epics
-
-Identity functions and constant functions are limit points of the 
-functional spectrum with respect to information preservation.
-All the other functions are in-between: They “lose” some information,
-which is regarded as uninteresting for some reason.
-
-\room
-
-How do functions lose information?
-Basically in two ways: They may be “blind” enough to confuse different
-inputs, by mapping them to the same output, or they may ignore values
-of their target. For instance, $\const{c}$ confuses all inputs
-by mapping them all onto $c$. Moreover, it ignores all values of its
-target apart from $c$.
-
-\room
-
-Functions which do not confuse their inputs are called /monics/:
-They are “post-cancellable”:
-
-#+BEGIN_EXPORT latex
-\eqn{monic-Defn}{ f \; \mathsf{monic} \equivS 
-  \left(∀ h,k \;•\; f ∘ h = f ∘ k \equivs h = k\right)
-}
-#+END_EXPORT
-
-Functions which do not ignore values of their target are called
-/epics/: They are “pre-cancellable”:
-#+BEGIN_EXPORT latex
-\eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
-  \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
-}
-#+END_EXPORT
-
-Intuitively, $h = k$ on all points of their source precisely when
-they are equal on all image points of $f$, since $f$ being epic means 
-it outputs all values of their source.
-
-\room
-
-It is easy to check that “the” identity function is monic and epic, 
-while any constant function $\const{c}$ is not monic and is only
-epic when its target consists only of $c$.
-
-* COMMENT Isos
-
-A function is an /iso/ iff it is invertible:
-There is a function /f˘/ called its “inverse” or “converse” such that
-\eqn{inverse-Char}{ f ∘ f˘ = \Id \landS f˘ ∘ f = \Id}
-
-To /construct/ $f˘$, we begin by identifying its type which may give
-insight into its necessary `shape' --e.g., as a sum or a product--
-then we pick one of these equations and try to reduce it as much as possible
-until we arrive at a definition of $f˘$, or its `components'. --E.g., the inverse of ~assoc~.
-  + E.g., $coassocr = [\Id + \inl, \inr ∘ \inr] : (A + B) + C ≅ A + (B + C)$, its inverse
-    /coassocl/ must be of the shape $[x, [y, z]]$ for unknowns $x,y,z$ which can be calculated
-    by solving the equation $[x, [y, z]] ∘ coassocr = \Id$ --Do it!
-
-If, for some reason, $f˘$ is found handier than isomorphism $f$
-in reasoning, then the following rules can be of help.
-
-\eqn{inverse-Shunting₁}{ f ∘ x = y \equivS x = f˘ ∘ y}
-\eqn{inverse-Shunting₂}{ x ∘ f = y \equivS x = y ∘ f˘}
-
-\room
-
-Consequently, 
-Isos are necessarily monic and epic, but in general the other way
-around is not true.
-
-\room
-
-Isomorphisms are very important because they convert data from one
-“format”, say $A$, to another format, say $B$, without losing 
-information. So $f$ and $f˘$ are faithful protocols between the two
-formats $A$ and $B$. 
-*Of course, these formats contain the same “amount” of information although the same data adopts a “different” shape in each of them.*
-─c.f. \nameref{SeqPair-is-Pair-Seq}.
-
-\room
-
-Isomorphic data domains are regarded as “abstractly” the same;
-then one write $A ≅ B$.
-
-Finally, note that all classes of functions referred to so far
----identities, constants, epics, monics, and isos---
-are closed under composition.
-
-* COMMENT Mixing products and coproducts
-
-Any $f : A + B → C × D$ can be expressed alternatively as an /either/
-or as a /split/. It turns out that both formats are identical:
-The exchange rule.
-
-For example, $undistr  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id × \inr] : (A × B) + (A × C) → A × (B + C)$.
-
-Also, by the exchange rule,
-\eqn{Cool-Property}{ [f × g, h × k] \;=\; ⟨ [f, h] ∘ (\fst + \fst), [g, k] ∘ (\snd + \snd)⟩ }
-\eqn{Co-cool-Property}{ ⟨f + g, h + k⟩ \;=\; [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)] }
-# Direct proof:
-# 
-#   [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)]
-# = [ ⟨inl ∘ f , inl ∘ h⟩, ⟨inr ∘ g, inr ∘ k⟩ ]      absorption
-# = ⟨ [inl ∘ f, inr ∘ g], [inl ∘ h, inr ∘ k]⟩       exchange
-# = ⟨ f + g, h + k ⟩                               defns
-
-Also, since constants ignore their inputs,
-\eqn{Exchange-with-constant}{ [⟨ f, \const{k} ⟩, ⟨ g , \const{k} ⟩] = ⟨ [f, g], \const{k} ⟩ }
-# Proof:
-#
-#   [⟨ f, _k_ ⟩, ⟨ g , _k_ ⟩]
-# = ⟨ [f, g], [ _k_ , _k_ ]⟩        exchange
-# = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
-# = ⟨ [f, g], _k_ ⟩               constants
-
-* COMMENT Initial and terminal datatypes
-
-All properties studied for binary /splits/ and binary /eithers/ extend to the
-finitary case. For the particular situation $n = 1$, we will have $⟨f⟩=[f]=f$
-and $\inl = \fst = \Id$, of course. 
-
-For the particular situation $n = 0$,
-finitary products “degenerate” to 1 and finitary sums “degenerate” to 0.
-The standard notation for the empty split $⟨⟩$ is $!_C$, where $C$ is the source.
-Dually, the standard notation for the empty either $[]$ is $?_C$.
-
-Exercise 2.30: Particularise the exchange law to empty products and empty coproducts; i.e., 1 and 0!
-
 
 * COMMENT FIXES
 ** §4 FIX
@@ -1405,9 +1428,356 @@ Exercise 2.30: Particularise the exchange law to empty products and empty coprod
 
  0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
 
+* COMMENT Old Category Theory Theorem List
 
+\fontsize{9}{10}\selectfont
+\begin{landscape}
+\begin{multicols}{2}
 
+{\bf Musa Al-hassy} \hfill {\today}
+\\
+\centerline{\large\textbf{Category Theory Theorem List}}
 
+% identity morphism
+\def\Id{\mathsf{id}}
+
+% source and target
+\def\src{\mathsf{src}\,}
+\def\tgt{\mathsf{tgt}\,}
+
+% constant functor
+\def\K#1{ \mathcal{K}\, #1 }
+
+% natural transformation
+\def\natTo{\mathrel{\ooalign{\,$\longrightarrow$\cr\quad.}}}
+
+** Environments
+
+ (\todo Examples of common or intersting categories ; or
+ constructions to obtain new categries, here )
+
+ Our common environments will be the following distributive lattices
+ \vspace{-1em}
+ \begin{itemize}\itemsep-0.3em
+  \item Booleans: $(\BB, \implies, \land, \lor, \false, \true)$ {\hfill\color{red}---Our ambient logic!}
+  \item Extended Number Line:  $(\RR, \leq, \min, \max, -\infty, +\infty)$ 
+  \item Naturals under division: $(\NN, \ | \ , \gcd, \lcm, 1, 0)$
+  \item Sets : $(\power \ X, \subseteq, \cap, \cup, \emptyset, X)$
+ % \item Programs ordered by refinement with join being demonic choice % $\framebox(3,10){}$
+ %   having bottom element be the \verb+ABORT+ program.
+ \end{itemize}  
+ \vspace{-1em}
+
+ \NTHM{}{Principle of Duality}{
+   A statement $S$ is true about $\mathcal{C}$
+   iff it's dual $S[\fcmp \,:=\, \circ]$ is true about $\mathcal{C}^{op}$. }
+
+ \NTHM{}{Subcategory}{ Subcollection of objects and a subcollection of morphisms
+   that contains the identities for them and is closed under composition.
+ }
+
+ \NTHM{}{Full subcategory}{ Each homset of the morphism subcollection is the whole homset of the parent category.
+ That is, it is generated by the objects subcollection.
+ }
+
+ \NTHM{}{lluf subcategory}{ The object subcollection contains all objects of the parent category. }
+
+** COMMENT Pullbacks
+ \heading{Pullbacks}
+
+ \def\Pb{ \operatorname{\mathsf{Pb}} }
+
+ A \emph{pullback} of $f,g$ is an object $\Pb \, f \, g$ with two morphisms $f \nearrow g$ and $g \nearrow f$,
+ and an operation ``named'' $(g \nearrow f , f \nearrow g)\under(-,-)$ with the following properties
+
+ \NTHM{}{Axiom, Pullback Definition}{ $(g \nearrow f) \fcmp f \eqs (f \nearrow g) \fcmp g$}
+
+ \NTHM{}{Axiom, Pullback Typing}{
+   $p \fcmp f \eqs q \fcmp f \impliesS (g \nearrow f , f \nearrow g)\under(p, q) : \Pb\,f\,g \to \src p$}
+
+ \NTHM{}{Axiom, Pullback Char}{
+   $(g \nearrow f , f \nearrow g) \fcmp (x, x) \eqs (p, q) \;\equivs\; x \eqs (g \nearrow f , f \nearrow g)\under(p, q) $}
+
+ \NTHM{}{Pullback Self, projections}{ \\
+   {\color{white}.\hfill}
+   $
+   (g \nearrow f) \fcmp \big((g \nearrow f , f \nearrow g)\under(p, q)\big) \eqs p
+   \landS
+   (f \nearrow g) \fcmp \big((g \nearrow f , f \nearrow g)\under(p, q)\big) \eqs q
+   $
+   }
+
+ \NTHM{}{Pullback Identity}{$\Id_{\Pb\,f\,g} \eqs (g \nearrow f , f \nearrow g)\under (g \nearrow f , f \nearrow g)$}
+
+ \NTHM{}{$\nearrow$-Uniqueness, ``Jointly Epic''}{ \\
+   {\color{white}.\hfill}
+   $
+   (g \nearrow f , f \nearrow g) \fcmp (x, x)
+   \eqs
+   (g \nearrow f , f \nearrow g) \fcmp (y, y)
+   \impliesS x \eqs y
+   $}
+
+ \NTHM{}{Pullback-Fusion, ``Composition into Numerator''}{ \\
+     {\color{white}.\hfill}
+   $
+   \bigg((g \nearrow f , f \nearrow g)\under(p, q)\bigg) \fcmp x
+   \eqs
+   (g \nearrow f , f \nearrow g)\under\bigg( (p, q) \fcmp (x,x) \bigg)
+   $
+   }
+
+ \def\eq{\approx}
+ \def\Eq{\mathsf{Eq}}
+
+** COMMENT Equalisers
+ \heading{Equalisers}
+
+ Equalisers generalise the notion of ``solution set to an equation''
+ or the domain of the common image of two morphisms.
+  
+ An \emph{equaliser} of $f,g$, with $\src f = \src g$, is an object $\Eq\, f\, g$, a morphism $[f \eq g] : \Eq\,f\, g \to \src\, f$, and a
+ function $-\over[f \eq g]$ with the following properties
+
+ \NTHM{}{Axiom, Definition}{ $[f \eq g] \fcmp f \eqs [f \eq g] \fcmp g$}
+
+ \NTHM{}{Axiom, Typing}{
+   $q \fcmp f \eqs q \fcmp g \impliesS q \over [f \eq g] : \src q \to \Eq\,f\,g$}
+
+ \NTHM{}{Axiom, Characterisation}{
+   $x \fcmp\, [f \eq g] \eqs q \equivS x \eqs q \over [f \eq g] $}
+
+ \NTHM{}{Identity}{$\Id_{\Eq\,f\,g} \eqs [f \eq g] \over [f \eq g]$}
+
+ \NTHM{}{PreFusion, ``PreComposition into Numerator''}{ 
+   $x \fcmp ( q \over [f \eq g]) \eqs (x \fcmp q) \over [f \eq g]$}
+
+ \NTHM{}{Self, Denominator Cancellation}{
+   $ \big(q \over [f \eq g]\big) \fcmp [f \eq g] \eqs q
+   \\
+     \text{\hspace{18.4em}} \big(q \fcmp [f \eq g]\big) \over [f \eq g] \eqs q
+   $
+ }
+
+ \NTHM{}{Epic}{
+   $x \fcmp [f \sim g] \eqs y \fcmp [f \sim g] \impliesS x \eqs y$}
+
+ \newpage
+
+ \NTHM{}{ X }{ Y }
+
+ \todo rewrite this section: Too much text. Introduce heuristics.
+** COMMENT Finality
+
+ \heading{Finality}
+ \def\final#1{ \mbox{!}_#1 }
+
+ \NTHM{}{Axiom, final-Characterisation}{$f : B \to 1 \equivS f \eqs \final{B}$}
+
+ \NTHM{}{final-Self}{$\final{1} : 1 \to 1$}
+
+ \NTHM{}{final-Identity}{$\Id_1 \eqs \final{1}$}
+
+ \NTHM{}{final-Uniqueness}{$f,g : B \to 1 \impliesS f \eqs g$}
+
+ \NTHM{}{final-Fusion / Post-absorption}{$f : B \to C \impliesS f \fcmp \final{B} \eqs \final{C} $}
+
+ \NTHM{}{initial-final Coincidence}{$\initial{1} \eqs \final{0}$}
+** COMMENT Pushouts
+ \kern4ex
+ \heading{Pushouts}
+
+   Taking $D$ and $\mathcal{D}$ as suggested by
+   $D\,\mathcal{D}:
+     \spot\!\!\!\!_B\overset{f}{\text{\tiny$\longleftarrow$}} \!\!
+     \spot\!\!\!\!_A\overset{g}{\text{\tiny$\longrightarrow$}}\!\!\spot\!\!\!\!_C
+   $
+  
+ Working out the details and simplifying, we find that $\bigvee D$
+ has objects morphism-pairs $p,q$ that post-equalise $f$ and $g$ in that $f \fcmp p \eqs g \fcmp q$, and morphisms
+ $x : (p,q) \to (p',q') \equivS x : \tgt p \to \tgt p' \lands (p', q') \eqs (p,q) \fcmp x$.
+ \iffalse details
+
+ Since D is just the inclusion, we have that a cocone for the above diagram
+ is a triple (p,q,r) to a single object and have sources (B,A,C) respectively
+ such that r = f;p = g;q and so r is determined uniquely by p and q; whence it
+ can be ignored.
+
+ then a morphism between such pairs (p,q) and (p',q') is a morphism from the target
+ of the former to the target of the latter such that the resulting triangles commute :-)
+
+ Draw the diagrams!
+
+ A \emph{pushout} of $f,g$ is an inital object in this category.
+
+ Initiality means there exists an
+ object $Po\, f\, g$ with two morphisms $f \searrow g$ and $g \searrow f$,
+ and there exists a function $(f , g)\under(-,-)$ with the following properties
+
+ \NTHM{}{Axiom, Pushout-Definition}{ $f \fcmp (f \searrow g) \eqs g \fcmp (g \searrow f)$}
+
+ \NTHM{}{Axiom, Pushout-Typing}{
+   $f \fcmp p \eqs g \fcmp q \impliesS (f , g) \under (p , q) : Po\,f\,g \to \tgt p$}
+
+ \todo this looks wrong!\\
+ \NTHM{}{Axiom, Pushout-Characterisation}{
+   $(f , g) \fcmp (x , x) \eqs (p , q) \equivS x \eqs (f , g) \under (p , q) $}
+
+ \NTHM{}{Pushout-Self, projections}{
+   $f \fcmp (f , g) \under (p , q) \eqs p
+   \landS
+   g \fcmp (f , g) \under (p , q) \eqs q$
+   }
+
+ \NTHM{}{Pushout-Identity}{$\Id_{Po\,f\,g} \eqs (f , g) \under (f , g)$}
+
+ \NTHM{}{$\under$-Uniqueness, ``Jointly Epic''}{
+   $(f , g) \fcmp (x , x) \eqs (f , g) \fcmp (y , y) \impliesS x \eqs y$}
+
+ \NTHM{}{Pushout-Fusion, ``Composition into Numerator''}{ \\
+   $\big((f , g) \under (p , q)\big) \fcmp x \eqs (f , g) \under \big( (p , q) \fcmp (x,x)\big)$}
+** colimits
+ \heading{Colimits}
+
+ Colimits are precisely initiality, and generalise
+ sums, coequalisers, and pushouts.
+
+ Let $D : \mathcal{D} \to \mathcal{A}$ be a functor
+ ---in-fact it suffices to consider this as a graph homomorphism
+ reifying the nodes and vertices of $\mathcal{D}$ as objects
+ and morphisms of $\mathcal{A}$.
+
+ {\bf Observe!}
+ When giving $D$ and $\mathcal{D}$ via a diagram, as is done below in some
+ example constructions, then $\mathcal{D}$ is just a subcategory and so
+ $D$ is just the inclusion functor :-)
+
+ `Cones' sit upright on their base $(D)$ on a table;
+ `CoCones` sit upright on a co-table ;)
+
+ \NTHM{}{Axiom, CoCone Category $\bigvee D$}{
+   objects are `cocones' $(C : Obj_\mathcal{A},\, \gamma : D \natTo \K{C})$
+   and morphisms $f : (C, \gamma) \to (C', \delta)
+   \equivS f : C \to C' \lands \gamma \fcmp \K{f} \eqs \delta $
+ }
+
+ \def\under{ \backslash }
+
+ A \emph{colimit} for $D$ is an initial object in $\bigvee D$.
+ That is, \emph{there exists} a cocone $(CoLimD, \gamma)$ of $D$ and
+ a function $\gamma \under -$ such that
+ ---copy and paste initiality properties---
+
+ The fraction notation better suggests the \emph{calculational}
+ properties.
+
+ ( Maybe call the object $\bigsqcup D$ ? Since it is similar to the `join'
+ and a cocone is a `proof' that an object is an upper bound? )
+
+ Let $x\; _F\!\fcmp_G\; y \eqs F\,x \,\fcmp\, G\,y$,
+ ---note that $(\eta \fcmp_K x)_A \eqs \eta_A \fcmp x$---
+ then:
+
+ \NTHM{}{Axiom, colimit-Definition}{  $x : A \to B \impliesS x \;_{D}\!\fcmp\; \gamma_B \eqs \gamma_A$}
+
+ \NTHM{}{Axiom, colimit-Typing}{$(C, \delta) \text{ cocone for } D \impliesS \gamma \under \delta : CoLimD \to C $}
+
+ \NTHM{}{Axiom, colimit-Characterisation}{$\gamma \fcmp_\K x \eqs \delta \equivS x \eqs \gamma \under \delta $}
+
+ \NTHM{}{colimit-Self}{$\gamma \fcmp_\K \gamma \under \delta \eqs \delta $}
+
+ \NTHM{}{colimit-Identity}{$\Id_{CoLimD} \eqs \gamma \under \gamma$}
+
+ \NTHM{}{$\under$-Uniqueness, ``Jointly Epic''}{$\gamma \fcmp_\K x \eqs \gamma \fcmp_\K y \impliesS x \eqs y$}
+
+ \NTHM{}{colimit-Fusion, ``Composition into Numerator''}{$(\gamma \under \delta) \fcmp_\K x \eqs \gamma \under (\delta \fcmp_\K x)$}
+
+ In accordance with our ``dangerous convention'', we've omitted the
+ well-formedness condition that $\delta$ is an object in $\bigvee D$;
+ the notation $\cdots\under\delta$ is only senseful if
+ $\delta : D \natTo \K{CoLimD}$ ---ie $D x \fcmp \delta_{\tgt \, x} = \delta_{\src \, x}$---, like in arithmetic where the notation $m / n$ is only
+ senseful if $n$ differs from 0.
+
+ The following law confirms the choice of notation once more.
+
+ \NTHM{}{$\under$-Compose}{$(\gamma \under \delta) \fcmp (\delta \under \epsilon) \eqs \gamma \under \epsilon$}
+
+ \NTHM{}{$\under$-Functor}{$F(\gamma \under \delta) \eqs F\gamma \under F\delta$}
+
+ \alert{where} $\delta$ and $\epsilon$ are $D$ cocones
+ and anything appearing to the left of $\under$ being a colimit!
+
+ Let $\eta F$ be the natural transformation $x \mapsto \eta_{F\, x}$.
+ Let $\gamma$ and $\gamma F$ be colimits for the same diagram, then
+
+ \NTHM{}{$\under$-natural transformation}{$\gamma F \under \delta F \eqs \gamma \under \delta$}
+
+ Let $()_x : \varnothing \natTo \K{x}$ be the natural transformation from the
+ empty functor $\varnothing : \mathbf{0} \to \mathcal{A}$ to the constant functor.
+
+ \NTHM{}{Initiality as colimit, $\under-\initial{B}\;$}{$ \initial{B} \eqs ()_0 \under ()_B $}
+
+ Take $D$ and $\mathcal{D}$ as suggested by $D\,\mathcal{D} = (\spot\!\!\!\!^A \; \spot\!\!\!\!^B)$, for given
+ objects $A = \src f$ and $B = \src g$, with colimit $\gamma = (\mathsf{inl}, \mathsf{inr})$.
+
+ \NTHM{}{Sum as colimit, $\under-[]$}{$ [f,g] \eqs (\mathsf{inl}, \mathsf{inr}) \under (f,g)$}
+
+ Needless to say, my favourite:
+
+ \NTHM{}{Colimit as Adjunction}{$ (D \natTo \K C) \;\cong\; (CoLimD \to C)$}
+
+ Cocones under $D$ correspond one-to-one with arrows from its colimit ;)
+
+ Also, notice that we have natural transformations
+ $\initial{-} : \K 0 \natTo \mathsf{Id}$
+ and $\final{-} : \mathsf{Id} \natTo \K 1$
+
+ Claim?
+
+ the cat has a final element iff identity endofunctor has a colimit.
+ ie the final element is the union of all elements and so is the
+ top or maximal element ;)
+
+ $1 \cong CoLim \, \mathsf{Id}$
+ where $\final{-} = \gamma$ is the witnessing family?
+
+** Prelims: skolem et al
+ \kern3ex
+ \heading{Prelims}
+
+ \heuristic[Skolemisation]
+ Assertions of the form ``$\forall\, x \spot \exists!\, y \spot P\, x\, y$''
+ are not very well suited for \emph{algebraic manipulation}:
+ it is the existential quantification inside the scope of the universal one that
+ hinders effective calculation. However, such an assertion is equivalent to
+ \centerline{``there is a function $\langle-\rangle$ with $\forall x,y \spot P\,x\,y \equivs y = \langle\, x \, \rangle$''}
+ where the existence claim is brought to a global level and so reasoning need no longer be interrupted
+ by the declaration and naming of the existence of a unique $y$ that depends on $x$; it can be denoted just $\langle\, x \, \rangle$.
+ A variety of bracketing notation may be used for the important role of the various unique $y$'s
+ with the additional advantage that no extra parentheses are needed for composite arguments $x$
+ (which are expected to occur often).
+ As usual, the universal quantification in the above displayed formula are omitted, thus simplifying
+ the formulation once more.
+
+ With such a characterisation in-hand, natural questions come to mind.
+ ``Self'': Is $\langle\, x \, \rangle$ itself a solution to the problem? Indeed we have
+ $P\, x\, \langle\, x \, \rangle$.
+ ``Uniqueness'': Is the solution to the problem unique? Indeed, $P\, x\, y \lands P\, x\, z \implies y = z$.
+ ``Identity'': Is there a way to use the identity morphisms to truthify the left side?
+ ``Fusion'': Can we solve for `?' in $\langle\, x \, \rangle \fcmp f = \langle\, ? \, \rangle$,
+ or perhaps the dual composition?
+
+ \emph{How do prove such assertions}: begin with the given side $P\,x\,y$ and try to simplify this
+ via a chain of equivalences to obtain $y = \text{``an expression not involving $y$''}$ and
+ then define $\langle\, x \, \rangle$ to be the right-hand side of the previous equation.
+ Sometimes, equivalences are difficult and we can instead prove, by circular implication,
+ that $P\,x\,y \implies y = \cdots  \lands y = \cdots \implies P\,x\,y$
+ ---either way, the proof is given as a calculation.
+ That is, aim to rewrite $y$ in-terms of $x$ in the given $P\,x\,y$.
+
+ [Dangerous] Convention:
+ free variables are quantified implicitly in such a way that the laws in which they appear
+ are well-defined.
 * COMMENT Maybe move to README
 ** Gluing functions which do not compose -- products         :move_to_readme:
 
@@ -1875,6 +2245,143 @@ Include:
 
    Hint: https://math.stackexchange.com/questions/1210440/given-a-mathcalc-rightarrow-mathcale-when-does-operatornamecolim
 
+* COMMENT Duality: Sums & Products :uniform_notation:artefact:
+
+#+BEGIN_EXPORT latex
+\def\fst{\mathsf{fst}}
+\def\snd{\mathsf{snd}}
+#+END_EXPORT
+
+#+LaTeX_HEADER: \usepackage{stackengine} 
+#
+# \topinset{*}{O}{1pt}{}
+#
+#+LaTeX: \def\composition{ \topinset{﹔}{∘}{0.4pt}{} }
+
+In category theory there are two popular notations for composition,
+$f ﹔ g = g ∘ f$, and there are two arrow notations $A → B \;=\; B \leftarrow A$,
+known as the “forwards” and “backwards” notations.
+
+\room
+
+Some people prefer one notation and stick with it; however having both in-hand
+allows us to say: The /dual/ of a categorical statement formed with 
+$﹔,→$ is obtained by syntactically replacing these two with $∘, \leftarrow$ respectively
+while leaving variables and $\Id$'s alone.
+
+\room
+
+#+LaTeX: \def\dual{\mathsf{dual}}
+#
+#
+For example, applying this process to sums yields /products/:
+\vspace{-0.5em}
+#+begin_calculation latex 
+   h = ⟨f, g⟩
+\step{  We define products as dual to sums }
+   h = \dual [f, g]
+\step{  dual operation definition }
+  \dual\left( h = [f,g] \right)
+\step{  []-Char and Leibniz }
+  \dual\left( \inl ﹔ h = f  \lands  \inr ﹔ h = g\right) 
+\step{  dual operation definition }
+  \dual\left(\inl ﹔ h\right) = f  \lands  \dual\left(\inr ﹔ h\right) = g) 
+\step{  dual operation definition }
+  \dual \text{ } \inl ∘ h = f  \lands  \dual \text{ }  \inr ∘ h = g
+\step{  Define: $\fst = \dual\, \inl$, $\snd = \dual\, \inr$ }
+  \fst ∘ h = f  \lands  \snd ∘ h = g
+\step{  Switch back to ﹔-notation }
+   h ﹔ \fst = f  \lands  h ﹔ \snd = g
+#+end_calculation
+
+# Dualising the other sum artefacts yields:
+/$(\fst, \snd, A × B)$ form a product of A and B/ if there is an operation
+$⟨-,-⟩$ satisfying the Char and Type laws below; from which we obtain a host of corollaries.
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{$\langle\rangle$-Type}{f : C → A \lands g : C → B \impliesS ⟨f, g⟩ : C → A × B}
+
+\eqn{$\langle\rangle$-Char}{ x ﹔ \fst = f \lands x ﹔ \snd = g \equivS x = ⟨f, g⟩ }
+
+\eqn{$\langle\rangle$-Cancellation; $\langle\rangle$-Self}{ ⟨f, g⟩ ﹔ \fst = f \landS ⟨f, g⟩ ﹔ \snd = g}
+
+\eqn{$\langle\rangle$-Id}{ ⟨\fst, \snd⟩ = \Id}
+
+\eqn{$\langle\rangle$-Unique}{ x ﹔ \fst = y ﹔\fst  \lands x; \snd = y ﹔ \snd \impliesS x = y}
+
+\eqn{$\langle\rangle$-Fusion}{ x ﹔ ⟨f , g⟩ = ⟨x﹔f, x ﹔ g⟩ }
+
+\eqn{$\langle\rangle$-Functor-Dist}{F \, ⟨f, g⟩_𝒞 = ⟨F \, f , F \, g⟩_𝒟 \qquad\text{ where } F : 𝒞 → 𝒟}
+
+\endeqns
+#+END_EXPORT
+
+\room
+
+These are essentially a re-write of the sum laws; let's write the next set of laws only once.
+
+\room
+
+Let the tuple “⟅ ⟆, ⋆, $l$, $r$, $\composition$” be either
+“⟨ ⟩, ×, $\fst$, $\snd$, $∘$” or “[ ], +, $\inl$, $\inr$, $﹔$”.
+
+\room
+
+For categories in which sums and products exist, we define for $f : A → B$ and $g : C → D$,
+
+\begineqns
+
+\eqn{$\star$-Definition}{ f ⋆ g = ⟅ f \composition l, g \composition r⟆ : A ⋆ C → B ⋆ D}
+
+\eqn{$l,r$-Naturality}{ l \composition (f ⋆ g) = f \composition l \landS r \composition (f ⋆ g) = g \composition r }
+
+\eqn{Extensionality}{ ⟅l \composition h, r \composition h⟆ = h}
+
+\eqn{Absorption}{ (f ⋆ g) \composition ⟅h, j⟆ = ⟅f \composition h, g \composition j⟆ }
+
+\eqn{$\star$-Bi-Functoriality}{ \Id ⋆ \Id = \Id \landS (f ⋆ g) \composition (h ⋆ j) = (f \composition h) ⋆ (g \composition j)}
+
+\eqn{Structural Equality}{ ⟅f,g⟆ = ⟅h, j⟆ \equivS f = h \lands g = j }
+
+\eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
+
+\endeqns
+
+\room
+
+Notice that the last law above is self-dual.
+
+
+* COMMENT README
+
+C-c C-c: evalute src block
+
+#+NAME: make-readme
+#+BEGIN_SRC emacs-lisp :results none
+(with-temp-buffer
+    (insert 
+    "#+EXPORT_FILE_NAME: README.md
+     #+HTML: <h1> CatsCheatSheet </h1>
+     # OPTIONS: toc:nil
+
+     This project is to contain a listing of common theorems in elementary category theory.
+     
+     *The listing sheet, as PDF, can be found [[https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf][here]]*, 
+     while below is an unruly html rendition.
+     
+     This reference sheet is built around the system https://github.com/alhassy/CheatSheet
+     
+     #+TOC: headlines 2
+     #+INCLUDE: CheatSheet.org     
+    ")
+    ;; (set-visited-file-name "ReadIt2.md")
+    (org-mode)
+    (org-md-export-to-markdown)
+)
+#+END_SRC
+
 
 * COMMENT footer
 
@@ -1882,6 +2389,7 @@ Include:
 
 # Local Variables:
 # eval: (org-babel-tangle)
+# eval: (progn (org-babel-goto-named-src-block "make-readme") (org-babel-execute-src-block) (outline-hide-sublevels 1))
 # eval: (load-file "CheatSheet.el")
 # compile-command: (my-org-latex-export-to-pdf)
 # End:
