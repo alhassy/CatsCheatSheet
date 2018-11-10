@@ -1149,8 +1149,6 @@ For categories in which sums exist, we define for $f : A → B$ and $g : C → D
 
 \eqn{Structural Equality}{ [f,g] = [h, j] \equivS f = h \lands g = j }
 
-\eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
-
 \endeqns
 
 \newpage
@@ -1231,11 +1229,7 @@ For categories in which products exist, we define for $f : A → B$ and $g : C �
 
 \eqn{Structural Equality}{ ⟨f,g⟩ = ⟨h, j⟩ \equivS f = h \lands g = j }
 
-# \eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
-
 \endeqns
-
-# Notice that the last law above is self-dual.
 
 \newpage
 
@@ -1267,6 +1261,8 @@ or as a /split/. It turns out that both formats are identical:
 \eqn{Exchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
 
 E.g., $\mathsf{undistr}  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id × \inr] : (A × B) + (A × C) → A × (B + C)$.
+
+# Notice that this law above is self-dual.
 
 # Also, by the exchange rule,
 \begineqns
