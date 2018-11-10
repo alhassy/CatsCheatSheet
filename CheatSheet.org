@@ -1054,6 +1054,18 @@ The category theory is mostly implicit, but presented elegantly!
 
 \vspace{-0.5em}
 
+** COMMENT Further Reads
+
+ + Roland Backhouse
+ + Grant Malcolm
+ + Lambert Meertens
+ + Jaap van der Woude
+
+ + /Adjunctions/ by Fokkinga and Meertens
+
+ + Backus' FP and Iverson's APL are examples of pointfree programming
+   languages; look them up ;-)
+
 
 * COMMENT Constant functions
 
@@ -1662,100 +1674,6 @@ for(int j=0; j<n; j++)
  # of the form $y = ℱ\, x$. For example, can the identity be expressed, or `reflected', using this combinator?
  # We just solve the equation $\Id = ℱ\, x$ for unknown(s) $x$ by appealing to the universal property.
 
-
-* COMMENT FIXES
-** §4 FIX
-
- 0. §4.7, page 135: ?
-
-** §3 FIX
- 0. §3.1, page 65: The code block is terminated by a superfluous semicolon, ~;~, as is the case for after (3.8) and
-     in exercise 3.5.
-
- 0. §3.1, page 68, exercise 3.3: The arguments to the ~for~ are in the wrong order; moreover the notation
-    for multiplication is inconsistent with in (3.6).
-
- 0. §3.3, page 79: The top-most code fragment mentions ~Eval T~ but nothing in the surrounding text mentions
-    ~Eval~. Is this a typo?
-
- 0. §3.4, page 83: In the fourth equation in the bottom-most calculation, there seems to be a missing
-    ~cons~ tag on the right-hand side --c.f. (3.27)--. The right-most should be /Cons(a, x)/ instead of just /(a,x)/.
-
- 0. §3.6, page 87: Right after (3.41), there is an inconsistency with the notation of multiplication, or there lack of.
-    Perhaps consider using a × or *, rather than just a space.
-
- 0. §3.9, page 96, equation (3.63): Do you mean ${}_n C_p$ instead of ${}^n C_p$?
-    If so: It might also help to mention that this is the combinatorial choice operator
-    and is not the same as the coefficients $C_i$ of (3.62); otherwise the overloaded $C$ might
-    cause more trouble than desired. Alternatively maybe use notation $\binom{n}{p}$ instead.
-
- 0. §3.9, page 97, exercise 3.10: At the end of the first line, you want $(1 + X)²$ rather than $(1 + X²)$.
-
- 0. §3.12, page 99: When you first introduced isos back in §2, you said they were functions that were both
-    monic and epic, which is the case for your ambient category, Sets. However, in the first line of this
-    subsection, it seems you are stating that an /F/-algebra that is both epic and monoic is necessarily an iso
-    --which as far as I know is not true, even when the underling category is Set.
-
- 0. §3.15, page 110: First sentence after the functor instance should include a definite article; it should be
-    /in the language's/.
-
- 0. §3.16, page 115, line 10: Typo, /more that two/ should be /more than two/.
-
- 0. §3.19, page 123, last paragraph, third line: Typo /such as discipline/ should be /such a discipline/.
-
-** §2 FIX
-
- 0. §2.4, last line:  Should be /`natural'/ instead of /'natural'./
-
- 0. §2.5, exercise 2.1: Maybe place this at the end of §2.4 since
-      it's a problem on identity functions,
-      rather than at the end of §2.5 which is on constant functions.
-
- 0. §2.6, end: It's easy to see how monics generalise injective functions
-    but it's not as easy for the surjective-epic case. I've conjured up
-    the following explanation, which might be helpful to include.
-    #+BEGIN_QUOTE
- 
- #+BEGIN_EXPORT latex
- \eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
-   \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
- }
- #+END_EXPORT
-
-    Intuitively, $h = k$ on all points of their source precisely when
-    they are equal on all image points of $f$, since $f$ being epic
-    means it outputs all values of their source.
-    #+END_QUOTE
-
- 0. §2.7, before equation 2.18:
-    I think you meant /pointfree/ not /pointwise/ as clearly 2.18 involves
-    no points.
-
- 0. §2.13, ×-fusion calculation: In the final hint, perhaps add /after (2.63)/
-    so that it is clear which /derived above/ law is being referenced
-    --since its name is in the surrounding text and may not be easy to locate.
-
- 0. §2.14, page 39, second paragraph: Typo /market/ should be /marked/.
- 0. §2.14, page 39, diagram: Typos, left arrow should be labelled /g/ not /f/,
-    and the right arrow should be labelled /h/ not /g/.
-
- 0. §2.14, exercise 2.21: It seems you have the accidental typos /λap/ appearing twice.
-
- 0. §2.15, second paragraph: For $f : B ← C × A$, the phrase /f c ∈ B/ is ill-typed
-    and it may be incorrect to say it, /f c/, /denotes a value of type B/.
-
- 0. §2.15, typing (2.81): The name /ap/ appears on the arrow, perhaps you do not want it appearing 
-    twice in one line like that.
-
- 0. §2.15, first paragraph after (2.81): Perhaps it may be better to use a definite article:
-    /Back to the generic binary operator/ rather than /Back to generic binary operator/.
-
- 0. §2.18, page 56: In the definition of type ~Point~, maybe mention that the Haskell ecosystem
-    uses distinct name-spaces for types and their constructors whence the overloading of ``Point''
-    is non-ambiguous.
-
- 0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
-
 * COMMENT ToDo's
 Include:
 + Page 23: Associativity of ~C~ product structs.
@@ -1772,20 +1690,7 @@ Include:
 
    Hint: https://math.stackexchange.com/questions/1210440/given-a-mathcalc-rightarrow-mathcale-when-does-operatornamecolim
 
-* COMMENT ∞ Further Reads
 
-+ Roland Backhouse
-+ Grant Malcolm
-+ Lambert Meertens
-+ Jaap van der Woude
-
-+ /Adjunctions/ by Fokkinga and Meertens
-
-+ Backus' FP and Iverson's APL are examples of pointfree programming
-  languages; look them up ;-)
-
-* COMMENT newpage                                                    :ignore:
-  \newpage
 * COMMENT footer
 
 (find-file "CheatSheet.el")
