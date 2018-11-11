@@ -408,9 +408,9 @@ Example natural transformations
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{ntr-Ftr}{ Jη : JF →̣ JG \providedS η : F →̣ G \quad \text{ where } (Jη)_A ≔ J(η_A) }
+\eqn{ntrf-Ftr}{ Jη : JF →̣ JG \providedS η : F →̣ G \quad \text{ where } (Jη)_A ≔ J(η_A) }
 
-\eqn{ntr-Poly}{ ηK : FK →̣ GK  \hspace{-2ex}\providedS η : F →̣ G \quad \text{ where } (ηK)_A ≔ η_{(K\, A) } }
+\eqn{ntrf-Poly}{ ηK : FK →̣ GK  \hspace{-2ex}\providedS η : F →̣ G \quad \text{ where } (ηK)_A ≔ η_{(K\, A) } }
 
 \eqn{ntrf-Id}{ \Id_F : F →̣ F \text{\hspace{12em} where } (\Id_F)_A ≔ \Id_{(F\, A)} }
 
@@ -931,7 +931,7 @@ Each colimit is a certain initial object, and each initial object is a certain c
 + The category $⋁D$, built upon 𝒞, has objects $γ : D →̣ \const{C}$ called “co-cones”, for
   some object $C =: \tgt\, γ$, and a morphism from $γ$ to $δ$ is a 𝒞-morphism $x$ such that $\const{x} ∘ γ = δ$.
 
- /`Cones' sit upright on their base, $D$, on a table; `CoCones` sit upright on a co-table!/
+ /`Cones' sit upright on their base, $D$, on a table; `CoCones' sit upright on a co-table!/
  
 + A /colimit for D/ is an initial object in $⋁ D$; which may or may not exist.
 
@@ -950,9 +950,15 @@ Writing $-╱γ$ for $⦇-⦈$ and working out the definition of co-cone in term
 Well-formedness convention: In each law the variables are quantified
 in such a way that the premise of $\slash$-Type is met.
 The notation $δ╱⋯$ is only senseful if δ is a co-cone for $D$,
-like in arithmetic where the notation $m ÷ n$ is only sensful if $n$ differs from 0.
+like in arithmetic where the notation $m \div n$ is only sensful if $n$ differs from 0.
 
 \eqn{$\slash$-Char}{ \const{x} ∘ γ = δ \equivS x = δ ╱ γ }
+
+\vspace{2ex}
+The fraction notation better suggests the \emph{calculational} properties.
+
+% # Maybe call the colimiting object $\bigsqcup D$ ? Since it is similar to the `join'
+% # and a cocone is a `proof' that an object is an upper bound?
 
 \vspace{2ex}
 Notice that for given $x : C → C'$ the equation $δ ╱ γ = x$ \underline{defines}
@@ -960,7 +966,7 @@ Notice that for given $x : C → C'$ the equation $δ ╱ γ = x$ \underline{def
 $δ_A = x ∘ γ_A$. This allows us to define a natural transformation --or `eithers' in
 the case of sums-- using a single function \emph{having} the type of the mediating arrow.
 
-\eqn{$\slash$-Self-Cancellation}{ \const{δ╱γ} ∘ γ = δ}
+\eqn{$\slash$-Self ; Cancellation}{ \const{δ╱γ} ∘ γ = δ}
 
 \eqn{$\slash$-Id}{γ╱γ = \Id}
 
@@ -973,16 +979,20 @@ the case of sums-- using a single function \emph{having} the type of the mediati
 % ≡  δ ﹔ _x_ = δ ﹔ _x_                         ╲-self
 % ≡ true                                        =-reflexivity
 
-\eqn{$\slash$-Unique}{\const{x} ∘ γ = \const{y} ∘ γ \impliesS x = y}
+\eqn{$\slash$-Unique ; JointlyEpic}{\const{x} ∘ γ = \const{y} ∘ γ \impliesS x = y}
+
+% \vspace{2ex}
+% This expresses that colimits γ have an epic-like property: \\
+% The component morphisms $γ_A$ are \emph{jointly epic}.
 
 \vspace{2ex}
-This expresses that colimits γ have an epic-like property: \\
-The component morphisms $γ_A$ are \emph{jointly epic}.
-
-\vspace{2ex}
-The following law confirms the choice of notation once more.
+The following law confirms the choice of notation once more
+--just as the above fusion law is nearly mutliplication into the numerator.
 
 \eqn{$\slash$-Compose}{ε╱δ ∘ δ╱γ  = ε╱γ}
+
+% # ? \alert{where} $\delta$ and $\epsilon$ are $D$ cocones
+% # ? and anything appearing to the left? of $\under$ being a colimit!
 
 \vspace{2ex}
 The next law tells us that functors distribute over the ╱-notation
@@ -994,75 +1004,24 @@ preserves colimits.
 
 \eqn{$\slash$-Pre-Functor-Elim}{δF╱γF = δ╱γ}
 
+% Recall $\eta F$ be the natural transformation $x \mapsto \eta_{F\, x}$.
+%  Let $\gamma$ and $\gamma F$ be colimits for the same diagram, then
+
 \endeqns
 #+END_EXPORT
 
-# \newpage
-* COMMENT 2colimits
+\room
+\room
 
- The fraction notation better suggests the \emph{calculational}
- properties.
+Let $()_x : \varnothing →̣ \K{x}$ be the natural transformation from the
+empty functor $\varnothing : \mathbf{0} \to 𝒞$ to the constant functor.
+\vspace{-0.8em}
+#+LaTeX:  \eqn{Initiality as colimit, ╱-⦇⦈}{⦇B⦈ \eqs ()_B ╱ ()_0}
 
- # Maybe call the colimiting object $\bigsqcup D$ ? Since it is similar to the `join'
- # and a cocone is a `proof' that an object is an upper bound?
-
- + {Axiom, colimit-Naturality?}{  $x : A \to B \impliesS x \;_{D}\!\fcmp\; \gamma_B \eqs \gamma_A$}
-
- + {Axiom, colimit-Characterisation}{$\gamma \fcmp_\K x \eqs \delta \equivS x \eqs \gamma \under \delta $}
- + {colimit-Self}{$\gamma \fcmp_\K \gamma \under \delta \eqs \delta $}
- + {colimit-Identity}{$\Id_{CoLimD} \eqs \gamma \under \gamma$}
- + {$\under$-Uniqueness, ``Jointly Epic''}{$\gamma \fcmp_\K x \eqs \gamma \fcmp_\K y \impliesS x \eqs y$}
- + {colimit-Fusion, ``Composition into Numerator''}{$(\gamma \under \delta) \fcmp_\K x \eqs \gamma \under (\delta \fcmp_\K x)$}
-
- In accordance with our ``dangerous convention'', we've omitted the
- well-formedness condition that $\delta$ is an object in $\bigvee D$;
- the notation $\cdots\under\delta$ is only senseful if
- $\delta : D \natTo \K{CoLimD}$ ---ie $D x \fcmp \delta_{\tgt \, x} = \delta_{\src \, x}$---, like in arithmetic where the notation $m / n$ is only
- senseful if $n$ differs from 0.
-
- The following law confirms the choice of notation once more.
-
- \NTHM{}{$\under$-Compose}{$(\gamma \under \delta) \fcmp (\delta \under \epsilon) \eqs \gamma \under \epsilon$}
-
- \NTHM{}{$\under$-Functor}{$F(\gamma \under \delta) \eqs F\gamma \under F\delta$}
-
- \alert{where} $\delta$ and $\epsilon$ are $D$ cocones
- and anything appearing to the left of $\under$ being a colimit!
-
- Let $\eta F$ be the natural transformation $x \mapsto \eta_{F\, x}$.
- Let $\gamma$ and $\gamma F$ be colimits for the same diagram, then
-
- \NTHM{}{$\under$-natural transformation}{$\gamma F \under \delta F \eqs \gamma \under \delta$}
-
- Let $()_x : \varnothing \natTo \K{x}$ be the natural transformation from the
- empty functor $\varnothing : \mathbf{0} \to \mathcal{A}$ to the constant functor.
-
- \NTHM{}{Initiality as colimit, $\under-\initial{B}\;$}{$ \initial{B} \eqs ()_0 \under ()_B $}
-
- Take $D$ and $\mathcal{D}$ as suggested by $D\,\mathcal{D} = (\spot\!\!\!\!^A \; \spot\!\!\!\!^B)$, for given
- objects $A = \src f$ and $B = \src g$, with colimit $\gamma = (\mathsf{inl}, \mathsf{inr})$.
-
- \NTHM{}{Sum as colimit, $\under-[]$}{$ [f,g] \eqs (\mathsf{inl}, \mathsf{inr}) \under (f,g)$}
-
- Needless to say, my favourite:
-
- \NTHM{}{Colimit as Adjunction}{$ (D \natTo \K C) \;\cong\; (CoLimD \to C)$}
-
- Cocones under $D$ correspond one-to-one with arrows from its colimit ;)
-
- Also, notice that we have natural transformations
- $\initial{-} : \K 0 \natTo \mathsf{Id}$
- and $\final{-} : \mathsf{Id} \natTo \K 1$
-
- Claim?
-
- the cat has a final element iff identity endofunctor has a colimit.
- ie the final element is the union of all elements and so is the
- top or maximal element ;)
-
- $1 \cong CoLim \, \mathsf{Id}$
- where $\final{-} = \gamma$ is the witnessing family?
-
+# Needless to say, my favourite:
+Cocones under $D$ correspond one-to-one with arrows from its colimit:
+\vspace{-0.8em}
+#+LaTeX:  \eqn{Colimit as Adjunction}{(D →̣ \K C) \;\cong\; (\mathsf{CoLim}\,D \to C) \!\qquad \text{ where } \mathsf{CoLim}\,D = \tgt γ }
 * Limits
 
 Dually, the category $⋀D$ has objects being “cones” $γ : \const{C} →̣ D$ where $C =: \src\, γ$
@@ -1070,8 +1029,8 @@ is a 𝒞-object, and a morphism to $γ$ /from/ $δ$ is a 𝒞-morphism $x$ such
 In terms of 𝒞, /$γ : Obj(⋀ D)$ is a limit for $D$/ if there is a mapping $γ╲-$ such that
 the following ╲-Type and ╲-Char hold, from which we obtain a host of corollaries.
 As usual, there is the implicit well-formedness condition. 
-Theorem ╲-Unique expresses that limits γ have an monic-like property:
-The component morphisms $γ_A$ are \emph{jointly monic}.
+# Theorem ╲-Unique expresses that limits γ have an monic-like property:
+# The component morphisms $γ_A$ are \emph{jointly monic}.
 #
 # Well-formedness convention: In each law the variables are quantified
 # in such a way that the premise of $/$-Type is met.
@@ -1091,7 +1050,7 @@ The component morphisms $γ_A$ are \emph{jointly monic}.
 
 \eqn{$\backslash$-Fusion}{γ╲δ  ∘ x = γ ╲ (δ ∘ \const{x})}
 
-\eqn{$\backslash$-Unique}{γ ∘ \const{x} = γ ∘ \const{y} \impliesS x = y}
+\eqn{$\backslash$-Unique ; JointlyMonic}{γ ∘ \const{x} = γ ∘ \const{y} \impliesS x = y}
 
 \eqn{$\backslash$-Functor-Dist}{F(γ ╲ δ) = Fγ ╲ Fδ}
 
@@ -1125,6 +1084,10 @@ Let $γ=(\inl, \inr)$ be a colimit for $D$, let $A + B = \tgt\,γ$, and write
 $[f, g]$ in-place of $γ╲(f, g)$, then the ╲-laws yield:
 /$(\inl, \inr, A+B)$ form a sum of $A$ and $B$/ if there is a mapping $[-,-]$
 such that \ref{[]-Type} and \ref{[]-Char} hold.
+
+#  Take $D$ and $\mathcal{D}$ as suggested by $D\,\mathcal{D} = (\spot\!\!\!\!^A \; \spot\!\!\!\!^B)$, for given
+#  objects $A = \src f$ and $B = \src g$, with colimit $\gamma = (\mathsf{inl}, \mathsf{inr})$.
+# #+LaTeX:  \eqn{Sum as colimit, ╱-[]}{[f,g] \eqs (\mathsf{inl}, \mathsf{inr}) \under (f,g)}
 
 #+BEGIN_EXPORT latex
 \begineqns
@@ -1361,7 +1324,7 @@ yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $-╱p$ such that
 Well-formedness convention: In each law the variables are quantified
 in such a way that the premise of \ref{CoEq-Type} is met.
 The notation $q╱⋯$ is only senseful if $f ∘ q = g ∘ q$,
-like in arithmetic where the notation $m ÷ n$ is only sensful if $n$ differs from 0.
+like in arithmetic where the notation $m \div n$ is only sensful if $n$ differs from 0.
 
 \eqn{CoEq-Char}{ x ∘ p = q \equivS x = q ╱ p }
 
@@ -1542,7 +1505,7 @@ The category theory is mostly implicit, but presented elegantly!
     is non-ambiguous.
 
  0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
-
+* COMMENT TODO Generalise Exchange Law to arbitrary colimits and limits xD
 * COMMENT Old Category Theory Theorem List
 
 ** Category Theory Notation :latex:ignore:
@@ -2427,6 +2390,19 @@ Include:
   - Some of the insightful, or fun ones, maybe include here ;-)
   - §2.19 is all exercises!
 
++ Also, notice that we have natural transformations
+   $\initial{-} : \K 0 \natTo \mathsf{Id}$
+   and $\final{-} : \mathsf{Id} \natTo \K 1$
+  
+   Claim?
+  
+   the cat has a final element iff identity endofunctor has a colimit.
+   ie the final element is the union of all elements and so is the
+   top or maximal element ;)
+  
+   $1 \cong CoLim \, \mathsf{Id}$
+   where $\final{-} = \gamma$ is the witnessing family?
+  
 + Provide a /calculational/ proof of: if a category J has a terminal object 1, 
    then the colimit of any functor F:J→C is just F(1), with the cocone defined by the maps F(τj):F(j)→F(1). 
 
