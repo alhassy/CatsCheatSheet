@@ -10,24 +10,24 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 # Table of Contents
 
-1.  [Categories](#org424dcc9)
-2.  [“Gluing” Morphisms Together](#orgdb3bf82)
-3.  [Functors](#org56858b6)
-4.  [Naturality](#org0fbf1fb)
-5.  [Adjunctions](#org91f413d)
-6.  [Constant Combinators](#org0b8805f)
-7.  [Monics and Epics](#org8425b8d)
-8.  [Isos](#org790fff1)
-9.  [Skolemisation](#orgb4f62dd)
-10. [Initiality](#org158b5cd)
-11. [Colimits](#org2d73cea)
-12. [Limits](#orgf067adb)
-13. [Coequaliser](#org8992043)
-14. [Sums](#orgc3f8d9f)
-15. [Products](#org646358d)
-16. [Finitary Sums and Products](#org53ddc6a)
-17. [Mixing products and coproducts](#orgf2c229b)
-18. [References](#org91de456)
+1.  [Categories](#org69263f2)
+2.  [“Gluing” Morphisms Together](#org829ecfc)
+3.  [Functors](#orgb8b4347)
+4.  [Naturality](#org05185f6)
+5.  [Adjunctions](#orgf3a4eba)
+6.  [Constant Combinators](#org4c4a333)
+7.  [Monics and Epics](#orgd5bf600)
+8.  [Isos](#org4851634)
+9.  [Skolemisation](#orgf7013cf)
+10. [Initiality](#org2ef1a81)
+11. [Colimits](#orge2e4bbc)
+12. [Limits](#org77f3ebd)
+13. [Sums](#org558d8a1)
+14. [Products](#orgc84e29e)
+15. [Finitary Sums and Products](#orgb913442)
+16. [Mixing products and coproducts](#org4ca9cb9)
+17. [Coequaliser](#orgc3f340b)
+18. [References](#orge041012)
 
 
 
@@ -40,7 +40,7 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 
 
-<a id="org424dcc9"></a>
+<a id="org69263f2"></a>
 
 # Categories
 
@@ -109,7 +109,7 @@ of this.
 \newpage
 
 
-<a id="orgdb3bf82"></a>
+<a id="org829ecfc"></a>
 
 # “Gluing” Morphisms Together
 
@@ -170,7 +170,7 @@ A *transpose* arises when we need to combine a binary morphism with a unary morp
 \vspace{1em}
 
 
-<a id="org56858b6"></a>
+<a id="orgb8b4347"></a>
 
 # Functors
 
@@ -231,7 +231,7 @@ Category \(𝒜lℊ(F)\)
 -   A **bifunctor** from 𝒞 to 𝒟 is just a functor *𝒞² → 𝒟*.
 
 
-<a id="org0fbf1fb"></a>
+<a id="org05185f6"></a>
 
 # Naturality
 
@@ -315,7 +315,7 @@ E.g., without even knowing the definitions, naturality of
 \fi
 
 
-<a id="org91f413d"></a>
+<a id="orgf3a4eba"></a>
 
 # Adjunctions
 
@@ -378,7 +378,7 @@ Also,
 -   Right adjoints preserve limits such as terminal objects and products.
 
 
-<a id="org0b8805f"></a>
+<a id="org4c4a333"></a>
 
 # Constant Combinators
 
@@ -387,9 +387,7 @@ we find functions which lose all, or almost all, information.
 Regardless of their input, the output of these functions is always the
 same value.
 
-\room
-
-The Constant Combinator \(\K : 𝒞 → ℱ𝓊𝓃𝒸(𝒟,𝒞)\)
+\(\K : 𝒞 → ℱ𝓊𝓃𝒸(𝒟,𝒞)\)
 
 -   For objects \(x\), the \`\`constant functor'':   
     \(\K{x}\, y = x\) and \(\K{x}\, f = \Id_x\) for objects \(y\) and morphisms \(f\).
@@ -412,7 +410,7 @@ are bridged explicitly by the constant functions:
 \newpage
 
 
-<a id="org8425b8d"></a>
+<a id="orgd5bf600"></a>
 
 # Monics and Epics
 
@@ -449,7 +447,7 @@ while any constant function \(\const{c}\) is not monic and is only
 epic when its target consists only of \(c\).
 
 
-<a id="org790fff1"></a>
+<a id="org4851634"></a>
 
 # Isos
 
@@ -507,7 +505,7 @@ are closed under composition.
 Monics to the initial object are necessarily isos! 
 
 
-<a id="orgb4f62dd"></a>
+<a id="orgf7013cf"></a>
 
 # Skolemisation
 
@@ -530,7 +528,7 @@ The formulation of the definition is clear but it's not very well suited for *al
 A convenient formulation is obtained by \`skolemisation': An assertion of the form
 \[ ∀ x \;•\; ∃₁ y \;•\; R \, x \, y \]
 is equivalent to: There's a function ℱ such that
-\[ ∀ x, y \;•\; R \, x \, y \;≡\; y = ℱ\, x  \]
+\[ \, \hspace{13em} ∀ x, y \;•\; R \, x \, y \;≡\; y = ℱ\, x  \hspace{8em}\text{\sc(ℱ-Char)} \]
 In the former formulation it is the existential quantification “\(∃ y\)” inside the scope of a universal
 one that hinders effective calculation. In the latter formulation the existence claim is brought to a
 more global level: A reasoning need no longer be interrupted by the declaration and naming of the
@@ -578,13 +576,13 @@ by truthifying each side, namely \`Self' and \`Id'. A bit more on the naming:
 
 <tr>
 <td class="org-left">Uniq</td>
-<td class="org-left">It's problem has a unique solution</td>
+<td class="org-left">Its problem has a unique solution</td>
 </tr>
 
 
 <tr>
 <td class="org-left">Fusion</td>
-<td class="org-left">How it behaves wrt composition</td>
+<td class="org-left">How it behaves with respect to composition</td>
 </tr>
 
 
@@ -600,10 +598,27 @@ Note that the last 3 indicate how the concept interacts with the categorical str
 at most one solution, so together they are equivalent to ℱ-Char &#x2013;however those two proofs
 are usually not easier nor more elegant than a proof of ℱ-Char directly.
 
+\room
+
+**Proving ℱ-Char** is straightforwardly accomplished by providing a definition for ℱ
+and establishing ℱ-Char &#x2013;these two steps can be done in parallel! Almost every such
+proof has the following format, or a circular implication thereof: For arbitrary \(x\) and \(y\),
+
+<div class="calculation">
+R \kern0.5ex x \kern0.5ex y
+\step[≡]{}
+⋮
+\step[≡]{}
+y = \text{“an expression not involving $y$”}
+\step[≡]{ 𝒹ℯ𝒻𝒾𝓃ℯ $ℱ \, x$ to be the right side of the previous equation }
+y = ℱ \kern0.5ex x
+
+</div>
+
 \newpage
 
 
-<a id="org158b5cd"></a>
+<a id="org2ef1a81"></a>
 
 # Initiality
 
@@ -627,43 +642,23 @@ in a suitable category, and the mediator \(⦇-⦈\) captures
 “definitions by induction on the structure”! Hence induction arguments
 can be replaced by initiality arguments! Woah!
 
-\room
 
-**Proving Initiality** One may prove that an object \(0\) is initial by providing
-a definition for \(⦇-⦈\) and establishing initial-Char. Almost every such
-proof has the following format, or a circular implication thereof: For arbitrary *f* and *B*,
-
-\vspace{2em}
-
-<div class="calculation">
-f : A → B
-\step[≡]{}
-⋮
-\step[≡]{}
-f = \text{“an expression not involving $f$”}
-\step[≡]{ 𝒹ℯ𝒻𝒾𝓃ℯ $⦇ B ⦈$ to be the right side of the previous equation }
-f = ⦇ B ⦈
-
-</div>
-
-\vspace{-2em}
-
-\newpage
-
-
-<a id="org2d73cea"></a>
+<a id="orge2e4bbc"></a>
 
 # Colimits
 
 Each colimit is a certain initial object, and each initial object is a certain colimit.
 
 -   A *diagram in 𝒞* is a functor \(D : 𝒟 → 𝒞\).
--   Define the constant functor \(\const{C}\, x = C\) for objects \(x\) and
-    \(\const{C}\, f = \Id_C\) for morphisms \(f\). For functions \(g : A → B\), we define the natural
-    transformation \(\const{g} = x \mapsto g : \const{A} →̣ \const{B}\).
+
+-   Recall \nameref{constant-combinator} yielding a functor on objects ---\(\const{C}\, x = C\) for objects \(x\) and
+    \(\const{C}\, f = \Id_C\) for morphisms *f*&#x2014; and a natural transformation on arrows
+    ---\(\const{g} = x \mapsto g : \const{A} →̣ \const{B}\) for morphism \(g : A → B\).
 
 -   The category \(⋁D\), built upon 𝒞, has objects \(γ : D →̣ \const{C}\) called “co-cones”, for
     some object \(C =: \tgt\, γ\), and a morphism from \(γ\) to \(δ\) is a 𝒞-morphism \(x\) such that \(\const{x} ∘ γ = δ\).
+    
+    *\`Cones' sit upright on their base, \(D\), on a table; \`CoCones' sit upright on a co-table!*
 
 -   A *colimit for D* is an initial object in \(⋁ D\); which may or may not exist.
 
@@ -673,12 +668,18 @@ Writing \(-╱γ\) for \(⦇-⦈\) and working out the definition of co-cone in 
   we obtain: *\(γ : Obj(⋁D)\) is a colimit for \(D\)* if there is a mapping \(-╱γ\) such that *╱-Type* and
 *╱-Char* hold.
 
-\vspace{-1em}
+\room
+\room
 
-\newpage
+Let \(()_x : \varnothing →̣ \K{x}\) be the natural transformation from the
+empty functor \(\varnothing : \mathbf{0} \to 𝒞\) to the constant functor.
+\vspace{-0.8em}
+
+Cocones under \(D\) correspond one-to-one with arrows from its colimit:
+\vspace{-0.8em}
 
 
-<a id="orgf067adb"></a>
+<a id="org77f3ebd"></a>
 
 # Limits
 
@@ -687,49 +688,13 @@ is a 𝒞-object, and a morphism to \(γ\) *from* \(δ\) is a 𝒞-morphism \(x\
 In terms of 𝒞, *\(γ : Obj(⋀ D)\) is a limit for \(D\)* if there is a mapping \(γ╲-\) such that
 the following ╲-Type and ╲-Char hold, from which we obtain a host of corollaries.
 As usual, there is the implicit well-formedness condition. 
-Theorem ╲-Unique expresses that limits γ have an monic-like property:
-The component morphisms \(γ_A\) are \emph{jointly monic}.
 
 \vspace{-1em}
 
-
-<a id="org8992043"></a>
-
-# Coequaliser
-
-Take \(D\) and \(𝒟\) as suggested by \(D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)\);
-where \(f,g : A → B\) are given. 
-Then a cocone δ for \(D\) is a two-member family \(δ = (q', q)\)
-with \(q' : A → C, q : B → C, C = \tgt\,\delta\) and \(δ_A ∘ \const{C} h = D h ∘ δ_B\); in-particular
-\(q' = f ∘ q = g ∘ q\) whence \(q'\) is fully-determined by \(q\) alone.
-
-Let \(γ = (p', p) : Obj(⋁D)\) be a colimit for \(D\) and write \(-p╱\) in-place of \(-╱γ\), then the ╱-laws
-yield: *\(p\) is a coequaliser of \((f,g)\)* if there is a mapping \(-╱p\) such that *CoEq-Type* and
-*CoEq-Char* hold.
-
 \newpage
 
-\iffalse
 
-Taking \(D\) and \(\mathcal{D}\) as suggested by
-\(D\,\mathcal{D}:\)
-$ \raisebox{6pt}{$\spot$}
-\overset{ \overset{f}{\text{\tiny$\longrightarrow$}}
-  }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
-\raisebox{6pt}{$\spot$}
-$
-
-Now call the category \(\bigvee D\) by the name \(\bigvee(f \,|\!|\, g)\):
-it has objects morphisms that post-equalise \(f\) and \(g\), and morphisms
-\(x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q\) 
-
-A \emph{coequaliser} of \(f,g\) is an initial object in
-\(\bigvee(f \,|\!|\, g)\).
-
-\fi
-
-
-<a id="orgc3f8d9f"></a>
+<a id="org558d8a1"></a>
 
 # Sums
 
@@ -771,14 +736,12 @@ For categories in which sums exist, we define for \(f : A → B\) and \(g : C �
 
 \eqn{Structural Equality}{ [f,g] = [h, j] \equivS f = h \lands g = j }
 
-\eqn{Interchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
-
 \endeqns
 
 \newpage
 
 
-<a id="org646358d"></a>
+<a id="orgc84e29e"></a>
 
 # Products
 
@@ -833,7 +796,7 @@ For categories in which products exist, we define for \(f : A → B\) and \(g : 
 \newpage
 
 
-<a id="org53ddc6a"></a>
+<a id="orgb913442"></a>
 
 # Finitary Sums and Products
 
@@ -851,7 +814,7 @@ Dually, the standard notation for the empty either \([]\) is \(?_C\).
 \eqn{Empty Exchange Rule}{ ⟨⟩_0 = []_1 }
 
 
-<a id="orgf2c229b"></a>
+<a id="org4ca9cb9"></a>
 
 # Mixing products and coproducts
 
@@ -875,8 +838,46 @@ E.g., \(\mathsf{undistr}  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id 
 
 Also, since constants ignore their inputs,
 
+\newpage
 
-<a id="org91de456"></a>
+
+<a id="orgc3f340b"></a>
+
+# Coequaliser
+
+Take \(D\) and \(𝒟\) as suggested by \(D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)\);
+where \(f,g : A → B\) are given. 
+Then a cocone δ for \(D\) is a two-member family \(δ = (q', q)\)
+with \(q' : A → C, q : B → C, C = \tgt\,\delta\) and \(δ_A ∘ \const{C} h = D h ∘ δ_B\); in-particular
+\(q' = f ∘ q = g ∘ q\) whence \(q'\) is fully-determined by \(q\) alone.
+
+Let \(γ = (p', p) : Obj(⋁D)\) be a colimit for \(D\) and write \(-p╱\) in-place of \(-╱γ\), then the ╱-laws
+yield: *\(p\) is a coequaliser of \((f,g)\)* if there is a mapping \(-╱p\) such that *CoEq-Type* and
+*CoEq-Char* hold.
+
+\vfill
+
+\iffalse
+
+Taking \(D\) and \(\mathcal{D}\) as suggested by
+\(D\,\mathcal{D}:\)
+$ \raisebox{6pt}{$\spot$}
+\overset{ \overset{f}{\text{\tiny$\longrightarrow$}}
+  }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
+\raisebox{6pt}{$\spot$}
+$
+
+Now call the category \(\bigvee D\) by the name \(\bigvee(f \,|\!|\, g)\):
+it has objects morphisms that post-equalise \(f\) and \(g\), and morphisms
+\(x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q\) 
+
+A \emph{coequaliser} of \(f,g\) is an initial object in
+\(\bigvee(f \,|\!|\, g)\).
+
+\fi
+
+
+<a id="orge041012"></a>
 
 # References
 
