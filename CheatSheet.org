@@ -88,6 +88,14 @@ However here are some reasons I've decided to switch to the traditional format:
 \def\bin{I\!\!I}
 #+END_EXPORT
 
+* COMMENT Compact Notation
+
+ Why do people look for compact notations? A compact notation leads to
+ shorter documents (less lines of code in programming) in which patterns are easier
+ to identify and to reason about. Properties can be stated in clear-cut, one-line long
+ equations which are easy to memorize. And diagrams such as (2.4) can be easily
+ drawn which enable us to visualize maths in a graphical format.
+
 * Categories
 #
 # The morphisms are a "dependent type" ;-)
@@ -259,6 +267,14 @@ A /transpose/ arises when we need to combine a binary morphism with a unary morp
 #+END_EXPORT
 
 \vspace{1em}
+
+** COMMENT Importance of Compositional Combinators                   :ignore:
+
+ # Paraphrasing Oliveira, §2.13
+ \vspace{3ex}
+ The compositional combinators put forward here are equipped with a concise /set of properties/
+ which enable programmers to transform programs, reason about them, and perform useful calculations.
+ This raises a /programming methodology/ which is scientific and stable.
 
 * Functors
 
@@ -616,6 +632,8 @@ are bridged explicitly by the constant functions:
 #+END_EXPORT
 
 \newpage
+
+# Observe that /constant arrows that are epic necessarily target a terminal object./
 * Monics and Epics
 
 Identity functions and constant functions are limit points of the 
@@ -813,6 +831,10 @@ proof has the following format, or a circular implication thereof: For arbitrary
 #  [Dangerous] Convention:
 #  free variables are quantified implicitly in such a way that the laws in which they appear
 #  are well-defined.
+
+ # The relevance of universal properties, such as ℱ-Char, is that it offers a way of /solving equations/
+ # of the form $y = ℱ\, x$. For example, can the identity be expressed, or `reflected', using this combinator?
+ # We just solve the equation $\Id = ℱ\, x$ for unknown(s) $x$ by appealing to the universal property.
 
 * Initiality
 
@@ -1505,7 +1527,6 @@ The category theory is mostly implicit, but presented elegantly!
     is non-ambiguous.
 
  0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
-* COMMENT TODO Generalise Exchange Law to arbitrary colimits and limits xD
 * COMMENT Old Category Theory Theorem List
 
 ** Category Theory Notation :latex:ignore:
@@ -1681,14 +1702,6 @@ The category theory is mostly implicit, but presented elegantly!
  \NTHM{}{Pushout-Fusion, ``Composition into Numerator''}{ \\
    $\big((f , g) \under (p , q)\big) \fcmp x \eqs (f , g) \under \big( (p , q) \fcmp (x,x)\big)$}
 * COMMENT Content from older repo
-** Compact Notation
-
- Why do people look for compact notations? A compact notation leads to
- shorter documents (less lines of code in programming) in which patterns are easier
- to identify and to reason about. Properties can be stated in clear-cut, one-line long
- equations which are easy to memorize. And diagrams such as (2.4) can be easily
- drawn which enable us to visualize maths in a graphical format.
-
 ** Functions and Contracts
 
  What do we want functions for? If we ask this question to a physician or engineer
@@ -1713,58 +1726,6 @@ The category theory is mostly implicit, but presented elegantly!
  In this case /B = A/, of course, and /f/ is said to be the identity function on /A/.
 
  Observe that “naturality laws” /f · h = h · f = f/ have a unique solution for /h/: “the” id-entity function.
-
-** Constants
-
- #+BEGIN_QUOTE
- Opposite to the identity functions, which do not lose any information, we find
- functions which lose all (or almost all) information. Regardless of their input, the
- output of these functions is always the same value.
-
- Let C be a nonempty data domain and let and /c ∈ C/. Then we define the
- /everywhere c/ function as follows, for arbitrary /A/:
- /c : A → C/,
- /_c_ a = c/
- #+END_QUOTE
-
- Observe that /Constant arrows that are epic necessarily target a terminal object./
-
-** Epics and Monics
-
- #+BEGIN_QUOTE
- Identity functions and constant functions are limit points of the functional spectrum
- with respect to information preservation. All the other functions are in between:
- they lose “some” information, which is regarded as uninteresting for some
- reason. This remark supports the following aphorism about a facet of functional
- programming: it is the art of transforming or losing information in a controlled
- and precise way. That is to say, the art of constructing the exact observation of
- data which fits in a particular context or requirement.
-
- How do functions lose information? Basically in two different ways: they may
- be “blind” enough to confuse different inputs, by mapping them onto the same
- output, or they may ignore values of their codomain. For instance, /_c_/ confuses all
- inputs by mapping them all onto /c/. Moreover, it ignores all values of its codomain
- apart from /c/.
-
- Functions which do not confuse inputs are called monics (or injective functions)
-
- Functions which do not ignore values of their codomain are called epics (or
- surjective functions).
- #+END_QUOTE
-
-** Isos
- #+BEGIN_QUOTE
- Isomorphisms are very important functions because they convert data from
- one “format”, say /A/, to another format, say /B/, without losing information. 
-
- So /f/ and /f⁻¹/ are faithful protocols between the two formats /A/ and /B/. Of course,
- these formats contain the same “amount” of information, although the same data
- adopts a different “shape” in each of them. In mathematics, one says that /A/ is
- isomorphic to /B/ and one writes /A ≅ B/ to express this fact.
-
- Isomorphic data domains are regarded as “abstractly” the same. Note that, in
- general, there is a wide range of isos between two isomorphic data domains.
- #+END_QUOTE
 
 ** Sums
  Given two functions /f : C ⟵ A/ and /g : C ⟵ B/ with a common target, we can “glue” them
@@ -1927,7 +1888,6 @@ The category theory is mostly implicit, but presented elegantly!
 
 \theorem{}{{\color{gray}Absorption /} Induced Definition of Casing}
         { $\[ f , g \] \cdot (i \+ j) = \[ f \cdot i , g \cdot j \]$ }
-
 * COMMENT Maybe move to README
 ** Gluing functions which do not compose -- products         :move_to_readme:
 
@@ -2375,9 +2335,14 @@ for(int j=0; j<n; j++)
  which enable programmers to transform programs, reason about them, and perform useful calculations.
  This raises a /programming methodology/ which is scientific and stable.
 
- # The relevance of universal properties, such as ℱ-Char, is that it offers a way of /solving equations/
- # of the form $y = ℱ\, x$. For example, can the identity be expressed, or `reflected', using this combinator?
- # We just solve the equation $\Id = ℱ\, x$ for unknown(s) $x$ by appealing to the universal property.
+** Compact Notation
+
+ Why do people look for compact notations? A compact notation leads to
+ shorter documents (less lines of code in programming) in which patterns are easier
+ to identify and to reason about. Properties can be stated in clear-cut, one-line long
+ equations which are easy to memorize. And diagrams such as (2.4) can be easily
+ drawn which enable us to visualize maths in a graphical format.
+
 
 * COMMENT ToDo's
 Include:
@@ -2407,6 +2372,7 @@ Include:
    then the colimit of any functor F:J→C is just F(1), with the cocone defined by the maps F(τj):F(j)→F(1). 
 
    Hint: https://math.stackexchange.com/questions/1210440/given-a-mathcalc-rightarrow-mathcale-when-does-operatornamecolim
+** COMMENT TODO Generalise Exchange Law to arbitrary colimits and limits xD
 
 * COMMENT Duality: Sums & Products :uniform_notation:artefact:
 
@@ -2548,7 +2514,6 @@ C-c C-c: evalute src block
     (org-md-export-to-markdown)
 )
 #+END_SRC
-
 
 * COMMENT footer
 
