@@ -716,11 +716,10 @@ Finally, note that all classes of functions referred to so far
 ---identities, constants, epics, monics, and isos---
 are closed under composition.
 
-
-
 Monics to the initial object are necessarily isos! 
 # Simialr to the bottom of a poset.
 
+# \newpage.\newpage
 * COMMENT More Morphism Properties
 
 # \NTHM{}{Monic}{ compositionally post-cancellable ---nearly the same formulation as injective! }
@@ -736,6 +735,7 @@ If a composition is epic then its last arrow is epic.
 \NTHM{}{Split Epic}{ compositionally pre-invertible }
 
 \NTHM{}{Iso}{ Both epic and monic ; i.e., monic and split epic }
+
 
 * Skolemisation
 # “Up to Isomorphism”
@@ -759,7 +759,7 @@ The formulation of the definition is clear but it's not very well suited for /al
 A convenient formulation is obtained by `skolemisation': An assertion of the form
 \[ ∀ x \;•\; ∃₁ y \;•\; R \, x \, y \]
 is equivalent to: There's a function ℱ such that
-\[ ∀ x, y \;•\; R \, x \, y \;≡\; y = ℱ\, x  \]
+\[ \, \hspace{13em} ∀ x, y \;•\; R \, x \, y \;≡\; y = ℱ\, x  \hspace{8em}\text{\sc(ℱ-Char)} \]
 In the former formulation it is the existential quantification “$∃ y$” inside the scope of a universal
 one that hinders effective calculation. In the latter formulation the existence claim is brought to a
 more global level: A reasoning need no longer be interrupted by the declaration and naming of the
@@ -781,8 +781,8 @@ by truthifying each side, namely `Self' and `Id'. A bit more on the naming:
 | Type        | Possibly non-syntactic constraint on notation being well-formed |
 | Self        | It, itself, is a solution                                       |
 | Id          | How $\Id$ can be expressed using it                             |
-| Uniq        | It's problem has a unique solution                              |
-| Fusion      | How it behaves wrt composition                                  |
+| Uniq        | Its problem has a unique solution                               |
+| Fusion      | How it behaves with respect to composition                      |
 | Composition | How two instances, in full subcategories, compose               |
 
 Note that the last 3 indicate how the concept interacts with the categorical structure:
@@ -790,7 +790,60 @@ $=, ﹔, \Id$. Also note that Self says there's at least one solution and Uniq s
 at most one solution, so together they are equivalent to ℱ-Char --however those two proofs
 are usually not easier nor more elegant than a proof of ℱ-Char directly.
 
+\room
+
+*Proving ℱ-Char* is straightforwardly accomplished by providing a definition for ℱ
+and establishing ℱ-Char --these two steps can be done in parallel! Almost every such
+proof has the following format, or a circular implication thereof: For arbitrary $x$ and $y$,
+
+# \vspace{2em}
+#+begin_calculation latex
+    R \kern0.5ex x \kern0.5ex y
+\step[≡]{}
+    ⋮
+\step[≡]{}
+    y = \text{“an expression not involving $y$”}
+\step[≡]{ 𝒹ℯ𝒻𝒾𝓃ℯ $ℱ \, x$ to be the right side of the previous equation }
+    y = ℱ \kern0.5ex x
+#+end_calculation
+
 \newpage
+
+** COMMENT Older formulation
+ 
+  Assertions of the form ``$\forall\, x \spot \exists!\, y \spot P\, x\, y$''
+  are not very well suited for \emph{algebraic manipulation}:
+  it is the existential quantification inside the scope of the universal one that
+  hinders effective calculation. However, such an assertion is equivalent to
+  \centerline{``there is a function $\langle-\rangle$ with $\forall x,y \spot P\,x\,y \equivs y = \langle\, x \, \rangle$''}
+  where the existence claim is brought to a global level and so reasoning need no longer be interrupted
+  by the declaration and naming of the existence of a unique $y$ that depends on $x$; it can be denoted just $\langle\, x \, \rangle$.
+  A variety of bracketing notation may be used for the important role of the various unique $y$'s
+  with the additional advantage that no extra parentheses are needed for composite arguments $x$
+  (which are expected to occur often).
+  As usual, the universal quantification in the above displayed formula are omitted, thus simplifying
+  the formulation once more.
+
+  With such a characterisation in-hand, natural questions come to mind.
+  ``Self'': Is $\langle\, x \, \rangle$ itself a solution to the problem? Indeed we have
+  $P\, x\, \langle\, x \, \rangle$.
+  ``Uniqueness'': Is the solution to the problem unique? Indeed, $P\, x\, y \lands P\, x\, z \implies y = z$.
+  ``Identity'': Is there a way to use the identity morphisms to truthify the left side?
+  ``Fusion'': Can we solve for `?' in $\langle\, x \, \rangle \fcmp f = \langle\, ? \, \rangle$,
+  or perhaps the dual composition?
+
+  \emph{How do prove such assertions}: begin with the given side $P\,x\,y$ and try to simplify this
+  via a chain of equivalences to obtain $y = \text{``an expression not involving $y$''}$ and
+  then define $\langle\, x \, \rangle$ to be the right-hand side of the previous equation.
+  Sometimes, equivalences are difficult and we can instead prove, by circular implication,
+  that $P\,x\,y \implies y = \cdots  \lands y = \cdots \implies P\,x\,y$
+  ---either way, the proof is given as a calculation.
+  That is, aim to rewrite $y$ in-terms of $x$ in the given $P\,x\,y$.
+
+  [Dangerous] Convention:
+  free variables are quantified implicitly in such a way that the laws in which they appear
+  are well-defined.
+
 * Initiality
 
 # Convenient definition: 
@@ -842,6 +895,7 @@ in a suitable category, and the mediator $⦇-⦈$ captures
 “definitions by induction on the structure”! Hence induction arguments
 can be replaced by initiality arguments! Woah!
 
+** COMMENT Proving Initiality :moved_to_skolemisation_section:
 \room
 
 *Proving Initiality* One may prove that an object $0$ is initial by providing
@@ -946,8 +1000,7 @@ preserves colimits.
 #+END_EXPORT
 
 \vspace{-1em}
-
-\newpage
+# \newpage
 * Limits
 
 Dually, the category $⋀D$ has objects being “cones” $γ : \const{C} →̣ D$ where $C =: \src\, γ$
@@ -995,76 +1048,7 @@ The component morphisms $γ_A$ are \emph{jointly monic}.
 
 \vspace{-1em}
 
-* Coequaliser
-
-# $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
-#
-Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
-where $f,g : A → B$ are given. 
-Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
-with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $δ_A ∘ \const{C} h = D h ∘ δ_B$; in-particular
-$q' = f ∘ q = g ∘ q$ whence $q'$ is fully-determined by $q$ alone.
-
-Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $-p╱$ in-place of $-╱γ$, then the ╱-laws
-yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $-╱p$ such that /CoEq-Type/ and
-/CoEq-Char/ hold.
-
-#+BEGIN_EXPORT latex
-\begineqns
-
-\eqn{CoEq-Type}{ f ∘ q =  g ∘ q \impliesS q╱p : \tgt\, p → \tgt\,q}
-
-\vspace{2ex}
-Well-formedness convention: In each law the variables are quantified
-in such a way that the premise of \ref{CoEq-Type} is met.
-The notation $q╱⋯$ is only senseful if $f ∘ q = g ∘ q$,
-like in arithmetic where the notation $m ÷ n$ is only sensful if $n$ differs from 0.
-
-\eqn{CoEq-Char}{ x ∘ p = q \equivS x = q ╱ p }
-
-\eqn{CoEq-Self}{ q╱p ∘ p = q}
-
-\eqn{CoEq-Id}{p╱p = \Id}
-
-\eqn{CoEq-Fusion}{x ∘ q╱p = (x ∘ q)╱p}
-
-\eqn{CoEq-Unique}{x ∘ p = y ∘ p \impliesS x = y}
-
-\eqn{CoEq-Compose}{r╱q ∘ q╱p = r╱p}
-%%
-%% \eqn{?╲-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
-%% 
-%% \eqn{?╲-Pre-Functor-Elim}{δF╱γF = δ╱γ}
-%%
-\endeqns
-#+END_EXPORT
-
 \newpage
-
-
-# CoEqualisers generalise the notion of induced equivalence relation.
-
-\iffalse
-
-  Taking $D$ and $\mathcal{D}$ as suggested by
-  $D\,\mathcal{D}:$
-  $ \raisebox{6pt}{$\spot$}
-  \overset{ \overset{f}{\text{\tiny$\longrightarrow$}}
-    }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
-  \raisebox{6pt}{$\spot$}
-  $
-  
-Now call the category $\bigvee D$ by the name $\bigvee(f \,|\!|\, g)$:
-it has objects morphisms that post-equalise $f$ and $g$, and morphisms
-$x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q$ 
-
-A \emph{coequaliser} of $f,g$ is an initial object in
-$\bigvee(f \,|\!|\, g)$.
-
-\fi
-
-# coEqualiser-Fusion, ``Composition into Numerator''
-
 * Sums
 #+LaTeX: \def\inl{\mathsf{inl}} 
 #+LaTeX: \def\inr{\mathsf{inr}}
@@ -1288,6 +1272,78 @@ Also, since constants ignore their inputs,
 # = ⟨ [f, g], [ _k_ , _k_ ]⟩        exchange
 # = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
 # = ⟨ [f, g], _k_ ⟩               constants
+
+
+\newpage
+
+* Coequaliser
+
+# $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
+#
+Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
+where $f,g : A → B$ are given. 
+Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
+with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $δ_A ∘ \const{C} h = D h ∘ δ_B$; in-particular
+$q' = f ∘ q = g ∘ q$ whence $q'$ is fully-determined by $q$ alone.
+
+Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $-p╱$ in-place of $-╱γ$, then the ╱-laws
+yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $-╱p$ such that /CoEq-Type/ and
+/CoEq-Char/ hold.
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{CoEq-Type}{ f ∘ q =  g ∘ q \impliesS q╱p : \tgt\, p → \tgt\,q}
+
+\vspace{2ex}
+Well-formedness convention: In each law the variables are quantified
+in such a way that the premise of \ref{CoEq-Type} is met.
+The notation $q╱⋯$ is only senseful if $f ∘ q = g ∘ q$,
+like in arithmetic where the notation $m ÷ n$ is only sensful if $n$ differs from 0.
+
+\eqn{CoEq-Char}{ x ∘ p = q \equivS x = q ╱ p }
+
+\eqn{CoEq-Self}{ q╱p ∘ p = q}
+
+\eqn{CoEq-Id}{p╱p = \Id}
+
+\eqn{CoEq-Fusion}{x ∘ q╱p = (x ∘ q)╱p}
+
+\eqn{CoEq-Unique}{x ∘ p = y ∘ p \impliesS x = y}
+
+\eqn{CoEq-Compose}{r╱q ∘ q╱p = r╱p}
+%%
+%% \eqn{?╲-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
+%% 
+%% \eqn{?╲-Pre-Functor-Elim}{δF╱γF = δ╱γ}
+%%
+\endeqns
+#+END_EXPORT
+
+# CoEqualisers generalise the notion of induced equivalence relation.
+
+\vfill
+
+\iffalse
+
+  Taking $D$ and $\mathcal{D}$ as suggested by
+  $D\,\mathcal{D}:$
+  $ \raisebox{6pt}{$\spot$}
+  \overset{ \overset{f}{\text{\tiny$\longrightarrow$}}
+    }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
+  \raisebox{6pt}{$\spot$}
+  $
+  
+Now call the category $\bigvee D$ by the name $\bigvee(f \,|\!|\, g)$:
+it has objects morphisms that post-equalise $f$ and $g$, and morphisms
+$x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q$ 
+
+A \emph{coequaliser} of $f,g$ is an initial object in
+$\bigvee(f \,|\!|\, g)$.
+
+\fi
+
+# coEqualiser-Fusion, ``Composition into Numerator''
 * References
 
 #+LaTeX: {\color{white}.}
@@ -1333,6 +1389,7 @@ The category theory is mostly implicit, but presented elegantly!
 
  + Backus' FP and Iverson's APL are examples of pointfree programming
    languages; look them up ;-)
+
 
 * COMMENT FIXES
 ** §4 FIX
@@ -1737,43 +1794,6 @@ The category theory is mostly implicit, but presented elegantly!
  $1 \cong CoLim \, \mathsf{Id}$
  where $\final{-} = \gamma$ is the witnessing family?
 
-** Prelims: skolem et al
- \kern3ex
- \heading{Prelims}
-
- \heuristic[Skolemisation]
- Assertions of the form ``$\forall\, x \spot \exists!\, y \spot P\, x\, y$''
- are not very well suited for \emph{algebraic manipulation}:
- it is the existential quantification inside the scope of the universal one that
- hinders effective calculation. However, such an assertion is equivalent to
- \centerline{``there is a function $\langle-\rangle$ with $\forall x,y \spot P\,x\,y \equivs y = \langle\, x \, \rangle$''}
- where the existence claim is brought to a global level and so reasoning need no longer be interrupted
- by the declaration and naming of the existence of a unique $y$ that depends on $x$; it can be denoted just $\langle\, x \, \rangle$.
- A variety of bracketing notation may be used for the important role of the various unique $y$'s
- with the additional advantage that no extra parentheses are needed for composite arguments $x$
- (which are expected to occur often).
- As usual, the universal quantification in the above displayed formula are omitted, thus simplifying
- the formulation once more.
-
- With such a characterisation in-hand, natural questions come to mind.
- ``Self'': Is $\langle\, x \, \rangle$ itself a solution to the problem? Indeed we have
- $P\, x\, \langle\, x \, \rangle$.
- ``Uniqueness'': Is the solution to the problem unique? Indeed, $P\, x\, y \lands P\, x\, z \implies y = z$.
- ``Identity'': Is there a way to use the identity morphisms to truthify the left side?
- ``Fusion'': Can we solve for `?' in $\langle\, x \, \rangle \fcmp f = \langle\, ? \, \rangle$,
- or perhaps the dual composition?
-
- \emph{How do prove such assertions}: begin with the given side $P\,x\,y$ and try to simplify this
- via a chain of equivalences to obtain $y = \text{``an expression not involving $y$''}$ and
- then define $\langle\, x \, \rangle$ to be the right-hand side of the previous equation.
- Sometimes, equivalences are difficult and we can instead prove, by circular implication,
- that $P\,x\,y \implies y = \cdots  \lands y = \cdots \implies P\,x\,y$
- ---either way, the proof is given as a calculation.
- That is, aim to rewrite $y$ in-terms of $x$ in the given $P\,x\,y$.
-
- [Dangerous] Convention:
- free variables are quantified implicitly in such a way that the laws in which they appear
- are well-defined.
 * COMMENT Content from older repo
 ** Compact Notation
 
