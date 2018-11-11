@@ -1016,7 +1016,7 @@ preserves colimits.
 Let $()_x : \varnothing →̣ \K{x}$ be the natural transformation from the
 empty functor $\varnothing : \mathbf{0} \to 𝒞$ to the constant functor.
 \vspace{-0.8em}
-#+LaTeX:  \eqn{Initiality as colimit, ╱-⦇⦈}{⦇B⦈ \eqs ()_B ╱ ()_0}
+#+LaTeX:  \eqn{Initiality as colimit}{⦇B⦈ \eqs ()_B ╱ ()_0}
 
 # Needless to say, my favourite:
 Cocones under $D$ correspond one-to-one with arrows from its colimit:
