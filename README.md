@@ -10,24 +10,24 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 # Table of Contents
 
-1.  [Categories](#org69263f2)
-2.  [“Gluing” Morphisms Together](#org829ecfc)
-3.  [Functors](#orgb8b4347)
-4.  [Naturality](#org05185f6)
-5.  [Adjunctions](#orgf3a4eba)
-6.  [Constant Combinators](#org4c4a333)
-7.  [Monics and Epics](#orgd5bf600)
-8.  [Isos](#org4851634)
-9.  [Skolemisation](#orgf7013cf)
-10. [Initiality](#org2ef1a81)
-11. [Colimits](#orge2e4bbc)
-12. [Limits](#org77f3ebd)
-13. [Sums](#org558d8a1)
-14. [Products](#orgc84e29e)
-15. [Finitary Sums and Products](#orgb913442)
-16. [Mixing products and coproducts](#org4ca9cb9)
-17. [Coequaliser](#orgc3f340b)
-18. [References](#orge041012)
+1.  [Categories](#org5fbc147)
+2.  [“Gluing” Morphisms Together](#org4b09cbf)
+3.  [Functors](#org3703ded)
+4.  [Naturality](#org1255588)
+5.  [Adjunctions](#orgeac7e75)
+6.  [Constant Combinators](#org8d5e1fc)
+7.  [Monics and Epics](#org6cfdac6)
+8.  [Isos](#org8ea1080)
+9.  [Skolemisation](#org9fdc620)
+10. [Initiality](#orgc9de1a3)
+11. [Colimits](#org6e520b1)
+12. [Limits](#orgbe3875c)
+13. [Sums](#orgc95333b)
+14. [Products](#org1ded206)
+15. [Finitary Sums and Products](#orgddf32db)
+16. [Mixing products and coproducts](#orgf8cb2fc)
+17. [Coequaliser](#org48c5a0a)
+18. [References](#org491e92c)
 
 
 
@@ -40,7 +40,7 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 
 
-<a id="org69263f2"></a>
+<a id="org5fbc147"></a>
 
 # Categories
 
@@ -109,7 +109,7 @@ of this.
 \newpage
 
 
-<a id="org829ecfc"></a>
+<a id="org4b09cbf"></a>
 
 # “Gluing” Morphisms Together
 
@@ -170,7 +170,7 @@ A *transpose* arises when we need to combine a binary morphism with a unary morp
 \vspace{1em}
 
 
-<a id="orgb8b4347"></a>
+<a id="org3703ded"></a>
 
 # Functors
 
@@ -231,7 +231,7 @@ Category \(𝒜lℊ(F)\)
 -   A **bifunctor** from 𝒞 to 𝒟 is just a functor *𝒞² → 𝒟*.
 
 
-<a id="org05185f6"></a>
+<a id="org1255588"></a>
 
 # Naturality
 
@@ -315,7 +315,7 @@ E.g., without even knowing the definitions, naturality of
 \fi
 
 
-<a id="orgf3a4eba"></a>
+<a id="orgeac7e75"></a>
 
 # Adjunctions
 
@@ -378,7 +378,7 @@ Also,
 -   Right adjoints preserve limits such as terminal objects and products.
 
 
-<a id="org4c4a333"></a>
+<a id="org8d5e1fc"></a>
 
 # Constant Combinators
 
@@ -410,7 +410,7 @@ are bridged explicitly by the constant functions:
 \newpage
 
 
-<a id="orgd5bf600"></a>
+<a id="org6cfdac6"></a>
 
 # Monics and Epics
 
@@ -447,7 +447,7 @@ while any constant function \(\const{c}\) is not monic and is only
 epic when its target consists only of \(c\).
 
 
-<a id="org4851634"></a>
+<a id="org8ea1080"></a>
 
 # Isos
 
@@ -505,7 +505,7 @@ are closed under composition.
 Monics to the initial object are necessarily isos! 
 
 
-<a id="orgf7013cf"></a>
+<a id="org9fdc620"></a>
 
 # Skolemisation
 
@@ -618,7 +618,7 @@ y = ℱ \kern0.5ex x
 \newpage
 
 
-<a id="org2ef1a81"></a>
+<a id="orgc9de1a3"></a>
 
 # Initiality
 
@@ -643,7 +643,7 @@ in a suitable category, and the mediator \(⦇-⦈\) captures
 can be replaced by initiality arguments! Woah!
 
 
-<a id="orge2e4bbc"></a>
+<a id="org6e520b1"></a>
 
 # Colimits
 
@@ -679,7 +679,7 @@ Cocones under \(D\) correspond one-to-one with arrows from its colimit:
 \vspace{-0.8em}
 
 
-<a id="org77f3ebd"></a>
+<a id="orgbe3875c"></a>
 
 # Limits
 
@@ -694,7 +694,7 @@ As usual, there is the implicit well-formedness condition.
 \newpage
 
 
-<a id="org558d8a1"></a>
+<a id="orgc95333b"></a>
 
 # Sums
 
@@ -741,7 +741,7 @@ For categories in which sums exist, we define for \(f : A → B\) and \(g : C �
 \newpage
 
 
-<a id="orgc84e29e"></a>
+<a id="org1ded206"></a>
 
 # Products
 
@@ -796,7 +796,7 @@ For categories in which products exist, we define for \(f : A → B\) and \(g : 
 \newpage
 
 
-<a id="orgb913442"></a>
+<a id="orgddf32db"></a>
 
 # Finitary Sums and Products
 
@@ -814,7 +814,7 @@ Dually, the standard notation for the empty either \([]\) is \(?_C\).
 \eqn{Empty Exchange Rule}{ ⟨⟩_0 = []_1 }
 
 
-<a id="org4ca9cb9"></a>
+<a id="orgf8cb2fc"></a>
 
 # Mixing products and coproducts
 
@@ -841,7 +841,7 @@ Also, since constants ignore their inputs,
 \newpage
 
 
-<a id="orgc3f340b"></a>
+<a id="org48c5a0a"></a>
 
 # Coequaliser
 
@@ -877,7 +877,7 @@ A \emph{coequaliser} of \(f,g\) is an initial object in
 \fi
 
 
-<a id="orge041012"></a>
+<a id="org491e92c"></a>
 
 # References
 

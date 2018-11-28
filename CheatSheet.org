@@ -88,6 +88,10 @@ However here are some reasons I've decided to switch to the traditional format:
 \def\bin{I\!\!I}
 #+END_EXPORT
 
+
+* COMMENT TODO BEGIN_IGNORE  nope                                    :ignore:
+\iffalse
+
 * COMMENT Compact Notation
 
  Why do people look for compact notations? A compact notation leads to
@@ -804,6 +808,16 @@ by truthifying each side, namely `Self' and `Id'. A bit more on the naming:
 | Fusion      | How it behaves with respect to composition                      |
 | Composition | How two instances, in full subcategories, compose               |
 
+# More, to consider.
+#
+# | Reflection   | How Id can be expressed                                         |
+# | Cancellation | How it can be eliminated                                        |
+# | Fusion       | How composition goes into it                                    |
+# | Absorption   | How a lifted, via functor application, composition goes into it |
+# | Naturality   | How it commutes with composition                                |
+# | Functor      | How it defines a functor                                        |
+# | Definition   | How it's defined for arbitrary morphisms by being defined for the Id case; usually an instance of Absorption; c.f. x/y defined by 1/y defined. |
+
 Note that the last 3 indicate how the concept interacts with the categorical structure:
 $=, ﹔, \Id$. Also note that Self says there's at least one solution and Uniq says there is
 at most one solution, so together they are equivalent to ℱ-Char --however those two proofs
@@ -1437,96 +1451,69 @@ The category theory is mostly implicit, but presented elegantly!
  + Backus' FP and Iverson's APL are examples of pointfree programming
    languages; look them up ;-)
 
+* COMMENT TODO END_IGNORE  nope                                      :ignore:
+\fi
 
-* COMMENT FIXES
-** §4 FIX
+* COMMENT Why Monads Matter
 
- 0. §4.7, page 135: ?
+Suppose the output of the producer function $g$ is /T-times more elaborate/
+than the input of the consumer function $f$, then a composition scheme
+is devised for such functions:
 
-** §3 FIX
- 0. §3.1, page 68, exercise 3.3: The arguments to the ~for~ are in the wrong order; moreover the notation
-    for multiplication is inconsistent with in (3.6).
+#+BEGIN_EXAMPLE haskell
+T (T C)  ⟵T f⟵ T B ⟵g⟵ A
+↓                  ⋮
+μ                  ⋮
+↓                  ⋮
+T C      ⟵  f⟵  B
 
- 0. §3.3, page 79: The top-most code fragment mentions ~Eval T~ but nothing in the surrounding text mentions
-    ~Eval~. Is this a typo?
+Desired:  T C ⟵ f ◇ g ⟵ A
+#+END_EXAMPLE
 
- 0. §3.4, page 83: In the fourth equation in the bottom-most calculation, there seems to be a missing
-    ~cons~ tag on the right-hand side --c.f. (3.27)--. The right-most should be /Cons(a, x)/ instead of just /(a,x)/.
+Given by $f ◇ g = μ ∘ T f ∘ g$, where $μ : T ←̣ T²$ is a suitable polymorphic function.
 
- 0. §3.6, page 87: Right after (3.41), there is an inconsistency with the notation of multiplication, or there lack of.
-    Perhaps consider using a × or *, rather than just a space.
+Together with a unit function $η : T ←̣ Id$, datatype T forms a so-called /monad/ type.
 
- 0. §3.9, page 96, equation (3.63): Do you mean ${}_n C_p$ instead of ${}^n C_p$?
-    If so: It might also help to mention that this is the combinatorial choice operator
-    and is not the same as the coefficients $C_i$ of (3.62); otherwise the overloaded $C$ might
-    cause more trouble than desired. Alternatively maybe use notation $\binom{n}{p}$ instead.
+The simplest of all monads is the /identity monad/ $T X = X$, which is such that
+$μ = id, η = id, f ◇ g = f ∘ g$. So --in a sense-- the /whole functional discipline/
+studied thus far was already /monadic/, living inside the simplest of all monads: The identity.
+Put in other words, such functional discipline can be framed into a wider discipline in which
+an arbitrary monad is present.
 
- 0. §3.9, page 97, exercise 3.10: At the end of the first line, you want $(1 + X)²$ rather than $(1 + X²)$.
 
- 0. §3.12, page 99: When you first introduced isos back in §2, you said they were functions that were both
-    monic and epic, which is the case for your ambient category, Sets. However, in the first line of this
-    subsection, it seems you are stating that an /F/-algebra that is both epic and monoic is necessarily an iso
-    --which as far as I know is not true, even when the underling category is Set.
+Kleisli Composition is assocatiive with identity η --which coincide, for the identity monad,
+to the usual composition and identity laws of functions--
+and μ = Id ◇ Id and we have the fusion laws:
++ (f ◇ g) ∘ h = f ◇ (g ∘ h)     -- ◇-∘ mutual associtivity
++  (f ∘ g) ◇ h = f ◇ (T g ∘ h)  -- ∘-◇ fusion
++ T f ∘ (h ◇ k) = (T f ∘ h) ◇ k  -- T∘-◇ mutual associtvity
 
- 0. §3.15, page 110: First sentence after the functor instance should include a definite article; it should be
-    /in the language's/.
 
- 0. §3.16, page 115, line 10: Typo, /more that two/ should be /more than two/.
+If η is the identity of ◇, then what happens when we compose with Id?
+f ◇ Id accepts a value of type $T B$ that is passed to $f : T C ← B$,
+yielding an output of type $T\, C$. This construction is called /binding/:
+$>>=f \;=\; f ◇ Id$
 
- 0. §3.19, page 123, last paragraph, third line: Typo /such as discipline/ should be /such a discipline/.
+Expressed pointwise we get $x >>= f \;=\; (μ ∘ T f) x$ which is exactly $f\, x$ for
+the identity monad, so $>>=$ can be regarded as denoting /monadic function application/!
 
-** §2 FIX
++ (f ◇ g) a  =  do {b ← g a; f b}     =  g a >>= f
++ T f     x  =  do {a ←   x; η(f x)}  =  x   >>= η ∘ f   
 
- 0. §2.4, last line:  Should be /`natural'/ instead of /'natural'./
+  That is: map f = unpack x, apply f, pack result using η.
 
- 0. §2.5, exercise 2.1: Maybe place this at the end of §2.4 since
-      it's a problem on identity functions,
-      rather than at the end of §2.5 which is on constant functions.
++ x >>= f          =  do {a ← x; f x}
++ (x >>= g) >>= f  =  x >>= (f ◇ g)
 
- 0. §2.6, end: It's easy to see how monics generalise injective functions
-    but it's not as easy for the surjective-epic case. I've conjured up
-    the following explanation, which might be helpful to include.
-    #+BEGIN_QUOTE
- 
- #+BEGIN_EXPORT latex
- \eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
-   \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
- }
- #+END_EXPORT
+For enjoyable reading on monadic IO in Haskell see [18] chapter 18.
 
-    Intuitively, $h = k$ on all points of their source precisely when
-    they are equal on all image points of $f$, since $f$ being epic
-    means it outputs all values of their source.
-    #+END_QUOTE
+Adjunctions play a major role in [16]
 
- 0. §2.7, before equation 2.18:
-    I think you meant /pointfree/ not /pointwise/ as clearly 2.18 involves
-    no points.
+Neato: μ ∘ η = Id
 
- 0. §2.13, ×-fusion calculation: In the final hint, perhaps add /after (2.63)/
-    so that it is clear which /derived above/ law is being referenced
-    --since its name is in the surrounding text and may not be easy to locate.
+From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
+η = ⌈Id⌉ and μ = R⌊Id⌋.
 
- 0. §2.14, page 39, second paragraph: Typo /market/ should be /marked/.
- 0. §2.14, page 39, diagram: Typos, left arrow should be labelled /g/ not /f/,
-    and the right arrow should be labelled /h/ not /g/.
-
- 0. §2.14, exercise 2.21: It seems you have the accidental typos /λap/ appearing twice.
-
- 0. §2.15, second paragraph: For $f : B ← C × A$, the phrase /f c ∈ B/ is ill-typed
-    and it may be incorrect to say it, /f c/, /denotes a value of type B/.
-
- 0. §2.15, typing (2.81): The name /ap/ appears on the arrow, perhaps you do not want it appearing 
-    twice in one line like that.
-
- 0. §2.15, first paragraph after (2.81): Perhaps it may be better to use a definite article:
-    /Back to the generic binary operator/ rather than /Back to generic binary operator/.
-
- 0. §2.18, page 56: In the definition of type ~Point~, maybe mention that the Haskell ecosystem
-    uses distinct name-spaces for types and their constructors whence the overloading of ``Point''
-    is non-ambiguous.
-
- 0. §2.19, exercises 2.40: You have $\,.\, swap$ but you likely wanted to use a ~\cdot~ to obtain $·\, swap$.
 * COMMENT Old Category Theory Theorem List
 
 ** Category Theory Notation :latex:ignore:
@@ -2112,6 +2099,14 @@ The category theory is mostly implicit, but presented elegantly!
  Also $\transpose{\snd}$ is a constant function:
  \eqn{Oh₃}{ \transpose{\snd} ∘ f \eqs \transpose{\snd} }
  #+END_EXPORT
+
+
++ Absorption: gᴬ ∘ \transpose{h} = \transpose{g ∘ h}
+
+   Whence Closed definition: \transpose{g} = gᴬ ∘ \transpose{Id}.
+
++ Naturality: h ∘ \transpose{Id} = \transpose{Id} ∘ (hᴬ × Idₐ)
+
 * COMMENT Maybe move to a different project
   F-Algebras: “Recursion in the Pointfree Style”
 ** COMMENT §3 Recursion in the Pointfree Style
@@ -2342,7 +2337,6 @@ for(int j=0; j<n; j++)
  to identify and to reason about. Properties can be stated in clear-cut, one-line long
  equations which are easy to memorize. And diagrams such as (2.4) can be easily
  drawn which enable us to visualize maths in a graphical format.
-
 
 * COMMENT ToDo's
 Include:
