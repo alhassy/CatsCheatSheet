@@ -1,4 +1,7 @@
-module PathCat where
+-- This file has been extracted from https://alhassy.github.io/PathCat/
+-- Type checks with Agda version 2.6.0.
+
+mmodule PathCat where
 
 open import Level using (Level) renaming (zero to ℓ₀ ; suc to ℓsuc ; _⊔_ to _⊍_)
 
@@ -7,7 +10,7 @@ open import Data.Fin
   using (Fin ; toℕ ; fromℕ ; fromℕ≤ ; reduce≥ ; inject≤)
   renaming (_<_ to _f<_ ; zero to fzero ; suc to fsuc)
 open import Data.Nat
-open import Relation.Binary using (module DecTotalOrder)
+open import Relation.Binary using (mmodule DecTotalOrder)
 open import Data.Nat.Properties using(≤-decTotalOrder ; ≤-refl)
 open DecTotalOrder Data.Nat.Properties.≤-decTotalOrder
 
@@ -24,7 +27,7 @@ open import Relation.Binary.PropositionalEquality using (_≗_ ; _≡_)
            ; cong to ≡-cong ; cong₂ to ≡-cong₂ 
            ; subst to ≡-subst ; subst₂ to ≡-subst₂ ; setoid to ≡-setoid)
 
-module _ {i} {S : Set i} where
+mmodule _ {i} {S : Set i} where
     open import Relation.Binary.EqReasoning (≡-setoid S) public
 
 open import Agda.Builtin.String
@@ -105,7 +108,7 @@ MonSig : Signature
 MonSig = record { 𝒩 = 2 ; ar = 0 ,, 2 ,, nil }
 -- unit u : X⁰ → X and multiplication m : X² → X
 
-module _ where -- An anyonomous module for categorial definitions
+mmodule _ where -- An anyonomous mmodule for categorial definitions
     
  record Category {i j : Level} : Set (ℓsuc (i ⊍ j)) where
   infixr 10 _⨾_
@@ -154,7 +157,8 @@ module _ where -- An anyonomous module for categorial definitions
     ; rightId = ≡-refl
     }
 
- record Functor {i j k l} (𝒞 : Category {i} {j}) (𝒟 : Category {k} {l}) : Set (ℓsuc (i ⊍ j ⊍ k ⊍ l)) where
+ record Functor {i j k l} (𝒞 : Category {i} {j}) (𝒟 : Category {k} {l}) 
+  : Set (ℓsuc (i ⊍ j ⊍ k ⊍ l)) where
   private
     instance
       𝒞′ : Category ;  𝒞′ = 𝒞
@@ -171,7 +175,7 @@ module _ where -- An anyonomous module for categorial definitions
   functor_preserves-composition = comp
   functor_preserves-identities  = id
 
- open Functor using (obj ; mor ; functor_preserves-composition ; functor_preserves-identities) public
+ open Functor public hiding (id ; comp)
 
  NatTrans : ∀ {i j i’ j’}  ⦃ 𝒞 : Category {i} {j} ⦄ ⦃ 𝒟 : Category {i’} {j’} ⦄ 
             (F G : Functor 𝒞 𝒟) → Set (j’ ⊍ i ⊍ j)
@@ -298,7 +302,7 @@ module _ where -- An anyonomous module for categorial definitions
             (η {A} ⨾′ γ {A}) ⨾′ mor H f
           ∎)
 
- module graphs-as-functors where
+ mmodule graphs-as-functors where
 
   -- formal objects
   data 𝒢₀ : Set where E V : 𝒢₀
@@ -412,6 +416,20 @@ module _ where -- An anyonomous module for categorial definitions
  ∂ : ∀ {i j} → Functor (𝒞𝒶𝓉 {i} {j}) 𝒞𝒶𝓉
  ∂ = record { obj = _ᵒᵖ ; mor = opify ; id = ≡-refl ; comp = ≡-refl }
 
+ ah-yeah : ∀ {i j} (let Cat = Obj (𝒞𝒶𝓉 {i} {j}))
+     -- identity on objects cofunctor, sometimes denoted _˘
+     → (dual : ∀ (𝒞 : Cat) {x y : Obj 𝒞}  →  x ⟶ y ∶ 𝒞  →  y ⟶ x ∶ 𝒞)
+     → (Id˘ : ∀ ⦃ 𝒞 : Cat ⦄ {x : Obj 𝒞} → dual 𝒞 Id  ≡  Id {A = x})
+     → (⨾-˘ : ∀ ⦃ 𝒞 : Cat ⦄ {x y z : Obj 𝒞} {f : x ⟶ y} {g : y ⟶ z}
+            → dual 𝒞 (f ⨾ g ∶ 𝒞)  ≡  (dual 𝒞 g) ⨾ (dual 𝒞 f) ∶ 𝒞)
+     -- which is involutionary
+     → (˘˘ : ∀ ⦃ 𝒞 : Cat ⦄ {x y : Obj 𝒞} {f : x ⟶ y} → dual 𝒞 (dual 𝒞 f) ≡ f)
+     -- which is respected by other functors
+     → (respect : ⦃ 𝒞 𝒟 : Cat ⦄ {F : 𝒞 ⟶ 𝒟} {x y : Obj 𝒞} {f : x ⟶ y}
+                → mor F (dual 𝒞 f) ≡ dual 𝒟 (mor F f))
+     -- then
+     → ∂ ≅ Id within Func (𝒞𝒶𝓉 {i} {j}) 𝒞𝒶𝓉
+
  ah-yeah {i} {j} _˘ Id˘ ⨾-˘ ˘˘ respect = record
    { to = II
    ; from = JJ
@@ -442,6 +460,26 @@ module _ where -- An anyonomous module for categorial definitions
      JJ : NatTrans ⦃ 𝒞𝒶𝓉 {i} {j} ⦄ ⦃ 𝒞𝒶𝓉 ⦄ Id ∂
      JJ = J , (λ {𝒞} {𝒟} {F} → Jnat ⦃ 𝒞 ⦄ ⦃ 𝒟 ⦄ {F})
 
+ infix 5 _⊗_
+ _⊗_ : ∀ {i j i’ j’} → Category {i} {j} → Category {i’} {j’} → Category {i ⊍ i’} {j ⊍ j’}
+ 𝒞 ⊗ 𝒟 = record
+           { Obj = Obj 𝒞 × Obj 𝒟
+           ; _⟶_ = λ{ (A , X) (B , Y)  →  (A ⟶ B) × (X ⟶ Y) }
+           ; _⨾_ = λ{ (f , k) (g , l) → (f ⨾ g , k ⨾ l) }
+           ; assoc = assoc ≡×≡ assoc
+           ; Id = Id , Id
+           ; leftId = leftId ≡×≡ leftId
+           ; rightId = rightId ≡×≡ rightId
+           }
+           where
+             _≡×≡_ : ∀ {i j} {A : Set i} {B : Set j} {a a’ : A} {b b’ : B} → a ≡ a’ → b ≡ b’ → (a , b) ≡ (a’ , b’)
+             ≡-refl ≡×≡ ≡-refl = ≡-refl
+             instance
+               𝒞′ : Category
+               𝒞′ = 𝒞
+               𝒟′ : Category
+               𝒟′ = 𝒟
+
  Fst : ∀ {i j i’ j’} {𝒞 : Category {i} {j}} {𝒟 : Category {i’} {j’}} 
      → Functor (𝒞 ⊗ 𝒟) 𝒞
  Fst = record { obj = proj₁ ; mor = proj₁ ; id = ≡-refl ; comp = ≡-refl }
@@ -464,9 +502,9 @@ module _ where -- An anyonomous module for categorial definitions
              mor F (Id , f) 𝒵.⨾ mor F (Id , g)
            ∎) }
   where
-        module 𝒳 = Category 𝒳
-        module 𝒴 = Category 𝒴
-        module 𝒵 = Category 𝒵
+        mmodule 𝒳 = Category 𝒳
+        mmodule 𝒴 = Category 𝒴
+        mmodule 𝒵 = Category 𝒵
         funcify : (y : Obj 𝒴) → Functor 𝒳 𝒵
         funcify = λ Y → record {
             obj = λ X → obj F (X , Y)
@@ -497,10 +535,10 @@ module _ where -- An anyonomous module for categorial definitions
    {𝒳 : Category {ix} {jx}} {𝒴 : Category {iy} {jy}}
    (_⊕_ : Functor (𝒳 ⊗ 𝒴) 𝒟) (F : Functor 𝒞 𝒳) (G : Functor 𝒞 𝒴) → Functor 𝒞 𝒟
  pointwise {𝒞 = 𝒞} {𝒟} {𝒳} {𝒴} Bi F G =
-   let module 𝒳 = Category 𝒳
-       module 𝒴 = Category 𝒴
-       module 𝒞 = Category 𝒞
-       module 𝒟 = Category 𝒟
+   let mmodule 𝒳 = Category 𝒳
+       mmodule 𝒴 = Category 𝒴
+       mmodule 𝒞 = Category 𝒞
+       mmodule 𝒟 = Category 𝒟
    in record {
      obj = λ C → obj Bi (obj F C , obj G C)
    ; mor = λ {x y} x→y → mor Bi (mor F x→y , mor G x→y)
@@ -530,7 +568,7 @@ module _ where -- An anyonomous module for categorial definitions
    -- hence contravariant in ‘first arg’ and covaraint in ‘second arg’
  Hom {𝒞 = 𝒞} =
    let
-     module 𝒞 = Category 𝒞
+     mmodule 𝒞 = Category 𝒞
      instance 𝒞′ : Category ; 𝒞′ = 𝒞
      ⨾-cong₂ : ∀ {A B C : Obj 𝒞} {f : A 𝒞.⟶ B} {g g’ : B 𝒞.⟶ C}
              → g ≡ g’ → f 𝒞.⨾ g ≡ f 𝒞.⨾ g’
@@ -603,7 +641,7 @@ record Path₁ (n : ℕ) (G : Graph₀) : Set (ℓsuc ℓ₀) where
     edges     : Vec (E G) (suc n)
     coherency : {i : Fin n} → tgt G (lookup (` i) edges) ≡ src G (lookup (fsuc i) edges)
 
-module Path-definition-2 (G : Graph₀) where
+mmodule Path-definition-2 (G : Graph₀) where
   open Graph₀ G
 
   mutual
@@ -615,7 +653,7 @@ module Path-definition-2 (G : Graph₀) where
     head₂ (v !) = v
     head₂ (cons v e p s t) = v
 
-module Path-definition-3 (G : Graph) where
+mmodule Path-definition-3 (G : Graph) where
 
   open Graph G
 
@@ -648,7 +686,7 @@ module Path-definition-3 (G : Graph) where
       start  : head₃ path ≡ x
       finish : end₃ path  ≡ y
 
-module TypedPaths (G : Graph) where
+mmodule TypedPaths (G : Graph) where
 
   open Graph G hiding(V)
   open Graph   using (V)
@@ -737,8 +775,8 @@ module TypedPaths (G : Graph) where
       open TypedPaths ⦃...⦄
       open Category   ⦃...⦄
 
-      module 𝒞𝒶𝓉   = Category 𝒞𝒶𝓉
-      module 𝒢𝓇𝒶𝓅𝒽 = Category 𝒢𝓇𝒶𝓅𝒽
+      mmodule 𝒞𝒶𝓉   = Category 𝒞𝒶𝓉
+      mmodule 𝒢𝓇𝒶𝓅𝒽 = Category 𝒢𝓇𝒶𝓅𝒽
 
       id : ∀ ⦃ G ⦄ {x y} {p : x ⇝ y} 
         →   mor (𝒞𝒶𝓉.Id {𝒫₀ G}) p  ≡  mor (𝒫₁ (𝒢𝓇𝒶𝓅𝒽.Id)) p
@@ -751,14 +789,14 @@ module TypedPaths (G : Graph) where
       comp {p = x !} = ≡-refl
       comp {p = x ⟶[ e ]⟶ ps} = ⟶-≡ (comp {p = ps})
 
-module freedom (G : Obj 𝒢𝓇𝒶𝓅𝒽) {𝒞 : Category {ℓ₀} {ℓ₀} } where
+mmodule freedom (G : Obj 𝒢𝓇𝒶𝓅𝒽) {𝒞 : Category {ℓ₀} {ℓ₀} } where
 
   open TypedPaths G using (_! ; _⟶[_]⟶_ ;  _⇝_ ; _++_)
   open Category ⦃...⦄
 
-  module 𝒢𝓇𝒶𝓅𝒽 = Category 𝒢𝓇𝒶𝓅𝒽
-  module 𝒮ℯ𝓉 = Category (𝒮e𝓉 {ℓ₀})
-  module 𝒞 = Category 𝒞
+  mmodule 𝒢𝓇𝒶𝓅𝒽 = Category 𝒢𝓇𝒶𝓅𝒽
+  mmodule 𝒮ℯ𝓉 = Category (𝒮e𝓉 {ℓ₀})
+  mmodule 𝒞 = Category 𝒞
   instance 𝒞′ : Category ; 𝒞′ = 𝒞
 
   ι : G ⟶ 𝒰₀ (𝒫₀ G)
@@ -963,7 +1001,7 @@ module freedom (G : Obj 𝒢𝓇𝒶𝓅𝒽) {𝒞 : Category {ℓ₀} {ℓ₀}
       h
     ∎
 
-module _ {G H : Graph} {𝒞 𝒟 : Category {ℓ₀} {ℓ₀}} 
+mmodule _ {G H : Graph} {𝒞 𝒟 : Category {ℓ₀} {ℓ₀}} 
           (g : GraphMap G H) (F : Functor 𝒞 𝒟) where
 
   private
@@ -971,11 +1009,11 @@ module _ {G H : Graph} {𝒞 𝒟 : Category {ℓ₀} {ℓ₀}}
     lift = λ {A} {C} B → freedom.lift A {C} B
   open Category ⦃...⦄
 
-  module 𝒞     = Category 𝒞
-  module 𝒟     = Category 𝒟
-  module 𝒢𝓇𝒶𝓅𝒽 = Category 𝒢𝓇𝒶𝓅𝒽
-  module 𝒞𝒶𝓉   = Category (𝒞𝒶𝓉 {ℓ₀} {ℓ₀})
-  module 𝒮ℯ𝓉   = Category (𝒮e𝓉 {ℓ₀})
+  mmodule 𝒞     = Category 𝒞
+  mmodule 𝒟     = Category 𝒟
+  mmodule 𝒢𝓇𝒶𝓅𝒽 = Category 𝒢𝓇𝒶𝓅𝒽
+  mmodule 𝒞𝒶𝓉   = Category (𝒞𝒶𝓉 {ℓ₀} {ℓ₀})
+  mmodule 𝒮ℯ𝓉   = Category (𝒮e𝓉 {ℓ₀})
 
   naturality˘ : ∀ {K : Functor (𝒫₀ H) 𝒞} 
               →  lift˘ (𝒫₁ g 𝒞𝒶𝓉.⨾ K 𝒞𝒶𝓉.⨾ F)  ≡  (g 𝒢𝓇𝒶𝓅𝒽.⨾ lift˘ K 𝒢𝓇𝒶𝓅𝒽.⨾ 𝒰₁ F)
@@ -1029,9 +1067,9 @@ module _ {G H : Graph} {𝒞 𝒟 : Category {ℓ₀} {ℓ₀}}
   ; lfusion = λ {G H 𝒞 𝒟 f F K} → naturality˘ {G} {H} {𝒞} {𝒟} f K {F}
   ; rfusion = λ {G H 𝒞 𝒟 f k F} → naturality {G} {H} {𝒞} {𝒟} f F {k} }
   where
-    module _ {G : Graph} {𝒞 : Category} where open freedom G {𝒞} public
+    mmodule _ {G : Graph} {𝒞 : Category} where open freedom G {𝒞} public
 
-module folding (G : Graph) where
+mmodule folding (G : Graph) where
   open TypedPaths G
   open Graph G
                                               -- Given:
@@ -1073,7 +1111,7 @@ module folding (G : Graph) where
   fold-++ {g = g} _⊕_ {x = x} {p = .x ⟶[ e ]⟶ ps} unitl assoc =
     ≡-cong (λ exp → g x e ⊕ exp) (fold-++ _⊕_ {p = ps} unitl assoc) ⟨≡≡⟩ assoc
 
-module lists (A : Set) where
+mmodule lists (A : Set) where
 
   open import Data.Unit
 

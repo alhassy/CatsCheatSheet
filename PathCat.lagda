@@ -1,16 +1,13 @@
 #+TITLE: Graphs are to categories as lists are to monoids
-# TITLE: Graphs Are to Categories As Lists Are to Monoids
-#+DATE: 2018-12-01
+#+DATE: 2018-12-24
 #+AUTHOR: Musa Al-hassy
 #+EMAIL: alhassy@gmail.com
 #+DESCRIPTION: A fast-paced introduction to Category Theory based on the notion of graphs. Claims are proven in the Haskell-like proof assistant Agda.
 #+STARTUP: indent
 #+CATEGORIES: CategoryTheory
 #+OPTIONS: html-postamble:nil toc:nil d:nil
-#+IMAGE: ../assets/img/HeytingAlgebra.png
-#+SOURCE: ?????https://raw.githubusercontent.com/alhassy/LatticesCheatSheet/master/HeytingAlgebra.org
-#
-# Images need to be .png
+#+IMAGE: ../assets/img/PathCat.png
+#+SOURCE: https://raw.githubusercontent.com/alhassy/CatsCheatSheet/master/PathCat.lagda
 
 #+INCLUDE: ~/alhassy.github.io/content/MathJaxPreamble.org
 
@@ -20,21 +17,7 @@
 #
 # (preview-article)
 
-$$\def\foldr{\mathsf{foldr}}$$
-$$\def\edge{\mathsf{edge}}$$
-$$\def\Func{\mathsf{Func}}$$
-$$\def\Id{\mathsf{Id}}$$
-$$\def\src{\mathsf{src}}$$
-$$\def\tgt{\mathsf{tgt}}$$
-$$\def\obj{\mathsf{obj}}$$
-$$\def\mor{\mathsf{mor}}$$
-$$\def\natTo{\overset{.}{→}}$$
-$$\def\Obj{\mathsf{Obj}\,}$$
-$$\def\List{\mathsf{List}\,}$$
-
-#+INCLUDE: ~/alhassy.github.io/content/MathJaxPreamble.org
-
-* Abstract                                                      :ignore:
+* Abstract                                                           :ignore:
 #+BEGIN_CENTER
 *Abstract*
 #+END_CENTER
@@ -77,6 +60,22 @@ As such, /everything is an adjunction/ is an apt slogan for us :-)
 # tools used there are indirect reasoning (yoneda) and galois connections (adjunctions).
 
 # \tableofcontents
+
+#+BEGIN_SRC :tangle "PathCat.agda" 
+-- This file has been extracted from https://alhassy.github.io/PathCat/
+-- Type checks with Agda version 2.6.0.
+#+END_SRC
+* Photograph Credit                                                  :ignore:
+
+#+LaTeX: \iffalse
+#+HTML: <small> <center>
+( Photo by
+[[https://unsplash.com/@miklevasilyev][Mikhail Vasilyev]]
+on [[https://unsplash.com/][Unsplash]] )
+#+HTML: </center> </small>
+#+LaTeX: \fi
+
+# "Download free do whatever you want high-resolution photos from Unsplash."
 
 * Introduction
 :PROPERTIES:
@@ -319,21 +318,23 @@ However, we must admit that a slight downside of typed approach,
 --the two-piece definition-- is now
 we will need to use the following ‘shifting’ combinators: 
 They shift, or slide, the edge-types.
-\begin{spec}
--- ~\>>~ , casting
+
+#+BEGIN_EXAMPLE
+-- casting
 _⟫_ : ∀{x y y’} → x ⟶ y → y ≡ y’ → x ⟶ y’
 e ⟫ ≡-refl = e
 
 -- Casting leaves the edge the same, only type information changes
 ≅-⟫ : ∀{x y y’} {e : x ⟶ y} (y≈y’ : y ≡ y’) → e ≅ e ⟫ y≈y’
 ≅-⟫ ≡-refl = ≅-refl
-\end{spec}
+#+END_EXAMPLE
+
 Such is the cost of using a typed-approach.
 
 Even worse, if we use homogeneous equality then we’d have the ghastly operator
-\begin{spec}
+#+BEGIN_EXAMPLE
 ≡-⟫ : ∀{x y y’} {e : x ⟶ y} (y≈y’ : y ≡ y’) → e ⟫ y≈y’ ≡ (≡-subst (λ ω → x ⟶ ω) y≈y’ e)
-\end{spec}
+#+END_EXAMPLE
 
 However, it seems that our development does not even make use of these.
 Lucky us! However, it is something to be aware of.
@@ -564,7 +565,7 @@ _⟶’_ : ∀ {a} (AA BB : Σ X ∶ Set a • X) → Set _
         f’ (inj₁ x) with f x
         ...~ inj₁ x₁ = inj₁ x₁
         ...~ inj₂ tt = inj₂ tt
-\end{spec}
+#+END_EXAMPLE
 :End:
 
 ** COMMENT arrows in a particular category :syntax:
@@ -577,7 +578,7 @@ _⟶’_ : ∀ {a} (AA BB : Σ X ∶ Set a • X) → Set _
  -- open Category ⦃...⦄ hiding (Obj)
  open Category using (Id)
 
-** Familiar ~𝒮e𝓉~-tings
+** Familiar ~𝒮ℯ𝓉~-tings
 Let us give some elementary examples of the notion of a category to exhibit its ubiquity.
 
 *** 𝒮ℯ𝓉's
@@ -722,7 +723,8 @@ Now the notion of structure-preserving maps, for categories, is just that of gra
 but with attention to the algebraic portions as well.
 
 #+BEGIN_SRC agda
- record Functor {i j k l} (𝒞 : Category {i} {j}) (𝒟 : Category {k} {l}) : Set (ℓsuc (i ⊍ j ⊍ k ⊍ l)) where
+ record Functor {i j k l} (𝒞 : Category {i} {j}) (𝒟 : Category {k} {l}) 
+  : Set (ℓsuc (i ⊍ j ⊍ k ⊍ l)) where
   private
     instance
       𝒞′ : Category ;  𝒞′ = 𝒞
@@ -739,7 +741,7 @@ but with attention to the algebraic portions as well.
   functor_preserves-composition = comp
   functor_preserves-identities  = id
 
- open Functor using (obj ; mor ; functor_preserves-composition ; functor_preserves-identities) public
+ open Functor public hiding (id ; comp)
 #+END_SRC
 
 For a functor ~F~, it is common practice to denote both ~obj F~ and ~mor F~ by ~F~ and this is usually
@@ -758,13 +760,13 @@ Recall the category ~Div~ for constructive divisibility relationships ;-)
 ** COMMENT Synonyms for Readability
 
 While we’re close to the definition, let’s introduce some synonyms for readability
-\begin{spec}
+#+BEGIN_EXAMPLE
  module _ {i j k l} {𝒞 : Category {i} {j}} {𝒟 : Category {k} {l}} {F : Functor 𝒞 𝒟}
   where
 
     functors-preserve-composition = Functor.comp F
     functors-preserve-identities  = Functor.id F
-\end{spec}
+#+END_EXAMPLE
 We make these as synonyms rather than names in the record since we do not want to use such lengthy
 identifiers when realizing functor instances. The reason we do not make these synonyms in the
 record but rather in a public dummy module is to make the functor in question found from the ambient
@@ -920,7 +922,7 @@ Afterwards we give another example of a functor that says how every category can
 construed as a graph.
 
 First the category of /smaller/ categories,
-#+BEGIN_CENTER
+#+BEGIN_QUOTE
 ~𝒞𝒶𝓉~ is a category of kind ~(ℓsuc m, ℓsuc m)~, where ~m = i ⊍ j~, and its objects
 are categories of kind ~(i , j)~ and so it is not an object of itself.
 
@@ -928,12 +930,12 @@ Thank-you Russel and friends!
 
 ( You may proceed to snicker at the paradoxical and size issues encountered 
   by those who use set theory.
-  ---then again, I’ve never actually learned, nor even attempted to learn, 
+  ---Then again, I’ve never actually learned, nor even attempted to learn, 
   any ‘‘formal set theory’’;
   what I do know of set theory is usually couched in the language of type theory; 
   I heart [[https://www.springer.com/gp/book/9780387941158][LADM]]!
 )
-#+END_CENTER
+#+END_QUOTE
 
 #+BEGIN_SRC agda
  instance
@@ -999,10 +1001,10 @@ Some things to note,
 ** ~𝒢𝓇𝒶𝓅𝒽~
 In a nearly identical way, just ignoring the algebraic datum, we can show that
 ~Graph~'s with ~GraphMap~'s form a graph
-\begin{spec}
+#+BEGIN_EXAMPLE
   𝒢𝓇𝒶𝓅𝒽 : Category
   𝒢𝓇𝒶𝓅𝒽 = {! exercise !}
-\end{spec}
+#+END_EXAMPLE
 
 :Solution:
 #+BEGIN_SRC agda
@@ -1172,19 +1174,19 @@ and friends and so such functions are natural transformations by default!
 [[http://ecee.colorado.edu/ecen5533/fall11/reading/free.pdf][Theorems for free!]]
 
 For example,
-\begin{spec}
+#+BEGIN_EXAMPLE
 -- Let 𝒦 x y ≔ Id {x} for morphisms, and 𝒦 x y ≔ x for objects.
 
 size : ∀ {X} → List X → 𝒦 ℕ X   
 size [x₁, …, xₙ] = n
-\end{spec}
+#+END_EXAMPLE
 is a polymorphic function and so naturality follows and is easily shown --show it dear reader!
 So we have always have
 \[List\; f \;⨾\; size \quad=\quad size\]
 Since ~𝒦 ℕ f = Id~, then by extensionality: ~size : List ⟶̇ 𝒦~.
 :Solution:
 for any ~f : A ⟶ B~ we have
-\begin{spec}
+#+BEGIN_EXAMPLE
   (List f ⨾ size) [x₁, …, xₙ]
 =
   size (List f [x₁, …, xₙ])
@@ -1200,21 +1202,21 @@ for any ~f : A ⟶ B~ we have
   (𝒦 ℕ f) (size [x₁ , …, xₙ])
 =  
   (size ⨾ 𝒦 ℕ f) [x₁, …, xₙ]
-\end{spec}
+#+END_EXAMPLE
 Hence, ~size : List ⟶̇ 𝒦~.
 :End:
 
 On the other hand, the polymorphic function
-\begin{spec}
+#+BEGIN_EXAMPLE
 whyme : ∀ {X} → List X → 𝒦 Int X
 whyme {X} [x₁,…,xₙ] = If X = ℕ then 1729 else n
-\end{spec}
+#+END_EXAMPLE
 is not natural: The needed equation ~F f ⨾ η {B} = η {A} ⨾ G f~
 for any ~f : A → B~ breaks as witnessed by
 ~f = (λ x → 0) : ℝ → ℕ~ and any list with length ~n ≠ 1729~,
 and this is easily shown --do so!
 :Solution:
-\begin{spec}
+#+BEGIN_EXAMPLE
   (List f ⨾ whyme) [x₁, …, xₙ]
 =
   whyme (List f [x₁, …, xₙ])
@@ -1232,7 +1234,7 @@ and this is easily shown --do so!
   (𝒦 ℕ f) (whyme [x₁, …, xₙ])
 =
   (whyme ⨾ 𝒦 Int f) [x₁, …, xₙ]
-\end{spec}
+#+END_EXAMPLE
 :End:
 
 One might exclaim, /hey! this only works ’cuz you’re using Ramanujan’s taxi-cab number!/
@@ -1266,13 +1268,13 @@ Notice that that monomorphic functions are always natural!
 
 Given ~m : X → Y~ we can consture this as ~m : ∀ {Z} → 𝒦 X Z → 𝒦 Y Z~ and then we obtain
 naturality: given ~f : A → B~,
-\begin{spec}
+#+BEGIN_EXAMPLE
   m ⨾ 𝒦 X f
 = m ⨾ Id
 = m
 = Id ⨾ m
 = 𝒦 Y f ⨾ m
-\end{spec}
+#+END_EXAMPLE
 
 this is probably less insightful, and probably a damaging observation...
 
@@ -1281,7 +1283,7 @@ this is probably less insightful, and probably a damaging observation...
 The idea that a natural transformation cannot make reference to the type variable at all can be
 seen by yet another example.
 
-\begin{spec}
+#+BEGIN_EXAMPLE
   data 𝟙 : Set where ★ : 𝟙
 
   -- Choice function: For any type X, it yields an argument of that type.
@@ -1289,14 +1291,14 @@ seen by yet another example.
 
   nay : ∀ {X} → X → X
   nay {X} _ = ε X
-\end{spec}
+#+END_EXAMPLE
 
 Now naturality $\Id \, f ⨾ nay_B \;=\; nay_A ⨾ \Id \, f$ breaks as witnessed by
 $f \;=\; (λ _ → εℕ + 1) \;:\; 𝟙 → ℕ$ --and provided $εℕ ≠ 0$, otherwise
 we could use an $f$ with no fix points.
 
 :Solution:
-\begin{spec}
+#+BEGIN_EXAMPLE
   Id f ⨾ nay {ℕ}
 =
   f ⨾ (λ _ → ε ℕ)
@@ -1308,7 +1310,7 @@ we could use an $f$ with no fix points.
   λ _ → f (ε 𝟙)
 =
   nay {𝟙} ⨾ Id f
-\end{spec}
+#+END_EXAMPLE
 :End:
 
 From this we may hazard the following:
@@ -1534,7 +1536,7 @@ For example, I want to define a transformation $\mathsf{List} ⟶̇ \mathsf{List
     /free monoid functor/ with notations $A* \;=\; \List A \;=\; ℒ\, A$.
     
     Loosely put,
-    \begin{spec}
+    #+BEGIN_EXAMPLE
     ℒ₀    :  Monoid → Set
     ℒ₀ M  =  Σ n ∶ ℕ • ∏ i : 1..n • 𝒰 M   -- finite sequences of elements from M
     
@@ -1543,19 +1545,18 @@ For example, I want to define a transformation $\mathsf{List} ⟶̇ \mathsf{List
     
     fold : ∀ {M : Monoid} → ℒ₀ M → 𝒰₀ M
     fold {(M, ⊕, e)} = λ (n , x₁, …, xₙ) → x₁ ⊕ ⋯ ⊕ xₙ
-    \end{spec}
+#+END_EXAMPLE
     
     --The reader would pause to consider implementing this formally using Agda's ~Data.Fin~ and ~Data.Vec~ ;-)--
 
     Now for any monoid homomorphism ~h~, applying induction, yields
-    \begin{spec}
+    #+BEGIN_EXAMPLE
     h₀(x₁ ⊕ ⋯ ⊕ xₙ)  =  h₀ x₁ ⊕ ⋯ ⊕ h₀ xₙ  where  h₀ = 𝒰 (h₀, prf) = 𝒰 h
-    \end{spec}
+#+END_EXAMPLE
     Which is easily seen to be just naturality -- if we use backwards composition $f ⨾ g \;=\; g ∘ f$ --
-    \begin{spec}
+    #+BEGIN_EXAMPLE
     𝒰 h ∘ fold {M}  =  fold {N} ∘ ℒ h
-    \end{spec}
-
+#+END_EXAMPLE    
     Woah!
     
 + Every operation in any multisorted algebraic structure gives a natural transformation ::
@@ -1606,11 +1607,11 @@ a category?
 They do!
 However, we leave their definition to the reader ---as usual, if the reader is ever so desperate
 for solutions, they can be found as comments in the unruliness that is the source file.
-\begin{spec}
+#+BEGIN_EXAMPLE
  instance
   Func       :  ∀ {i j i’ j’} (𝒞 : Category {i} {j}) (𝒟 : Category {i’} {j’}) → Category _
   Func 𝒞 𝒟  =  {! exercise !}
-\end{spec}
+#+END_EXAMPLE
 
 + A hint: The identity natural transformation is the obvious way to get from $F\, X$ to $F\, X$,
   for any $X$ given $F$ ---well the only way to do so, without assuming anything else about the
@@ -1673,10 +1674,10 @@ functors and possibly adding some coherence laws.
 There are people who like to make a show about how ‘big’ 𝒞𝒶𝓉 or ~Func 𝒞 𝓓~ are;
 these people adhere to something called ‘set theory’ which is essentialy type theory but
 ignoring types, loosely put they work only with the datatype
-\begin{spec}
+#+BEGIN_EXAMPLE
 data SET : Set where
   Elem : ∀ {A : Set} → A → SET
-\end{spec}
+#+END_EXAMPLE
 Such heathens delegate types-of-types into ‘classes’ of ‘small’ and ‘big’ sets and it’s not
 uniform enough for me.
 Anyhow, such people would say that functor categories ‘‘cannot be constructed (as sets)’’ unless
@@ -1764,22 +1765,22 @@ Of course a formal justification is obtained by showing
     from :: ~h : f ⟶’ g ⇒ (h, Id) : f ⟶ g~.
     
     Rid ::
-    \begin{spec}
+    #+BEGIN_EXAMPLE
         (h , k) : f ⟶ g
     ⇒  h : f ⨾ k ⟶’ g
     ⇒ (h, Id) : f ⨾ k ⟶ g
     ≡ (h , k) : f ⟶ g
-    \end{spec}
+    #+END_EXAMPLE
     where the equivalence is just
    ~(h,k) ∈ f ⟶ g ⇔ (h , Id) ∈ (f ⨾ k) ⟶ g~.
     
     Lid ::
-    \begin{spec}
+    #+BEGIN_EXAMPLE
        h : f ⟶’ g
     ⇒ (h, Id) : f ⟶ g
     ⇒ h : f ⨾ Id ⟶’ g
     ≡ h : f ⟶’ g
-    \end{spec}
+    #+END_EXAMPLE
     
     Of course none of this is formal(ly in Agda) and so should be taken with great precaution!
     ---since it may be all wrong!
@@ -2060,10 +2061,10 @@ reversing arrows: $(A ⟶_{𝒞ᵒᵖ} B) \;≔\; (B ⟶_𝒞 A)$, then necessar
 $(f ⨾_{𝒞ᵒᵖ} g) \;≔\; g ⨾_𝒞 f$.
 A ‘contravariant functor’, or ‘cofunctor’, is a functor F from an opposite category and so
 there is a reversal of compositions: $F(f \,⨾\, g) \;=\; F g \,⨾\, F f$.
-\begin{spec}
+#+BEGIN_EXAMPLE
  _ᵒᵖ : ∀ {i j} → Category {i} {j} → Category
  𝒞 ᵒᵖ = {! exercise !}
-\end{spec}
+#+END_EXAMPLE
 :Solution:
 #+BEGIN_SRC agda
  _ᵒᵖ : ∀ {i j} → Category {i} {j} → Category {i} {j}
@@ -2171,7 +2172,7 @@ Conjecture: Assuming categories are equipped with a contravariant involutionary 
 that is identity on objects, we can show that the identity functor is naturally isomorphic 
 to the opposite functor.
 
-\begin{code} 
+#+BEGIN_SRC agda
  ah-yeah : ∀ {i j} (let Cat = Obj (𝒞𝒶𝓉 {i} {j}))
      -- identity on objects cofunctor, sometimes denoted _˘
      → (dual : ∀ (𝒞 : Cat) {x y : Obj 𝒞}  →  x ⟶ y ∶ 𝒞  →  y ⟶ x ∶ 𝒞)
@@ -2185,11 +2186,10 @@ to the opposite functor.
                 → mor F (dual 𝒞 f) ≡ dual 𝒟 (mor F f))
      -- then
      → ∂ ≅ Id within Func (𝒞𝒶𝓉 {i} {j}) 𝒞𝒶𝓉     
-\end{code}     
-
-\begin{spec}
+#+END_SRC
+#+BEGIN_EXAMPLE
  ah-yeah = {! exercise !}
-\end{spec}
+#+END_EXAMPLE
 :Solution:
 #+BEGIN_SRC agda
  ah-yeah {i} {j} _˘ Id˘ ⨾-˘ ˘˘ respect = record
@@ -2288,13 +2288,13 @@ For any two categories 𝒞 and 𝒟 we can construct their ‘product’ catego
 $𝒞 ⊗ 𝒟$ whose objects and morphisms are pairs with components from 𝒞 and 𝒟:
 $\Obj\, (𝒞 ⊗ 𝒟) \;\;=\;\; \Obj\, 𝒞 \,×\, \Obj\, 𝒟$ and
 $(A , X) ⟶_{𝒞 ⊗ 𝒟} (B , Y) \;\;=\;\; (A ⟶_𝒞 B) \,×\, (X ⟶_𝒟 Y)$.
-\begin{spec}
+#+BEGIN_EXAMPLE
  -- we cannot overload symbols in Agda and so using ‘⊗’ in-place of more common ‘×’.
  _⊗_ : ∀ {i j i’ j’} → Category {i} {j} → Category {i’} {j’} → Category
  𝒞 ⊗ 𝒟 = {! exercise !}
-\end{spec}
+#+END_EXAMPLE
 :Solution:
-\begin{code}
+#+BEGIN_SRC agda
  infix 5 _⊗_
  _⊗_ : ∀ {i j i’ j’} → Category {i} {j} → Category {i’} {j’} → Category {i ⊍ i’} {j ⊍ j’}
  𝒞 ⊗ 𝒟 = record
@@ -2314,7 +2314,7 @@ $(A , X) ⟶_{𝒞 ⊗ 𝒟} (B , Y) \;\;=\;\; (A ⟶_𝒞 B) \,×\, (X ⟶_𝒟
                𝒞′ = 𝒞
                𝒟′ : Category
                𝒟′ = 𝒟
- \end{code}
+#+END_SRC
 :End:
 
 Observe that in weaker languages, a category is specified by its objects, morphisms, and composition
@@ -2369,14 +2369,14 @@ As expected, we have projections,
 For types we have \[ (𝒳 × 𝒴 ⟶ 𝒵) \quad≅\quad (𝒳 ⟶ 𝒵 ^ 𝒴) \quad≅\quad (𝒴 ⟶ 𝒵 ^ 𝒳)\]
 Since categories are essentially types endowed with nifty structure,
 we expect it to hold in that context as well.
-\begin{spec}
+#+BEGIN_EXAMPLE
   -- Everyone usually proves currying in the first argument,
   -- let’s rebel and do so for the second argument
  curry₂ : ∀ {ix jx iy jy iz jz}
           {𝒳 : Category {ix} {jx}} {𝒴 : Category {iy} {jy}} {𝒵 : Category {iz} {jz}}
         → Functor (𝒳 ⊗ 𝒴) 𝒵 → Functor 𝒴 (Func 𝒳 𝒵)
  curry₂ = {! exercise !}
-\end{spec}
+#+END_EXAMPLE
 :Solution:
 #+BEGIN_SRC agda
  curry₂ : ∀ {ix jx iy jy iz jz} ⦃ 𝒳 : Category {ix} {jx} ⦄ ⦃ 𝒴 : Category {iy} {jy} ⦄ ⦃ 𝒵 : Category {iz} {jz} ⦄
@@ -2427,14 +2427,14 @@ we expect it to hold in that context as well.
 ** Pointwise extensions and the hom functor
 Just as addition can be extended to number-valued functions pointwise, $f + g \;≔\; λ x → f x + g x$,
 we can do the same thing with functors.
-\begin{spec}
+#+BEGIN_EXAMPLE
  -- For bifunctor ‘⊕’ and functors ‘F, G’, we have a functor ‘λ x → F x ⊕ G x’
  pointwise : ∀ {ic jc id jd ix jx iy jy}
    {𝒞 : Category {ic} {jc}} {𝒟 : Category {id} {jd}} {𝒳 : Category {ix} {jx}} {𝒴 : Category {iy} {jy}}
    → Functor (𝒳 ⊗ 𝒴) 𝒟 → Functor 𝒞 𝒳 → Functor 𝒞 𝒴
    → Functor 𝒞 𝒟
  pointwise = {! exercise !}
-\end{spec}
+#+END_EXAMPLE
 :Solution:
 #+BEGIN_SRC agda
  pointwise : ∀ {ic jc id jd ix jx iy jy} {𝒞 : Category {ic} {jc}} {𝒟 : Category {id} {jd}}
@@ -2725,7 +2725,7 @@ Unfolding it, we have
 This is easier for verifying an adjunction, while the former is easier for remembering and understanding what an adjunction actually is.
 
 :RecallingTypes:
-\begin{spec}
+#+BEGIN_EXAMPLE
   Hom : {𝒞 : Category {ℓ₀} {ℓ₀} } → Functor (𝒞 ᵒᵖ ⊗ 𝒞) 𝒮e𝓉
   Y : ∀ {𝒞 𝒟} → Functor (𝒞 ⊗ 𝒟) 𝒟
   X : ∀ {𝒞 𝒟} → Functor (𝒞 ⊗ 𝒟) 𝒞
@@ -2737,7 +2737,7 @@ This is easier for verifying an adjunction, while the former is easier for remem
   X : 𝒞 ᵒᵖ × 𝒟 ⟶ 𝒞 ᵒᵖ
   X ⨾ F : 𝒞 ᵒᵖ × 𝒟 ⟶ 𝒟
   Y : 𝒞 ᵒᵖ × 𝒟 ⟶ 𝒟
-\end{spec}
+#+END_EXAMPLE
 :End:
 
 As the slogan goes ‘adjunctions are everywhere’.
@@ -2805,7 +2805,7 @@ complicated object.
 (Feel ‘free’ to stop squinting your eyes)
  
 
-For futher reading consider reading the adjoint article at [[http://www.comicbooklibrary.org/articles/Left_adjoint][the combic book library]]
+For futher reading consider reading the adjoint article at [[http://www.comicbooklibrary.org/articles/Left_adjoint][the comic book library]]
 and for more on the adjective ‘forgetful’ see [[https://ncatlab.org/nlab/show/forgetful+functor][ncatlab]] or [[http://mathworld.wolfram.com/ForgetfulFunctor.html][mathworld]]
 A nice list of common free objects can be found on [[https://en.wikipedia.org/wiki/Free_object#List_of_free_objects][wikipedia]].
 
@@ -2823,7 +2823,7 @@ free functor for the forgetful 𝒰 defined above from 𝒞𝒶𝓉 to 𝒢𝓇�
 
 ** COMMENT Free first-order logics                               :Abandoned:
 
-\begin{spec}
+#+BEGIN_EXAMPLE
 module RSD where
 
   data 𝟙 : Set where ⋆ : 𝟙
@@ -2869,7 +2869,7 @@ module RSD where
       ε = app u []
       _·_ : (l r : Term MonSig X MyVars) → Term MonSig X MyVars
       _·_ = λ l r → app m (l ,, r ,, [])
-\end{spec}
+#+END_EXAMPLE
 * Designing Paths
 :PROPERTIES:
 :header-args: :tangle "PathCat.agda" 
@@ -3061,12 +3061,12 @@ a connected b  ≡  (a ⇝ b) ⊎ (b ⇝ a)  --  path “between” a and b; not
 Such a transformation means we can realise vertices as connected components and this suggests
 taking ~βG : 𝒱G → 𝒦G~ which takes a vertix to the connected-component βlock that contains it.
 Then given graph map ~f : G ⟶ H~,
-\begin{spec}
+#+BEGIN_EXAMPLE
   𝒱 f ⨾ βG
 ≡ λ a → the block containing fᵥ a
 ≡ λ a → 𝒦f (the block containg a)
 ≡ βH ⨾ 𝒦f
-\end{spec}
+#+END_EXAMPLE
 :End:
 
   yeah!
@@ -3309,10 +3309,10 @@ vertices to vertices and edges to paths of length 1.
 Given a graph map $f$, following the list-analagoue of $[a₁, …, aₖ] \;↦\; f\, a₁ ⊕ ⋯ ⊕ f\, aₖ$
 we attempt to lift the map onto paths by taking the edges $e₁, …, eₖ$ of a path
 to a morphism $\edge\, f\, e₁ ⨾ ⋯ ⨾ \edge\, f\, eₖ$.
-That is,
-\[\text{Path:}\; x_0 \xrightarrow{e_1} x_1 \xrightarrow{e_2} x_2 \xrightarrow{e_3} ⋯ \xrightarrow{e_k} x_k \]
-Is lifted to the composition of
-\[\text{Morpisms:}\; \mathsf{ver}\, f\, x_0 \xrightarrow{\edge\, f\, e_1} 
+That is, a path of the form
+\[x_0 \xrightarrow{e_1} x_1 \xrightarrow{e_2} x_2 \xrightarrow{e_3} ⋯ \xrightarrow{e_k} x_k \]
+Is lifted to the composition of morphisms
+\[\mathsf{ver}\, f\, x_0 \xrightarrow{\edge\, f\, e_1} 
    \mathsf{ver}\, f\, x_1 \xrightarrow{\edge\, f\, e_2} 
    \mathsf{ver}\, f\, x_2 \xrightarrow{\edge\, f\, e_3} ⋯ \xrightarrow{\edge\, f\, e_k} 
    \mathsf{ver}\, f\, x_k \]
@@ -3435,10 +3435,10 @@ To talk of equations, we need appropriate equalities.
 #+END_SRC
 
 Spelled-out:
-\begin{spec}
+#+BEGIN_EXAMPLE
 _≋_ {G} {H} f g = Σ veq ∶ (∀ {v} → obj f v ≡ obj g v) •
   (∀ {x y e} → mor g {x} {y} e ≡ ≡-subst₂ (λ a b → Category._⟶_ H a b) veq veq (mor f e))
-\end{spec}
+#+END_EXAMPLE
 
 #+BEGIN_SRC agda
 -- Since equality of functors makes use of ~subst~s all over the place, we will need
@@ -3484,7 +3484,7 @@ the right of an arrow at the cost of it (and the arrow) changing.
 
 A few healthy exercises,
 
-\begin{spec}
+#+BEGIN_EXAMPLE
   lift˘ : Functor 𝒫G 𝒞 → GraphMap G (𝒰₀ 𝒞)
   lift˘ F = ι ⨾g 𝒰₁ F  --  i.e., record {ver = obj F , edge = mor F ∘ edge ι}
 
@@ -3493,7 +3493,7 @@ A few healthy exercises,
 
   lid : ∀{F : Functor 𝒫G 𝒞} → lift (lift˘ F) ≡ F
   lid = {! exercise !}
-\end{spec}
+#+END_EXAMPLE
 
 One can of course obtain these proofs from the other ones without recourse to definitions,
 however for comprehension one would do well to prove them from first principles.
@@ -3952,15 +3952,19 @@ I had fun writing this up & I hope you enjoy it too :-)
   The diligent reader may be interested to know that Maarten Fokkinga has written a very
   accessible and [[http://maartenfokkinga.github.io/utwente/mmf92b.pdf][gentle introduction to category theory using the calculational approach]].
 
+#+HTML: <small>
+#+BEGIN_CENTER
 ( This article is not yet ‘done’, but good enough for now. )
+#+END_CENTER
+#+HTML: </small>
 
-* COMMENT Setoid Approach :solutions:
+* COMMENT Setoid Approach                                         :solutions:
 Herein are the solutions to a setoid approach going all the way to the
 lifting of graphmaps to functors.
 
 I wrote this rushedly; very rough solutions.
 
-\begin{spec}
+#+BEGIN_EXAMPLE
 module _ where -- category definitions
  record Category’ {i j k : Level} : Set (ℓsuc (i ⊍ j ⊍ k)) where
   infixr 10 _⨾_
@@ -4171,7 +4175,7 @@ module freedom’ (G : Obj 𝒢𝓇𝒶𝓅𝒽) {𝒞’ : Category’ {ℓ₀}
   property’ : ∀{f : G ⟶ (Functor’.obj’ 𝒰’) 𝒞’} → Category’._≈_ 𝒢𝓇𝒶𝓅𝒽’ f (ι’ ⨾’ (Functor’.mor’ 𝒰’) (lift’ f))
   property’ {f} = ≡-refl , {!now need to add setoid structure to graphs!}
 -}
-\end{spec}
+#+END_EXAMPLE
 
 * COMMENT Random thoughts on: Relations ≅ Graph Paths
 Can we turn any relation into a category? Well we know that preorder relations yield categories,
@@ -4184,9 +4188,9 @@ provable, respectively.
 
 (As it stands, this relation is precicely a graph-path!
 If we want a relation in the traditional sense of ordered pairs, then we want a simple-graph.
-\begin{spec}
+#+BEGIN_EXAMPLE
 simple : ∀ {x y} (p q : R x y) → p ≡ q    -- at most one edge between any two pair
-\end{spec}
+#+END_EXAMPLE
 )
 
 
@@ -4199,12 +4203,12 @@ mention how intervals a..b are realised in the cat, say via hom??
 ]]
 
 Then, ~≤R~ is a partial order.
-\begin{spec}
+#+BEGIN_EXAMPLE
 data _≤R : X → X → Set where
   embed : ∀ {x y} → R x y → x ≤R y                      -- existing edges
   refl  : ∀ {x} → x ≤R x                                 -- empty path
   trans : ∀ {x y z} → x ≤R y → y ≤R z → x ≤R z         -- path concatenation
-\end{spec}
+#+END_EXAMPLE
 Observe that ~embed~ says that the order ~≤R~ contains ~R~. 
 
 (~≤R~ is also known as the "reachiability poset of R" ??)
@@ -4217,14 +4221,14 @@ the ‘multiplication’ operation since ~Rⁿ⁺¹ x y ⇔ Σ a,b ∶ ℕ • a
 ---or so I claim!
 
 For example, if ~R = { (1,2) , (3,4) }~ then
-\begin{spec}
+#+BEGIN_EXAMPLE
 ≤R =
 {
   (1,2) , (3,2),               -- embed
   (1,1), (2,2), (3,3),         -- refl
   -- trans gives no new pairs
 }
-\end{spec}
+#+END_EXAMPLE
 An example algorithm for finding the transitive closure is Warshall’s algorithm.
 
 Notice that if ~R~ reflexive or transitive, then we do not have uniqunenss of proofs for
@@ -4236,7 +4240,7 @@ adjunctin to this claim o mine? That is, functors from this free cat correspond 
 homomorphisms?? Consider consulting Schmidt and Strohnelin.
 
 Is this is the least preorder relation on R?
-\begin{spec}
+#+BEGIN_EXAMPLE
 suppose ⊑ is a reflexive relation that contains R, then
 
 given p : x ≤R y  --ignoring transitivity
@@ -4256,7 +4260,7 @@ Case p = trans q r, where q : x ≤R y, r : y ≤R z, Then by induction we have 
 
 Thus, ≤R is the least preorder containing R!! Woah! Awesome!
 
-\end{spec}
+#+END_EXAMPLE
 
 
 Every preorder can be obtained as the closure of its Hasse/covers relation:
@@ -4275,11 +4279,10 @@ If we take ~R = { (i, i+1) ∣ i ∈ 0..n-1} ~
 then ~≤R~ is the free graph on ~ℙₙ~, right??
 
 moreover it is a total order: we can show
-\begin{spec}
+#+BEGIN_EXAMPLE
 total : ∀ {x y} → x ≤R y ⊎ y ≤R x
 antisym : ∀ {x y} → x ≤R y → y ≤R x → x ≡ y
-\end{spec}
-
+#+END_EXAMPLE 
 Also such categories of paths are known as simplicies??
 
 \url{https://ncatlab.org/nlab/show/simplex+category}
