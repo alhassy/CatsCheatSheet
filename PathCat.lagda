@@ -2,7 +2,8 @@
 #+DATE: 2018-12-24
 #+AUTHOR: Musa Al-hassy
 #+EMAIL: alhassy@gmail.com
-#+DESCRIPTION: A fast-paced introduction to Category Theory based on the notion of graphs. Claims are proven in the Haskell-like proof assistant Agda.
+#+DESCRIPTION: A fast-paced introduction to Category Theory based on the notion of graphs.
+#+DESCRIPTION: Claims are proven in the Haskell-like proof assistant Agda.
 #+STARTUP: indent
 #+CATEGORIES: CategoryTheory
 #+OPTIONS: html-postamble:nil toc:nil d:nil
@@ -22,7 +23,7 @@
 *Abstract*
 #+END_CENTER
 Numbers are the lengths of lists which are the flattenings of trees which are
-the spannings of graphs. Incidentally, the previous sentence could be rephrased:
+the spannings of graphs.
 Unlike the first three, graphs have /two/ underlying types of interest
 --the vertices and the edges-- and it is getting to grips with this complexity
 that we attempt to tackle by considering their ‘algebraic’ counterpart: Categories.
@@ -30,14 +31,13 @@ that we attempt to tackle by considering their ‘algebraic’ counterpart: Cate
 # trees are just those graphs for which arbitrary points are connected by a unique undirected path.
 
 In our exploration of what graphs could possibly be and their relationships to lists are,
-we shall /mechanise/ or /implement/ our claims since there will be many details and it is easy
+we shall /mechanise,/ or /implement,/ our claims since there will be many details and it is easy
 to make mistakes --moreover as a self-learning project, I'd feel more confident to make
 *bold* claims when I have a proof assistant checking my work ;-)
 
 Assuming slight familiarity with the Agda programming language, we motivate the need for
 basic concepts of category theory with the aim of discussing adjunctions with
 a running example of a detailed construction and proof of a free functor.
-
 Moreover, the article contains a host of ~exercises~ whose solutions can be found in the
 literate source file. Raw Agda code can be found [[https://github.com/alhassy/CatsCheatSheet/blob/master/PathCat.agda][here.]]
 
@@ -84,12 +84,12 @@ on [[https://unsplash.com/][Unsplash]] )
 
 ** Motivation                                                       :ignore:
 
-Lists give free monoids $ℒ\, A = (List A, ++, [])$
+Lists give free monoids $ℒ\, A = (\List\, A, +\!+, [])$
 ---a monoid $𝒮 = (S, ⊕, 0_⊕)$ is a triple consisting of a set $S$ with a binary operation 
 $⊕$ on it that is associative and has a unit, $0_⊕$.
 That it is ‘free’ means that to define a structure-preserving map between monoids
-$(List\, A, ++, []) \,⟶\, (S, ⊕, 0_⊕)$ it suffices to only provide a map between their
-carriers $List\, A → S$ ---freedom means that plain old maps between types freely,
+$(\List\, A, +\!+, []) \,⟶\, (S, ⊕, 0_⊕)$ it suffices to only provide a map between their
+carriers $\List\, A → S$ ---freedom means that plain old maps between types freely,
 at no cost or effort, give rise to maps that preserve monoid structure.
 Moreover, the converse also holds and in-fact we have a bijection:
 \[
@@ -176,8 +176,8 @@ module _ {i} {S : Set i} where
 We intend our proofs to be sequences of formulae interleaved with
 justifications for how the formulae are related. At times, the justifications
 are by definition and so may be omitted, but we may want to mention them
-for presentational --pedagogical?-- purposes. Hence, we introduce the following
-the combinator ~lhs ≡⟨" by definition of something "⟩′ rhs~.
+for presentational --pedagogical?-- purposes. Hence, we introduce the
+combinator notation ~lhs ≡⟨" by definition of something "⟩′ rhs~.
 # --note that this combinator is intended to only be used in calculations.
 
 #+BEGIN_SRC agda
@@ -246,7 +246,7 @@ record _𝒢⟶₀_ (G H : Graph₀) : Set₁ where
     src-preservation : ∀ e → src(H) (edge e) ≡  vertex (src(G) e)
     tgt-preservation : ∀ e → tgt(H) (edge e) ≡  vertex (tgt(G) e)
 #+END_SRC
-( The fancy 𝒢 and ⟶ are obtained in Agda input mode by ~\McG~ and ~\-->~, respectively.)
+( The fancy 𝒢 and ⟶ are obtained in Agda input mode by ~\McG~ and ~\-->~, respectively. )
 
 This is a bit problematic in that we have two proof obligations and at a first glance it is not
 at all clear their motivation besides ‘‘structure-preserving’’.
@@ -274,7 +274,7 @@ record GraphMap (G H : Graph) : Set₁ where
       _⟶g_ = Graph._⟶_ G
       _⟶h_ = Graph._⟶_ H
     field
-      ver  : V(G) → V(H)                                   -- vertex morphism
+      ver  : V(G) → V(H)                                -- vertex morphism
       edge : {x y : V(G)} → (x ⟶g y) → (ver x ⟶h ver y) -- arrow preservation
 
 open GraphMap
@@ -284,10 +284,10 @@ Note ~edge~ essentially says that ~mor~ ‘shifts’, or ‘translates’, types
 ~x ⟶g y~ into types ~ver x ⟶h ver y~.
 
 While equivalent, this two-piece definition is preferable over the four-piece one given
-earlier since it means less proof-obligation and less constructions in general, but the same
+earlier since it means less proof-obligations and less constructions in general, but the same
 expressiblity. Yay!
 
-Before move on, let us give an example of a simple chain-graph.
+Before we move on, let us give an example of a simple chain-graph.
 For clarity, we present it in both variations.
 #+BEGIN_SRC agda
 -- embedding: j < n ⇒ j < suc n
@@ -306,7 +306,7 @@ This' an example of a ‘forgetful functor’, keep reading!
     }
 #+END_SRC
 That is, we have ~n+1~ vertices named ~0, 1, …, n~ and ~n~ edges named ~0, 1, …, n-1~
-with one typing-axiom being ~j : j ⟶ (j+1)~. Alternatively,
+with one typing axiom being ~j : j ⟶ (j+1)~. Alternatively,
 
 #+BEGIN_SRC agda
 [_] : ℕ → Graph
@@ -314,18 +314,18 @@ with one typing-axiom being ~j : j ⟶ (j+1)~. Alternatively,
 #+END_SRC
 
 ** Types Require Casting
-However, we must admit that a slight downside of typed approach, 
+However, we must admit that a slight downside of the typed approach
 --the two-piece definition-- is now
-we will need to use the following ‘shifting’ combinators: 
-They shift, or slide, the edge-types.
+we may need to use the following ‘shifting’ combinators: 
+They shift, or slide, the edge types.
 
 #+BEGIN_EXAMPLE
 -- casting
-_⟫_ : ∀{x y y’} → x ⟶ y → y ≡ y’ → x ⟶ y’
+_⟫_ : ∀{x y y’} →  (x ⟶ y) → (y ≡ y’) → (x ⟶ y’)
 e ⟫ ≡-refl = e
 
 -- Casting leaves the edge the same, only type information changes
-≅-⟫ : ∀{x y y’} {e : x ⟶ y} (y≈y’ : y ≡ y’) → e ≅ e ⟫ y≈y’
+≅-⟫ : ∀{x y y’} {e : x ⟶ y} (y≈y’ : y ≡ y’) → e ≅ (e ⟫ y≈y’)
 ≅-⟫ ≡-refl = ≅-refl
 #+END_EXAMPLE
 
@@ -357,7 +357,7 @@ a fixed category instead, and so get a model in that category.
 | Interpretation |   | Semantics, i.e., an implementation |
 #+END_CENTER
 
-Formally, one sorted signatures are defined:
+Formally, one-sorted signatures are defined:
 #+BEGIN_SRC agda
 open import Data.Vec 
   using (Vec) 
@@ -390,18 +390,18 @@ interepreted as objects, arrows, and composable pairs of arrows-- and four funct
 has been declared without any properties besides those of typing. If we discard ~C, ⨾, id~ we
 then obtain the signature of graphs. Without knowing what categories are, we have seen that their
 signatures are similar to both the graph and monoid signatures and so expect their logics to
-also be similar. Moreover we now have two slogans,
+also be similar. Moreover we now have a few slogans,
 \[\color{green}{\text{Categories are precisely typed monoids!}}\]
 \[\color{green}{\text{Categories are precisely graphs with a monoidal structure!}}\]
 \[\color{green}{\text{Categories are precisely coherently constructive lattices!}}\]
 
-( The last one is completely unmotivated, but it's a good place for the slogan and
+( The last one is completely unmotivated from our discussion, but it's a good place for the slogan and
   will be touched on when we look at examples of categories. )
 
-A signature can be visualised in the plane by associting a dot for each sort symbol and an arrow
+A signature can be visualised in the plane by associating a dot for each sort symbol and an arrow
 for each function symbol such that the arrow has a tail from each sort in the associated function
 symbols source sorts list and the end of the arrow is the target sort of the sort symbol.
-That is, a signature can be visualed as a hyper-graph.
+That is, a signature can be visualised as a hyper-graph.
 
 + A signature whose function symbols each have only one sort symbol for source-sorts is called a
   ‘graph signature’ since it corresponds to ---or can be visualised as--- a graph.
@@ -412,8 +412,9 @@ That is, a signature can be visualed as a hyper-graph.
 +  A model of ~𝒢~ is nothing more than a graph morphism
    ~𝒢 ⟶ 𝒮e𝓉~, where ~𝒮e𝓉~ is the graph with vertices being sets and edges being functions.
 
-Notice that a ~Graph₀~ is precisely a model of the graph ~• ⇉ •~ of two vertices and two edges from
-the first to the second. We will return to this point ;-)
+Notice that a ~Graph₀~ is precisely a model of the graph ~• ⇉ •~, which consists of 
+two vertices and two edges from the first vertex to the second vertex. 
+We will return to this point ;-)
 
 Before we move on, it is important to note that a signature does not capture any
 constraints required on the symbols --e.g., a monoid is the monoid signature as well
