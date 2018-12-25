@@ -2,6 +2,10 @@
 
 This project is to contain a listing of common theorems in elementary category theory.
 
+**The repo contains other articles I've written on Category Theory;**
+**which may be read in a blog-format at:**
+<https://alhassy.github.io/blog/categories/#categorytheory>
+
 **The listing sheet, as PDF, can be found [here](https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf)**, 
 while below is an unruly html rendition.
 
@@ -10,24 +14,24 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 # Table of Contents
 
-1.  [Categories](#org5fbc147)
-2.  [“Gluing” Morphisms Together](#org4b09cbf)
-3.  [Functors](#org3703ded)
-4.  [Naturality](#org1255588)
-5.  [Adjunctions](#orgeac7e75)
-6.  [Constant Combinators](#org8d5e1fc)
-7.  [Monics and Epics](#org6cfdac6)
-8.  [Isos](#org8ea1080)
-9.  [Skolemisation](#org9fdc620)
-10. [Initiality](#orgc9de1a3)
-11. [Colimits](#org6e520b1)
-12. [Limits](#orgbe3875c)
-13. [Sums](#orgc95333b)
-14. [Products](#org1ded206)
-15. [Finitary Sums and Products](#orgddf32db)
-16. [Mixing products and coproducts](#orgf8cb2fc)
-17. [Coequaliser](#org48c5a0a)
-18. [References](#org491e92c)
+1.  [Categories](#org6ce4178)
+2.  [“Gluing” Morphisms Together](#org6501b00)
+3.  [Functors](#orga93653d)
+4.  [Naturality](#orgd05d8fe)
+5.  [Adjunctions](#org547447f)
+6.  [Constant Combinators](#org2994fb1)
+7.  [Monics and Epics](#org338f6ab)
+8.  [Isos](#org94389b2)
+9.  [Skolemisation](#orge24bc8e)
+10. [Initiality](#orgbc04450)
+11. [Colimits](#orgba92b29)
+12. [Limits](#org14fc834)
+13. [Sums](#orgca28f3e)
+14. [Products](#org19ab07a)
+15. [Finitary Sums and Products](#org97b9cb4)
+16. [Mixing products and coproducts](#org7a3bdb5)
+17. [Coequaliser](#orgb35f74a)
+18. [References](#orgb4c05f4)
 
 
 
@@ -40,7 +44,7 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 
 
-<a id="org5fbc147"></a>
+<a id="org6ce4178"></a>
 
 # Categories
 
@@ -109,7 +113,7 @@ of this.
 \newpage
 
 
-<a id="org4b09cbf"></a>
+<a id="org6501b00"></a>
 
 # “Gluing” Morphisms Together
 
@@ -170,7 +174,7 @@ A *transpose* arises when we need to combine a binary morphism with a unary morp
 \vspace{1em}
 
 
-<a id="org3703ded"></a>
+<a id="orga93653d"></a>
 
 # Functors
 
@@ -231,7 +235,7 @@ Category \(𝒜lℊ(F)\)
 -   A **bifunctor** from 𝒞 to 𝒟 is just a functor *𝒞² → 𝒟*.
 
 
-<a id="org1255588"></a>
+<a id="orgd05d8fe"></a>
 
 # Naturality
 
@@ -315,7 +319,7 @@ E.g., without even knowing the definitions, naturality of
 \fi
 
 
-<a id="orgeac7e75"></a>
+<a id="org547447f"></a>
 
 # Adjunctions
 
@@ -378,7 +382,7 @@ Also,
 -   Right adjoints preserve limits such as terminal objects and products.
 
 
-<a id="org8d5e1fc"></a>
+<a id="org2994fb1"></a>
 
 # Constant Combinators
 
@@ -410,7 +414,7 @@ are bridged explicitly by the constant functions:
 \newpage
 
 
-<a id="org6cfdac6"></a>
+<a id="org338f6ab"></a>
 
 # Monics and Epics
 
@@ -447,7 +451,7 @@ while any constant function \(\const{c}\) is not monic and is only
 epic when its target consists only of \(c\).
 
 
-<a id="org8ea1080"></a>
+<a id="org94389b2"></a>
 
 # Isos
 
@@ -505,7 +509,7 @@ are closed under composition.
 Monics to the initial object are necessarily isos! 
 
 
-<a id="org9fdc620"></a>
+<a id="orge24bc8e"></a>
 
 # Skolemisation
 
@@ -618,7 +622,7 @@ y = ℱ \kern0.5ex x
 \newpage
 
 
-<a id="orgc9de1a3"></a>
+<a id="orgbc04450"></a>
 
 # Initiality
 
@@ -643,7 +647,7 @@ in a suitable category, and the mediator \(⦇-⦈\) captures
 can be replaced by initiality arguments! Woah!
 
 
-<a id="org6e520b1"></a>
+<a id="orgba92b29"></a>
 
 # Colimits
 
@@ -679,7 +683,7 @@ Cocones under \(D\) correspond one-to-one with arrows from its colimit:
 \vspace{-0.8em}
 
 
-<a id="orgbe3875c"></a>
+<a id="org14fc834"></a>
 
 # Limits
 
@@ -694,7 +698,7 @@ As usual, there is the implicit well-formedness condition.
 \newpage
 
 
-<a id="orgc95333b"></a>
+<a id="orgca28f3e"></a>
 
 # Sums
 
@@ -741,7 +745,7 @@ For categories in which sums exist, we define for \(f : A → B\) and \(g : C �
 \newpage
 
 
-<a id="org1ded206"></a>
+<a id="org19ab07a"></a>
 
 # Products
 
@@ -796,7 +800,7 @@ For categories in which products exist, we define for \(f : A → B\) and \(g : 
 \newpage
 
 
-<a id="orgddf32db"></a>
+<a id="org97b9cb4"></a>
 
 # Finitary Sums and Products
 
@@ -814,7 +818,7 @@ Dually, the standard notation for the empty either \([]\) is \(?_C\).
 \eqn{Empty Exchange Rule}{ ⟨⟩_0 = []_1 }
 
 
-<a id="orgf8cb2fc"></a>
+<a id="org7a3bdb5"></a>
 
 # Mixing products and coproducts
 
@@ -841,7 +845,7 @@ Also, since constants ignore their inputs,
 \newpage
 
 
-<a id="org48c5a0a"></a>
+<a id="orgb35f74a"></a>
 
 # Coequaliser
 
@@ -877,7 +881,7 @@ A \emph{coequaliser} of \(f,g\) is an initial object in
 \fi
 
 
-<a id="org491e92c"></a>
+<a id="orgb4c05f4"></a>
 
 # References
 

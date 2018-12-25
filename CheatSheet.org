@@ -2494,6 +2494,10 @@ C-c C-c: evalute src block
      # OPTIONS: toc:nil
 
      This project is to contain a listing of common theorems in elementary category theory.
+
+     *The repo contains other articles I've written on Category Theory;*
+     *which may be read in a blog-format at:*
+     https://alhassy.github.io/blog/categories/#categorytheory
      
      *The listing sheet, as PDF, can be found [[https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf][here]]*, 
      while below is an unruly html rendition.
