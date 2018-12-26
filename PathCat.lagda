@@ -4,6 +4,8 @@
 #+EMAIL: alhassy@gmail.com
 #+DESCRIPTION: A fast-paced introduction to Category Theory based on the notion of graphs.
 #+DESCRIPTION: Claims are proven in the Haskell-like proof assistant Agda.
+# Numbers are the lengths of lists which are the flattenings of trees which are
+# the spannings of graphs.
 #+STARTUP: indent
 #+CATEGORIES: CategoryTheory
 #+OPTIONS: html-postamble:nil toc:nil d:nil
@@ -454,7 +456,7 @@ However, this setoid structure becomes a bit of a noise, without providing any r
 and the issues of equivalences will be a distraction from the prime focus. 
 Instead, for our two cases where we use point-wise propositional,
 we will postulate two forms of extensionality. Without question this is not a general approach
----then again, our aim is not to develope a library for category theory, which has already been
+---then again, our aim is not to develop a library for category theory, which has already been
 done so elegantly by Kahl who calls it the [[http://relmics.mcmaster.ca/RATH-Agda/RATH-Agda-2.0.0.pdf][RATH-Agda]] project.
 
 #+BEGIN_SRC agda
@@ -484,7 +486,7 @@ module _ where -- An anyonomous module for categorial definitions
  syntax cmp 𝒞 f g  =  f ⨾ g ∶ 𝒞    -- “ghost colon”
 #+END_SRC
 
-However, similar to nearly everything else in this document, we can leave the setoid-approach as an excercise
+However, similar to nearly everything else in this document, we can leave the setoid approach as an exercise
 for the reader, which of course has solutions being in the literate source.
 #
 # I've moved the setoid-based theory to an appendix at the end, 
@@ -500,7 +502,7 @@ otherwise one ought to read up on the [[https://ncatlab.org/nlab/show/principle+
 of using equality instead of equivalence relations so as to understand
 [[http://www.math.harvard.edu/~mazur/preprints/when_is_one.pdf][when one thing is really another]].
 
-The diligent reader may be interest to know that Maarten Fokkinga has written a very
+The diligent reader may be interested to know that Maarten Fokkinga has written a very
 [[http://maartenfokkinga.github.io/utwente/mmf92b.pdf][gentle introduction to category theory using the calculational approach]]; I highly recommend it!
 
 Anyhow, in place of strict equality, one uses categorical isomorphism instead.
@@ -520,14 +522,14 @@ Anyhow, in place of strict equality, one uses categorical isomorphism instead.
 
 Interestingly, we shall later encounter a rather large category named
 𝒞𝒶𝓉 possessing the special property of being a [[https://ncatlab.org/nlab/show/2-category][“2-Category”]]: 
-It has morphisms between objects, as expected, which are now called “1-morphism”,
-and it has morphisms between 1-morphisms, also called 2-morphisms.
+It has morphisms between objects, as expected, which are now called “1-morphisms”,
+and it has morphisms between 1-morphisms, also called “2-morphisms”.
 
 That is, it has morphisms between morphisms.
 
 Above we argued that equality should be deferred in favour of isomorphism
 at the morphism level. Hence, in a 2-Category, it is only reasonable to defer
-an equation involving 1-morphisms to be up to isomorphism of 2-morphisms
+an equation involving objects to be up to isomorphism of 2-morphisms
 ---this is then called an “equivalence”.
 #+BEGIN_EXAMPLE
 ℒHS ≃ ℛHS  ⇔  Σ F ∶ ℒHS ⟶ ℛHS • Σ G ∶ ℛHS ⟶ ℒHS • F ⨾ G ≅ G ⨾ F ≅ Id
@@ -541,14 +543,13 @@ equivalences rather than isomorphisms.
 
 # also :: every category is equivalent to a skeletal subcategory
 
-For example, let 𝒫𝒶𝓇 be the supercategory of 𝒮e𝓉 with morphisms being 
-‘partial functions’ ~(A ⟶ B) = (A → B + 𝟙)~ where the extra element of
- ~𝟙 = { * }~ represents ‘undefined’
+For example, let 𝒫𝒶𝓇 be the supercategory of 𝒮e𝓉 with morphisms being ‘partial functions’
+\newline ~(A ⟶ B) = (A → B + 𝟙)~ where the extra element of ~𝟙 = { * }~ represents ‘undefined’
 ---also known as the ~Partial~, ~Option~, or ~Maybe~ monads.
 Moreover, let 𝒫𝒮ℯ𝓉 be the category of sets with an elected point.
 Then, ~𝒫𝒶𝓇 ≃ 𝒫𝒮e𝓉~ is witnessed by ~(A ⟶ B) ↦ ( (A + 𝟙, *) ⟶ (B + 𝟙, *) )~
-and conversely ~( (A , a) ⟶ (B , b) ) ↦ ( A - a ⟶ B - b)~ where
-~X - x ≡ Σ y ∶ X • ¬(x ≡ y)~. Exercise: Work out the remaining details
+and conversely \newline ~( (A , a) ⟶ (B , b) ) ↦ ( A - a ⟶ B - b)~ where
+~X - x ≡ Σ y ∶ X • ¬(x ≡ y)~. \newline Exercise: Work out the remaining details
 for the equivalence.
 
 :ParSetup:
