@@ -1343,36 +1343,96 @@ Also, since constants ignore their inputs,
 # = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
 # = ⟨ [f, g], _k_ ⟩               constants
 
-* Monoidal Categories
+* space vfill                                                        :ignore:
+    \vfill
+* References
+
+#+LaTeX: {\color{white}.}
+
+[[https://maartenfokkinga.github.io/utwente/mmf92b.pdf][A Gentle Introduction to Category Theory ─ the calculational approach]]
+\newline
+by [[https://maartenfokkinga.github.io/utwente/][Maarten Fokkinga]]
+
+\vspace{1em}
+
+An excellent introduction to category theory with examples motivated from programming, in-particular
+working with sequences. All steps are shown in a calculational style --which Fokkinga
+has made [[https://ctan.org/tex-archive/macros/latex/contrib/calculation][available]] for use with LaTeX-- thereby making it suitable for self-study.
+
+\vspace{1em}
+
+Clear, concise, and an illuminating read.
+
+\vspace{1em}
+
+I've deviated from his exposition by using backwards composition `∘' rather
+than diagrammatic composition `;', as such my limit notation is his colimit notation! Be careful.
+
+\vspace{1em}
+
+I've also consulted the delightful read [[http://www4.di.uminho.pt/~jno/ps/pdbc_part.pdf][Program Design by Calculation]] of [[http://www4.di.uminho.pt/~jno/][José Oliveira]].
+
+\vspace{0.5em}
+
+Very accessible for anyone who wants an introduction to functional programming!
+The category theory is mostly implicit, but presented elegantly!
+
+\vspace{-0.5em}
+
+** COMMENT Further Reads
+
+ + Roland Backhouse
+ + Grant Malcolm
+ + Lambert Meertens
+ + Jaap van der Woude
+
+ + /Adjunctions/ by Fokkinga and Meertens
+
+ + Backus' FP and Iverson's APL are examples of pointfree programming
+   languages; look them up ;-)
+
+* space newpage                                                      :ignore:
+  \newpage
+* Monoidal and Closed Categories
+
+  #+latex: \def\eval{\mathsf{eval}}
 
   It is rather common that we have a notion of pairing for types for which there is a unit type.
   Examples include products with the initial object, sums with the terminal object, or for
   the category of endofunctors: Functor composition with the identity functor.
 
-  A /monoidal category/ /(𝒞, ⊗, I, α, λ, ρ)/ consists of a category 𝒞 with bifunctor /_⊗_ : 𝒞² → 𝒞/ and object /I : Obj 𝒞/
-  and three natural isomorphisms: The ‘associator’ /α_{A, B, C} : A ⊗ (B ⊗ C) ≅ (A ⊗ B) ⊗ C/ and the ‘unitors’
-  /λ_A : I ⊗ A ≅ A/ and /ρ_A : A ⊗ I ≅ A/ such that:
+  \room
+
+  A /monoidal category/ /(𝒞, ⊗, I, α, λ, ρ)/ consists of a category 𝒞 with bifunctor
+  \newline
+  $\_{}⊗\_{} : 𝒞^2 → 𝒞$ and object /I : Obj 𝒞/ and three natural isomorphisms:
+  \newline
+  The ‘associator’ /α_{A, B, C} : A ⊗ (B ⊗ C) ≅ (A ⊗ B) ⊗ C/ and
+  \newline
+  the ‘unitors’  /λ_A : I ⊗ A ≅ A/ and /ρ_A : A ⊗ I ≅ A/ such that:
 
   0. The order of re-parensization, outer-most or inner-most first, does not matter; i.e.,
      the two obvious maps witnessing $A ⊗ (B ⊗ (C ⊗ D)) → ((A ⊗ B) ⊗ C) ⊗ D$ are identical:
-     $α ∘ α \eqs α ⊗ \Id \;∘\; α \;∘\; \Id ⊗ α$.
+     $α_{A ⊗ B, C, D} \;∘\; α_{A, B, C ⊗ D} \eqs α_{A, B, C} ⊗ \Id_D \;∘\; α_{A, B ⊗ C, D}\;∘\; \Id_A ⊗ α_{B, C, D}$.
 
-  1. Unit elimination paths are the same even if unnecssarily associtivity is performed; i.e.,
+  1. Unit elimination paths are the same even if unnecessary associtivity is performed; i.e.,
      the two obvious maps witnessing $A ⊗ (I ⊗ B) → A ⊗ B$ are identical:
-     $\Id ⊗ λ \eqs (ρ ⊗ \Id) ∘ α$.
+     \newline
+     $\Id_A ⊗ λ_B \eqs (ρ_A ⊗ \Id_B) \;∘\; α_{A, I, B}$.
 
   Mnemonic: λ, ‘L’ambda, is for ‘L’eft unitor; ρ, ‘R’ho, is for ‘R’ight unitor.
 
-  An /exponential for Y/ is characterised by the following adjoint isomorphism
-  that is natural in /Y/ and /Z./
+  \room
 
+  An /exponential for Y/ is characterised by the following adjoint isomorphism
+  that is natural in /Y/ and /Z:/
   #+begin_export latex
   \eqn{Exponential-Char}{⌊\_{}⌋ \;:\; X ⊗ Y → Z \quad≅\quad X → (Y ➩ Z) \;:\; ⌈\_{}⌉ }
   #+end_export
 
-  + The counit $ev_Z = ⌈\Id_{Y ➩ z}⌉ : (Y ➩ Z) ⊗ Y → Z$ is called the /evaluation morphism./
+  \room
   + Note that ⌊_⌋ generalises currying, and ⌈_⌉ generalises uncurrying.
-
+  + The counit $\eval_Z = ⌈\Id_{Y ➩ z}⌉ : (Y ➩ Z) ⊗ Y → Z$ is called the /evaluation morphism./
 
 #+BEGIN_EXPORT latex
 \begineqns
@@ -1420,9 +1480,138 @@ By Yoneda,
 ≅ A → Z
 :End:
 
+  \room
+  When exponentials always exists, one refers to $\_{}➩\_{} : 𝒞 × 𝒞^{op} → 𝒞$
+  as /the internal hom/ and says /(𝒞, ⊗, I, α, λ, ρ, ➩)/ is a *closed monoidal category*.
+
+  \room
+  A *Cartesian-closed category* is a monoidal category where the tensor
+  is categorical product; i.e., it's a category with finite products and exponentials.
+  These categories are in correspondence with the models of simply typed
+  lambda-calculus. If it has all finite sums as well, then it's known as
+  *bicartesian closed*, in which case products necessarily distribute over sums.
+
+  \room
+  In the cartesian case, the /entire/ collection of morphisms $X → Y$
+  is encoded by the /single/ object $X ➩ Y$. That is, $X → Y \quad≅\quad 1 → (X ➩ Y)$ in 𝒮ℯ𝓉.
+
+  \room
+  # Claim:
+  # The following natural transformation is natural in $X$ and $Y$, and
+  # dinatural in $W$.
+  #
+  # Proof?
+
+  # Claim: The second one is dinatural in X; proof?
+
+  #+BEGIN_EXPORT latex
+  \begineqns
+
+  \eqn{Left-Internal-Yoneda}{
+  ⌈⌈ \eval \,∘\, \Id ⊗ \eval \,∘\, α^{-1}⌉⌉
+  \;:\; (X ➩ Y) → (W ➩ X) ➩ (W ➩ Y)
+  }
+
+  \eqn{Internal-Identities}{ ⌈ λ_X ⌉ \;:\; I → (X ➩ X) }
+  \endeqns
+#+END_EXPORT
+
+  \room
+  More generally, a *closed category* is a category 𝒞 with a bifunctor
+  $\_{}➩\_{}$ and two ‘coherent’ transformations as above.
+
+  :Left_Yoneda__Proof:
+
+    (X ➩ Y)  →  (W ➩ X) ➩ (W ➩ Y)
+  ≅ ((X ➩ Y) ⊗ (W ➩ X)) ⊗ W  →  Y
+
+  We now compose:
+
+    ((X ➩ Y) ⊗ (W ➩ X)) ⊗ W
+  ≅{ α^{-1}_{X ➩ Y, W ➩ X, W} }
+    (X ➩ Y) ⊗ ((W ➩ X) ⊗ W)
+  →{ Id ⊗ eval_W }
+    (X ➩ Y) ⊗ X
+  →{ eval_X }
+    Y
+
+ Whence,
+ ⌈ ⌈ eval_X ∘ \Id ⊗ eval_W ∘ α^{-1}_{X ➩ Y, W ➩ X, W} ⌉_{(X ➩ Y) ⊗ (W ➩ X),W, Y}
+ ⌉_{X ➩ Y, W ➩ X, W ➩ Y}
+ :End:
+
+  :Internal_Ids_Proof:
+
+    I → (X ➩ X)
+  ≅ I ⊗ X → X
+
+  Whence,
+    ⌈ λ_X ⌉ : I → (X ➩ X)
+  :End:
+
+  \room
+
+  It is common to notate $X ➩ Y, ⌊f⌋$ by $Y^X, \transpose{f}$.
+#+BEGIN_EXPORT latex
+\begineqns
+
+% i.e., g is the “transpose” of f.
+\eqn{Transpose-Char}{ f \,=\, \eval \,∘\, g ⊗ \Id \equivS \transpose{f} = g }
+
+\eqn{Transpose-Self}{ \eval \,∘\, \transpose{f} ⊗ \Id \eqs f}
+
+% \eqn{Transpose-Id}{\transpose{\eval} \eqs \Id}
+
+\eqn{Transpose-Fusion}{ \transpose{f} ∘ h \eqs \transpose{f \,∘\, h ⊗ \Id } }
+%
+% \eqn{CoEq-Unique}{x ∘ p = y ∘ p \impliesS x = y}
+%
+% \eqn{CoEq-Compose}{r╱q ∘ q╱p = r╱p}
+%
+\endeqns
+#+END_EXPORT
+:Transpose-char-pf:
+
+Given f : X ⊗ Y → Z
+show ∃₁ g : X → (Y ➩ Z) such that f = eval_A ∘ g ⊗ Id_A
+
+Indeed,
+
+  eval ∘ (g ⊗ Id)
+= ⌈ Id ⌉ ∘ (g ⊗ Id)
+= ⌈ Id ∘ g ⌉  , by rad-fusion
+= ⌈ g⌉
+
+Whence, f = ⌈g⌉ and so g = ⌊ f ⌋ lol
+
+:End:
+:Transpose-fusion-pf:
+
+Given f : X ⊗ A → B and h : Y → X,
+
+   ⌊f⌋ ∘ h = ⌊ f ∘ h ⊗ Id ⌋ : Y → A ➩ B
+
+By lad fusion, or:
+
+   ⌊f⌋ ∘ h = ⌊ ? ⌋
+≡  ⌊?⌋ = ⌊f⌋ ∘ h                      ;; symmetry of ‘=’
+≡  ? = eval ∘ (⌊f⌋ ∘ h) ⊗ Id          ;; transpose-char
+≡  ? = eval ∘ (⌊f⌋ ∘ h) ⊗ (Id ∘ Id)   ;; identities
+≡  ? = eval ∘ (⌊f⌋ ⊗ Id) ∘ (h ⊗ Id)   ;; bi-functoriality
+≡  ? = f ∘ (h ⊗ Id)                   ;; transpose-self
+
+:End:
+:Transpose-compose-pf:
+   ⌊f⌋ ∘ ⌊g⌋ = ⌊?⌋
+ ≡ ? = eval ∘ (⌊f⌋ ∘ ⌊g⌋) ⊗ Id
+ ≡ ? = eval ∘ (⌊f⌋ ∘ ⌊g⌋) ⊗ (Id ∘ Id)
+ ≡ ? = eval ∘ (⌊f⌋ ⊗ Id) ∘ (⌊g⌋ ⊗ Id)
+ ≡ ? = f ∘ (⌊g⌋ ⊗ Id)
+:End:
+
 # \newpage
 
-* Coequaliser
+* COMMENT Coequaliser
 
 # $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
 #
@@ -1490,52 +1679,6 @@ $\bigvee(f \,|\!|\, g)$.
 \fi
 
 # coEqualiser-Fusion, ``Composition into Numerator''
-* References
-
-#+LaTeX: {\color{white}.}
-
-[[https://maartenfokkinga.github.io/utwente/mmf92b.pdf][A Gentle Introduction to Category Theory ─ the calculational approach]]
-\newline
-by [[https://maartenfokkinga.github.io/utwente/][Maarten Fokkinga]]
-
-\vspace{1em}
-
-An excellent introduction to category theory with examples motivated from programming, in-particular
-working with sequences. All steps are shown in a calculational style --which Fokkinga
-has made [[https://ctan.org/tex-archive/macros/latex/contrib/calculation][available]] for use with LaTeX-- thereby making it suitable for self-study.
-
-\vspace{1em}
-
-Clear, concise, and an illuminating read.
-
-\vspace{1em}
-
-I've deviated from his exposition by using backwards composition `∘' rather
-than diagrammatic composition `;', as such my limit notation is his colimit notation! Be careful.
-
-\vspace{1em}
-
-I've also consulted the delightful read [[http://www4.di.uminho.pt/~jno/ps/pdbc_part.pdf][Program Design by Calculation]] of [[http://www4.di.uminho.pt/~jno/][José Oliveira]].
-
-\vspace{0.5em}
-
-Very accessible for anyone who wants an introduction to functional programming!
-The category theory is mostly implicit, but presented elegantly!
-
-\vspace{-0.5em}
-
-** COMMENT Further Reads
-
- + Roland Backhouse
- + Grant Malcolm
- + Lambert Meertens
- + Jaap van der Woude
-
- + /Adjunctions/ by Fokkinga and Meertens
-
- + Backus' FP and Iverson's APL are examples of pointfree programming
-   languages; look them up ;-)
-
 * COMMENT Why Monads Matter
 
 Suppose the output of the producer function $g$ is /T-times more elaborate/
