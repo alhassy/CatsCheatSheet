@@ -1,13 +1,11 @@
 #+TITLE: Reference Sheet for Elementary Category Theory
-# SUBTITLE: Cheat Sheet Template
-# DATE: << Spring 2018 >>
-# When we don't provide a date, one is provided for us.
 #+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]] @@latex:{\tiny\hspace{5.5em}\url{https://github.com/alhassy/CatsCheatSheet}}@@
 #+EMAIL: alhassy@gmail.com
-#+DESCRIPTION: This document is written by Musa Al-hassy for his learning in the spring of 2018.
+#+DESCRIPTION: Cheatsheet of category theory: Adjunctions, [co]limits, [co]products, [co]terminals, etc.
 #+STARTUP: hideblocks
 #+STARTUP: overview
-#+TODO: TODO { BEGIN-IGNORE(b) END-IGNORE(e) } | DONE(d)
+#+TODO: TODO | Space
+#+OPTIONS: d:nil
 
 # Important shortcuts:
 # f7 preview changes
@@ -18,9 +16,8 @@
 #+LATEX_HEADER: \usepackage{newunicodechar}
 #+LATEX_HEADER: \newunicodechar{﹔}{\ensuremath{\raisebox{0.4ex}{\tiny \,;\,}}}  %% forward composition ﹔
 
-#+LATEX_HEADER: \usepackage{calculation} 
+#+LATEX_HEADER: \usepackage{calculation}
 
-#+INCLUDE: ~/Dropbox/MyUnicodeSymbols.org
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
 
 # https://en.wikipedia.org/wiki/Linguistic_relativity#Programming_languages
@@ -41,17 +38,23 @@ However here are some reasons I've decided to switch to the traditional format:
 + I want to motivate the “calculational style”, so I do not want to deviate in orthogonal
   directions.
 
-* COMMENT TODO commit info                                           :ignore:
-
-#+begin_tiny
-  \vspace{-3.5em}
-  \hspace{19em} [[https://github.com/alhassy/CatsCheatSheet/blob/984969814031f56f53732419f297e668d94df863/CheatSheet.pdf][~commit 9849698~]]
-  \vspace{2em}
-#+end_tiny
-
 * LaTeX Setup :ignore:
 
-#+BEGIN_EXPORT latex
+# INCLUDE: /Users/musa/MyUnicodeSymbols/MyUnicodeSymbols.sty
+#+LATEX_HEADER: \usepackage{/Users/musa/MyUnicodeSymbols/MyUnicodeSymbols}
+# LATEX_HEADER: \usepackage[utf8]{inputenc}
+# LATEX_HEADER: \usepackage[T1]{fontenc}
+# LATEX_HEADER: \usepackage{amssymb}
+# LATEX_HEADER: \usepackage{amsmath}
+# LATEX_HEADER: \usepackage{newunicodechar}
+
+# ➩ \pointer from wasysym package
+#+LATEX_HEADER: \usepackage{wasysym}
+#+LATEX_HEADER: \newunicodechar{α}{\ensuremath{\alpha}}
+#+LATEX_HEADER: \newunicodechar{ρ}{\ensuremath{\rho}}
+#+LATEX_HEADER: \newunicodechar{➩}{\,{\text{\pointer}}\,}
+
+#+begin_export latex
 \def\providedS{ \qquad\Leftarrow\qquad }
 
 \def\impliesS{ \qquad\Rightarrow\qquad }
@@ -88,10 +91,6 @@ However here are some reasons I've decided to switch to the traditional format:
 \def\bin{I\!\!I}
 #+END_EXPORT
 
-
-* COMMENT TODO BEGIN_IGNORE  nope                                    :ignore:
-\iffalse
-
 * COMMENT Compact Notation
 
  Why do people look for compact notations? A compact notation leads to
@@ -111,23 +110,23 @@ A *category* 𝒞 consists of a collection of “objects” $\Obj\, 𝒞$,
   and a dependently-typed “composition” operation
   $\_∘\_ : ∀\{A \, B \, C : \Obj\} → \Hom(B,C) → \Hom(A,B) → \Hom(A,C)$
   that is required to be associative with $\Id$ as identity.
- 
+
 # For other approaches see https://tex.stackexchange.com/a/12035/69371
 #
 # As we can see from \eqref{defn-Type}\ldots
 #
 
 #+LaTeX: \room
- 
+
   It is convenient to define a pair of operations $\src, \tgt$ from morphisms to objects
   as follows:
 \begin{flalign*}
-    f : X \to_𝒞 Y \quad\equiv\quad \mathsf{src}\; f = X \;\land\; \mathsf{tgt}\; f = Y 
+    f : X \to_𝒞 Y \quad\equiv\quad \mathsf{src}\; f = X \;\land\; \mathsf{tgt}\; f = Y
    &&
    \tag*{$\src,\tgt$-Definition}
    \label{src-tgt-Definition}
 \end{flalign*}
- 
+
 Instead of $\Hom_𝒞$ we can instead assume primitive a ternary relation
 $\_:\_→_𝒞\_$ and regain $\Hom_𝒞$ precisely when the relation is functional
 in its last two arguments:
@@ -148,28 +147,37 @@ Here's an equivalence-preserving property that is useful in algebraic calculatio
 # connectives and quantifications and equality.
 #
 
-Example Categories.
-+ Matrices with real number values determine a category whose objects are the natural numbers,
+Examples:
+
++ [[https://arxiv.org/abs/1312.4818][Linear Algebra:]] Matrices with real number values determine a category whose objects are the natural numbers,
   morphisms $n → m$ are $n × m$ matrices, $\Id$ is the identity matrix, and composition
   is matrix multiplication.
+
 + Each preorder determines a category: The objects are the elements
   and there is a morphism $a → b$ named, say, “$(a, b)$”, precisely when $a \leq b$;
   composition boils down to transitivity of $\leq$.
+
++ Each monoid $(M, ⊕, e)$ gives rise to a category: The objects and the arrows
+  are both the elements of$M$, and $k : m → n \;≡\; k ⊕ m = n$.
+  E.g., $(ℕ, ×, 1)$ gives rise to a category whose products are gcd's
+  and so properties of products are thus gcd theorems!
+
 + Each digraph determines a category: The objects are the nodes
   and the paths are the morphisms typed with their starting and ending node.
   Composition is catenation of paths and identity is the empty path.
+
 + Suppose we have an `interface', in the programming sense,
   of constant, function, and relation symbols --this is also called a /signature/.
 
   Let 𝒯 be any collection of sentences in the first-order language of signature $\Sigma$.
   Then we can define a category $\mathsf{Mod}\,𝒯$ whose objects are
   implementations of interface $\Sigma$ satisfying constraints 𝒯, and whose morphisms
-  are functions that preserve the $\Sigma$ structure. 
+  are functions that preserve the $\Sigma$ structure.
   Ignoring 𝒯, gives us `functor algebras'.
 
   Particular examples include monoids and structure-preserving maps between them;
   likewise digraphs, posets, rings, etc and their homomorphisms.
-  
+
 \room
 
 Even when morphisms are functions, the objects need not be sets:
@@ -190,8 +198,8 @@ say $f : C ← B$ then “$f$ after $g$”, their /composite morphism/,
 $f ∘ g : C ← A$ can be defined. It “glues” $f$ and $g$ together,
 “sequentially”:
 #+BEGIN_EXPORT latex
-\eqn{composition-Type}{ 
-  C \overset{f}{\longleftarrow} % B \lands 
+\eqn{composition-Type}{
+  C \overset{f}{\longleftarrow} % B \lands
   B \overset{g}{\longleftarrow} A \impliesS
   C \overset{\;f ∘ g}{\longleftarrow} A
 }
@@ -214,7 +222,7 @@ A /split/ arises wherever two morphisms do not compose but share the same source
 
 A /product/ appears when there is no explicit relationship between the types of the morphisms.
   - We regard their sources as projections of a product, whence they can be seen as /splits/.
-  - This $(c, d) ↦ (f\, c, g\, d)$ corresponds to the “parallel” application of $f$ and $g$, 
+  - This $(c, d) ↦ (f\, c, g\, d)$ corresponds to the “parallel” application of $f$ and $g$,
      each with its /own/ input.
 
 \room
@@ -242,7 +250,7 @@ A /transpose/ arises when we need to combine a binary morphism with a unary morp
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{split-Type}{ A \overset{f}{\longleftarrow} C \overset{g}{\longrightarrow} B 
+\eqn{split-Type}{ A \overset{f}{\longleftarrow} C \overset{g}{\longrightarrow} B
  \hspace{5.8em}\equivS A × B \overset{\;\;⟨f,g⟩}{\xleftarrow{\hspace*{0.5cm}}} C }
 
 \eqn{$\times$-Type}{ A \overset{f}{\longleftarrow} C \lands B \overset{g}{\longleftarrow} D
@@ -255,13 +263,13 @@ A /transpose/ arises when we need to combine a binary morphism with a unary morp
  \hspace{2em} \equivS A + B \overset{f + g}{\xrightarrow{\hspace*{0.5cm}}} C + D }
 
 \eqn{transpose-Type}{
-  B \overset{f}{\longleftarrow}{C × A} 
+  B \overset{f}{\longleftarrow}{C × A}
   \hspace{6.9em} \equivS
   B^A \overset{\transpose{f}}{\longleftarrow} C
   }
 
 \eqn{transpose-combination}{
-  B \overset{f}{\longleftarrow}{C × A} 
+  B \overset{f}{\longleftarrow}{C × A}
   \lands
   C \overset{g}{\longleftarrow} D
   \impliesS
@@ -286,12 +294,12 @@ A *functor* /F : 𝒜 → ℬ/ is a pair of mappings, denoted by one name,
 from the objects, and morphisms, of 𝒜 to those of ℬ such that
 it respects the categorical structure:
 
-#+BEGIN_EXPORT latex 
+#+BEGIN_EXPORT latex
 {\setlength{\abovedisplayskip}{-1pt}\setlength{\belowdisplayskip}{-1pt}
 
 \eqn{functor-Type}{F\, f : F\, A \to_ℬ F\, B \quad\Leftarrow\quad f : A \to_𝒜 B }
 
-\eqn{Functor}{F\, \Id_A \;=\; \Id_{F\, A}} 
+\eqn{Functor}{F\, \Id_A \;=\; \Id_{F\, A}}
 
 \eqn{Functor}{F\, (f ∘ g) \;=\; F\, f \circ F\, g}
 
@@ -300,15 +308,14 @@ it respects the categorical structure:
 
 \vspace{1em}
 
-The two axioms are equivalent to the single statement that 
+The two axioms are equivalent to the single statement that
 /functors distribute over finite compositions, with $\Id$ being the empty composition:/
 \[ F(f_0 ∘ \cdots ∘ f_{n-1}) \;=\; F\, f_0 ∘ \cdots ∘ F\, f_{n-1} \]
 
 Use of Functors.
 + In the definition of a category, “objects” are “just things” for which no internal
   structure is observable by categorical means --composition, identities, morphisms, typing.
-
-  Functors form the tool to deal with “structured” objects
+  /Functors form the tool to deal with “structured” objects./
 
   Indeed in 𝒮ℯ𝓉 the aspect of a structure is that it has “constituents”, and that it is possible
   to apply a function to all the individual constituents; this is done by
@@ -326,7 +333,7 @@ Use of Functors.
 
 +  Even though /F A/ is still just an object, a thing with no observable internal structure, the
   functor properties enable to exploit the “structure” of /F A/ by allowing us to “apply”
-  a /f/ to each “constituent” by using /F f/.
+  an /f/ to each “constituent” by using /F f/.
 
 \vspace{1em}
 
@@ -335,10 +342,10 @@ Category $𝒜lℊ(F)$
   -- i.e., objects are 𝒟-arrows $F\, A → A$ --
   and /F/-homomorphisms as morphisms, and it inherits composition and identities from 𝒟.
 
-  #+BEGIN_EXPORT latex 
+  #+BEGIN_EXPORT latex
   {\setlength{\abovedisplayskip}{-1pt}\setlength{\belowdisplayskip}{-1pt}
 
-  \eqn{defn-Homomorphism}{f : ⊕ →_F ⊗ \quad\equiv\quad ⊕ ﹔ f = F\, f ﹔ ⊗ }
+  \eqn{defn-Homomorphism}{f : ⊕ →_F ⊗ \quad\equiv\quad f ∘ ⊕ = ⊗ ∘ F\, f}
 
   \eqn{id-Homomorphism}{ \Id : ⊕ →_F ⊕ }
 
@@ -359,7 +366,7 @@ Category $𝒜lℊ(F)$
 
 \vspace{1em}
 
-+ A *contravariant functor* 𝒞 → 𝒟 is just a functor /𝒞ᵒᵖ → 𝒟ᵒᵖ/.
++ A *contravariant functor* 𝒞 → 𝒟 is just a functor /𝒞ᵒᵖ → 𝒟/.
 + A *bifunctor* from 𝒞 to 𝒟 is just a functor /𝒞² → 𝒟/.
 
 * Naturality
@@ -378,7 +385,7 @@ and /F/ denotes the structure itself.
 #+LaTeX: \paragraph{\footnotesize \textnormal{Example Structures}}\label{SeqPair-is-Pair-Seq}
 \hspace{-1em}:
 $\bin$ is the structure of pairs, /Seq/ is the structure of sequences,
-/Seq Seq/ the structure of sequences of sequences, 
+/Seq Seq/ the structure of sequences of sequences,
 $\bin \, Seq$ the structure of pairs of sequences --which is naturally isomorphic
 to $Seq \, \bin$ the structure of sequences of pairs!--, and so on.
 
@@ -408,7 +415,10 @@ and functor /G/ at the target side.
 
 + One also says /ηₐ is natural in/ its parameter /a/.
 
-+ If we take $G = \Id$, then natural transformations $F →̣ \Id$ are precisely /F/-homomorphisms.
++ If we take $G = \Id$, then natural transformations are /F/-homomorphisms.
+   Thus, naturality is a kind of homomorphism condition.
+   # $F →̣ \Id$ are precisely /F/-homomorphisms.
+
 + Indeed, a natural transformation is a sort-of homomorphism in that the image of a morphism
   after reshaping is the same as the reshaping of the image.
 
@@ -444,22 +454,22 @@ Example natural transformations
 \room
 
 *Category ℱ𝓊𝓃𝒸(𝒞, 𝒟)*
-consists of functors /𝒞 → 𝒟/ as objects and natrual transformations between them as objects.
-The identity transformation is indeed an identity for transformation composition, which is associative. 
+consists of functors /𝒞 → 𝒟/ as objects and natural transformations between them as arrows.
+The identity transformation is indeed an identity for transformation composition, which is associative.
 
 \room
 
 *Heuristic* To prove $φ = φ₁ ∘ ⋯ ∘ φₙ : F →̣ G$ is a natural transformation, it suffices
 to show that each $φᵢ$ is a natural transformation.
 E.g., without even knowing the definitions, naturality of
-/tails = Seq rev ∘ inits ∘ rev/ can be proven --just type checking!
+/tails = Seq rev ∘ inits ∘ rev/ can be proven ---just type checking!
 # thanks to \eqref{ntrf-Compose}!
 
 \iffalse
  + Theorem \eqref{ntrf-Compose} renders proofs of semantic properties to be trivial type checking!
  + E.g., It's trivial to prove /tails = rev ﹔ inits ﹔ Seq rev/ is a natural transformation
    by type checking, but to prove the naturality equation by using the naturality equations of
-   /rev/ and /inits/ --no definitions required-- necessitates more writing, and worse: Actual thought! 
+   /rev/ and /inits/ ---no definitions required--- necessitates more writing, and worse: Actual thought!
 \fi
 
 * Adjunctions
@@ -520,9 +530,9 @@ now reads:
 #+END_EXPORT
 
 \room
-\vspace{1ex} 
+\vspace{1ex}
 Note that ⌈ is like `r' and the argument to ⌈⌉ must involve the /R/-ight adjoint in its type;
-# likewise for 
+# likewise for
 #+LaTeX: {\textbf L}ad takes morphisms involving the {\textbf L}eft adjoint ;)
 
 \room
@@ -552,7 +562,7 @@ the more complicated concrete issue via ⌊⌋, lad.
 
 \eqn{unit-Inverse}{ \Id = R ε ∘ η}
 
-\eqn{Inverse-counit}{ \Id = ε ∘ L η} 
+\eqn{Inverse-counit}{ \Id = ε ∘ L η}
 
 \vspace{2ex}
 The unit and counit can be regained from the adjunction inverses,
@@ -596,7 +606,6 @@ Also,
 + Left adjoints preserve colimits such as initial objects and sums.
 + Right adjoints preserve limits such as terminal objects and products.
 
-
 * Constant Combinators
 
 #+LaTeX: \def\const#1{ \underline{#1} }
@@ -620,19 +629,19 @@ $\K : 𝒞 → ℱ𝓊𝓃𝒸(𝒟,𝒞)$
 \room
 Sometimes it is convenient to notate $\const{c} = \K \, c$
 and refer to this as the /everywhere c/ operation.
-#+LaTeX: \eqn{constant-Defn}{\const{c}\, a = c}
+#+LaTeX: \eqn{constant-functor-Defn}{\const{c}\, a = c}
 
-The following property defines constant functions at the `pointfree level':
-#+LaTeX: \eqn{constant-Fusion}{\const{c} ∘ f = \const{c} }
+The following property defines constant functors at the `pointfree level':
+#+LaTeX: \eqn{constant-Fusion}{\const{c} ∘ F = \const{c} }
 
-Constant functions force any difference in behaviour for any two
-functions to disappear:
-#+LaTeX: \eqn{constant-Equality}{\const{c} ∘ f = \const{c} ∘ g}
+Constant functors force any difference in behaviour for any two
+functors to disappear:
+#+LaTeX: \eqn{constant-Equality}{\const{c} ∘ F = \const{c} ∘ G}
 
-Interestingly in 𝒮ℯ𝓉, composition and application
-are bridged explicitly by the constant functions:
+Interestingly, functor composition and application
+are bridged explicitly by the constant functor:
 #+BEGIN_EXPORT latex
-\eqn{Set-Bridge}{ f ∘ \const{c} = \const{f \, c}}
+\eqn{Functor-Bridge}{ F ∘ \const{c} = \const{F \, c}}
 #+END_EXPORT
 
 \newpage
@@ -640,7 +649,7 @@ are bridged explicitly by the constant functions:
 # Observe that /constant arrows that are epic necessarily target a terminal object./
 * Monics and Epics
 
-Identity functions and constant functions are limit points of the 
+Identity functions and constant functions are limit points of the
 functional spectrum with respect to information preservation.
 All the other functions are in-between: They “lose” some information,
 which is regarded as uninteresting for some reason.
@@ -660,7 +669,7 @@ Functions which do not confuse their inputs are called /monics/:
 They are “post-cancellable”:
 
 #+BEGIN_EXPORT latex
-\eqn{monic-Defn}{ f \; \mathsf{monic} \equivS 
+\eqn{monic-Defn}{ f \; \mathsf{monic} \equivS
   \left(∀ h,k \;•\; f ∘ h = f ∘ k \equivs h = k\right)
 }
 #+END_EXPORT
@@ -668,18 +677,18 @@ They are “post-cancellable”:
 Functions which do not ignore values of their target are called
 /epics/: They are “pre-cancellable”:
 #+BEGIN_EXPORT latex
-\eqn{epic-Defn}{ f \; \mathsf{epic} \equivS 
+\eqn{epic-Defn}{ f \; \mathsf{epic} \equivS
   \left(∀ h,k \;•\; h ∘ f = k ∘ f \equivs h = k\right)
 }
 #+END_EXPORT
 
 Intuitively, $h = k$ on all points of their source precisely when
-they are equal on all image points of $f$, since $f$ being epic means 
+they are equal on all image points of $f$, since $f$ being epic means
 it outputs all values of their source.
 
 \room
 
-It is easy to check that “the” identity function is monic and epic, 
+It is easy to check that “the” identity function is monic and epic,
 while any constant function $\const{c}$ is not monic and is only
 epic when its target consists only of $c$.
 
@@ -723,9 +732,9 @@ around is not true.
 \room
 
 Isomorphisms are very important because they convert data from one
-“format”, say $A$, to another format, say $B$, without losing 
+“format”, say $A$, to another format, say $B$, without losing
 information. So $f$ and $f˘$ are faithful protocols between the two
-formats $A$ and $B$. 
+formats $A$ and $B$.
 Of course, these formats contain the same “amount” of information
 although the same data adopts a “different” shape in each of them.
 ─c.f. \nameref{SeqPair-is-Pair-Seq}.
@@ -739,11 +748,11 @@ Finally, note that all classes of functions referred to so far
 ---identities, constants, epics, monics, and isos---
 are closed under composition.
 
-Monics to the initial object are necessarily isos! 
+Monics to the initial object are necessarily isos!
 # Simialr to the bottom of a poset.
 
 # \newpage.\newpage
-* COMMENT More Morphism Properties
+* COMMENT TODO More Morphism Properties
 
 # \NTHM{}{Monic}{ compositionally post-cancellable ---nearly the same formulation as injective! }
 
@@ -766,7 +775,7 @@ If a composition is epic then its last arrow is epic.
 If a property $P$ holds for precisely one class of isomorphic objects,
 and for any two objects in the same class there is precisely one
 isomorphism from one to the other, then we say that
-/the P-object is unique up to unique isomorphism/. 
+/the P-object is unique up to unique isomorphism/.
 For example, in 𝒮ℯ𝓉 the one-point set is unique up to a unique isomorphism,
 but the two-point set is not.
 
@@ -852,13 +861,13 @@ proof has the following format, or a circular implication thereof: For arbitrary
 
 * Initiality
 
-# Convenient definition: 
+# Convenient definition:
 An object /0 is initial/ if there's a mapping $⦇-⦈$, from objects to morphisms,
 such that \ref{initial-Char} holds; from which we obtain a host of useful corollaries.
 Alternative notations for $⦇ B ⦈$ are $\text{!`}_B$, or $⦇0 → B⦈$ to make the
 dependency on 0 explicit.
 
-#+BEGIN_EXPORT latex 
+#+BEGIN_EXPORT latex
 \begineqns
 
 \eqn{initial-Char}{ f : 0 → B \equivS f = ⦇ B ⦈ }
@@ -880,7 +889,7 @@ which are full subcategories of some category 𝒞:}
 % Recall: 𝒟 is a full-subcategory of 𝒞 means: 𝒟(x,y) = 𝒞(x,y) for x,y : Obj 𝒟.
 
 \vspace{2ex}
-{\tiny Provided 𝒟 is built on top of 𝒞; i.e., 𝒟-objects are composite entities in 𝒞: } 
+{\tiny Provided 𝒟 is built on top of 𝒞; i.e., 𝒟-objects are composite entities in 𝒞: }
 \eqn{initial-Type}{ B \text{ is an object in 𝒟 } \impliesS ⦇ B ⦈ \text{ is a morphism in 𝒞} }
 
 \endeqns
@@ -925,7 +934,7 @@ proof has the following format, or a circular implication thereof: For arbitrary
 # up to isomorphism and so I've opted out to naming a representative `0`. Dually, for final objects.
 # %
 # % See page 38, par 2.22 of Fokkinga's gentle introduction for a nice calculational proof.
-# 
+#
 
 \newpage
 
@@ -953,12 +962,12 @@ Each colimit is a certain initial object, and each initial object is a certain c
     #  ---in-fact it suffices to consider this as a graph homomorphism
     #  reifying the nodes and vertices of $\mathcal{D}$ as objects
     #  and morphisms of $\mathcal{A}$.
-    # 
+    #
 
     #  When giving $D$ and $\mathcal{D}$ via a diagram, as is done below in some
     #  example constructions, then $\mathcal{D}$ is just a subcategory and so
     #  $D$ is just the inclusion functor :-)
-    # 
+    #
 
 + Recall \nameref{constant-combinator} yielding a functor on objects ---$\const{C}\, x = C$ for objects $x$ and
   $\const{C}\, f = \Id_C$ for morphisms /f/--- and a natural transformation on arrows
@@ -968,7 +977,7 @@ Each colimit is a certain initial object, and each initial object is a certain c
   some object $C =: \tgt\, γ$, and a morphism from $γ$ to $δ$ is a 𝒞-morphism $x$ such that $\const{x} ∘ γ = δ$.
 
  /`Cones' sit upright on their base, $D$, on a table; `CoCones' sit upright on a co-table!/
- 
+
 + A /colimit for D/ is an initial object in $⋁ D$; which may or may not exist.
 
 \room
@@ -1032,7 +1041,7 @@ The following law confirms the choice of notation once more
 
 \vspace{2ex}
 The next law tells us that functors distribute over the ╱-notation
-provided the implicit well-formedness condition that 
+provided the implicit well-formedness condition that
 $Fγ$ is a colimit holds --clearly this condition is valid when $F$
 preserves colimits.
 
@@ -1064,7 +1073,7 @@ Dually, the category $⋀D$ has objects being “cones” $γ : \const{C} →̣ 
 is a 𝒞-object, and a morphism to $γ$ /from/ $δ$ is a 𝒞-morphism $x$ such that $γ ∘ \const{x} = δ$.
 In terms of 𝒞, /$γ : Obj(⋀ D)$ is a limit for $D$/ if there is a mapping $γ╲-$ such that
 the following ╲-Type and ╲-Char hold, from which we obtain a host of corollaries.
-As usual, there is the implicit well-formedness condition. 
+As usual, there is the implicit well-formedness condition.
 # Theorem ╲-Unique expresses that limits γ have an monic-like property:
 # The component morphisms $γ_A$ are \emph{jointly monic}.
 #
@@ -1099,7 +1108,7 @@ As usual, there is the implicit well-formedness condition.
 % ≡  (δ ╱ γ ﹔ γ)FA = ((δ ╱ γ) ﹔ γF)A
 % ≡  δ ╱ γ ; γFA  = δ╱γ ﹔ γFA
 % ≡  true
-% 
+%
 \endeqns
 #+END_EXPORT
 
@@ -1107,7 +1116,7 @@ As usual, there is the implicit well-formedness condition.
 
 \newpage
 * Sums
-#+LaTeX: \def\inl{\mathsf{inl}} 
+#+LaTeX: \def\inl{\mathsf{inl}}
 #+LaTeX: \def\inr{\mathsf{inr}}
 
 Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \;\;\; \overset{B}{•} \right)$.
@@ -1155,8 +1164,8 @@ $(F\,\inl, F\,\inr, F(A+B))$ form a sum of $F\,A$ and $F\, B$.
 % Types are okay since, by assumption, F(A + B) forms the sum of FA and FB,
 % That is, (F A + F B) ≔ F(A + B)
 %
-% Direct proof: 
-% 
+% Direct proof:
+%
 %    F[f,g] = [Ff, Fg]
 % ≡  F[f,g] ﹔ F inl = F f  ∧ F[f,g] ﹔ F inr = F g
 % ≡  F([f,g] ﹔ inl) = F f  ∧ F([f,g] ﹔ inr) = F g
@@ -1239,7 +1248,7 @@ $⟨-,-⟩$ satisfying the Char and Type laws below; from which we obtain a host
 \room
 \room
 
-The characterisation says that the essential properties of ordered pairs 
+The characterisation says that the essential properties of ordered pairs
 is that their components are retrievable and they are
 completely determined by their components.
 
@@ -1300,7 +1309,7 @@ Dually, the standard notation for the empty either $[]$ is $?_C$.
 * Mixing products and coproducts
 
 Any $f : A + B → C × D$ can be expressed alternatively as an /either/
-or as a /split/. It turns out that both formats are identical: 
+or as a /split/. It turns out that both formats are identical:
 # The Interchange rule.
 \vspace{-1.5em}
 \eqn{Exchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
@@ -1316,7 +1325,7 @@ E.g., $\mathsf{undistr}  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id �
 
 \eqn{Co-cool-Property}{ ⟨f + g, h + k⟩ \;=\; [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)] }
 # Direct proof:
-# 
+#
 #   [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)]
 # = [ ⟨inl ∘ f , inl ∘ h⟩, ⟨inr ∘ g, inr ∘ k⟩ ]      absorption
 # = ⟨ [inl ∘ f, inr ∘ g], [inl ∘ h, inr ∘ k]⟩       exchange
@@ -1334,15 +1343,91 @@ Also, since constants ignore their inputs,
 # = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
 # = ⟨ [f, g], _k_ ⟩               constants
 
+* Monoidal Categories
 
-\newpage
+  It is rather common that we have a notion of pairing for types for which there is a unit type.
+  Examples include products with the initial object, sums with the terminal object, or for
+  the category of endofunctors: Functor composition with the identity functor.
+
+  A /monoidal category/ /(𝒞, ⊗, I, α, λ, ρ)/ consists of a category 𝒞 with bifunctor /_⊗_ : 𝒞² → 𝒞/ and object /I : Obj 𝒞/
+  and three natural isomorphisms: The ‘associator’ /α_{A, B, C} : A ⊗ (B ⊗ C) ≅ (A ⊗ B) ⊗ C/ and the ‘unitors’
+  /λ_A : I ⊗ A ≅ A/ and /ρ_A : A ⊗ I ≅ A/ such that:
+
+  0. The order of re-parensization, outer-most or inner-most first, does not matter; i.e.,
+     the two obvious maps witnessing $A ⊗ (B ⊗ (C ⊗ D)) → ((A ⊗ B) ⊗ C) ⊗ D$ are identical:
+     $α ∘ α \eqs α ⊗ \Id \;∘\; α \;∘\; \Id ⊗ α$.
+
+  1. Unit elimination paths are the same even if unnecssarily associtivity is performed; i.e.,
+     the two obvious maps witnessing $A ⊗ (I ⊗ B) → A ⊗ B$ are identical:
+     $\Id ⊗ λ \eqs (ρ ⊗ \Id) ∘ α$.
+
+  Mnemonic: λ, ‘L’ambda, is for ‘L’eft unitor; ρ, ‘R’ho, is for ‘R’ight unitor.
+
+  An /exponential for Y/ is characterised by the following adjoint isomorphism
+  that is natural in /Y/ and /Z./
+
+  #+begin_export latex
+  \eqn{Exponential-Char}{⌊\_{}⌋ \;:\; X ⊗ Y → Z \quad≅\quad X → (Y ➩ Z) \;:\; ⌈\_{}⌉ }
+  #+end_export
+
+  + The counit $ev_Z = ⌈\Id_{Y ➩ z}⌉ : (Y ➩ Z) ⊗ Y → Z$ is called the /evaluation morphism./
+  + Note that ⌊_⌋ generalises currying, and ⌈_⌉ generalises uncurrying.
+
+
+#+BEGIN_EXPORT latex
+\begineqns
+
+\eqn{Exp-Internalised-Char}{ X ➩ (Y ➩ Z)  \quad≅\quad  (X ⊗ Y) ➩ Z}
+
+\eqn{Exp-Unit}{ I ➩ Z \quad≅\quad Z }
+
+% false?
+% \eqn{Exp-Distributivity}{X ➩ (Y ⊗ Z) \quad≅\quad (X ➩ Y) ⊗ (X ➩ Z)}
+
+% false?
+% \eqn{Exp-Terminality}{ Z ➩ I \quad≅\quad I }
+
+% Self, Char, Id, Fusion, Unique, Compose?
+%
+% \eqn{CoEq-Char}{ x ∘ p = q \equivS x = q ╱ p }
+%
+% \eqn{CoEq-Self}{ q╱p ∘ p = q}
+%
+% \eqn{CoEq-Id}{p╱p = \Id}
+%
+% \eqn{CoEq-Fusion}{x ∘ q╱p = (x ∘ q)╱p}
+%
+% \eqn{CoEq-Unique}{x ∘ p = y ∘ p \impliesS x = y}
+%
+% \eqn{CoEq-Compose}{r╱q ∘ q╱p = r╱p}
+%
+\endeqns
+#+END_EXPORT
+:Exp-Internalised-Char_PROOF:
+By Yoneda,
+
+  A → X ➩ (Y ➩ Z)
+≅ A ⊗ X → (Y ➩ Z)
+≅ (A ⊗ X) ⊗ Y → Z
+≅ A ⊗ (X ⊗ Y) → Z
+≅ A → (X ⊗ Y) ➩ Z
+:End:
+:Exp-Unit_PROOF:
+By Yoneda,
+
+  A → I ➩ Z
+≅ A ⊗ I → Z
+≅ A → Z
+:End:
+
+# \newpage
 
 * Coequaliser
 
 # $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
 #
 Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
-where $f,g : A → B$ are given. 
+where $f,g : A → B$ are given.
 Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
 with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $δ_A ∘ \const{C} h = D h ∘ δ_B$; in-particular
 $q' = f ∘ q = g ∘ q$ whence $q'$ is fully-determined by $q$ alone.
@@ -1375,7 +1460,7 @@ like in arithmetic where the notation $m \div n$ is only sensful if $n$ differs 
 \eqn{CoEq-Compose}{r╱q ∘ q╱p = r╱p}
 %%
 %% \eqn{?╲-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
-%% 
+%%
 %% \eqn{?╲-Pre-Functor-Elim}{δF╱γF = δ╱γ}
 %%
 \endeqns
@@ -1394,10 +1479,10 @@ like in arithmetic where the notation $m \div n$ is only sensful if $n$ differs 
     }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
   \raisebox{6pt}{$\spot$}
   $
-  
+
 Now call the category $\bigvee D$ by the name $\bigvee(f \,|\!|\, g)$:
 it has objects morphisms that post-equalise $f$ and $g$, and morphisms
-$x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q$ 
+$x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q$
 
 A \emph{coequaliser} of $f,g$ is an initial object in
 $\bigvee(f \,|\!|\, g)$.
@@ -1451,9 +1536,6 @@ The category theory is mostly implicit, but presented elegantly!
  + Backus' FP and Iverson's APL are examples of pointfree programming
    languages; look them up ;-)
 
-* COMMENT TODO END_IGNORE  nope                                      :ignore:
-\fi
-
 * COMMENT Why Monads Matter
 
 Suppose the output of the producer function $g$ is /T-times more elaborate/
@@ -1498,7 +1580,7 @@ Expressed pointwise we get $x >>= f \;=\; (μ ∘ T f) x$ which is exactly $f\, 
 the identity monad, so $>>=$ can be regarded as denoting /monadic function application/!
 
 + (f ◇ g) a  =  do {b ← g a; f b}     =  g a >>= f
-+ T f     x  =  do {a ←   x; η(f x)}  =  x   >>= η ∘ f   
++ T f     x  =  do {a ←   x; η(f x)}  =  x   >>= η ∘ f
 
   That is: map f = unpack x, apply f, pack result using η.
 
@@ -1587,7 +1669,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
  Equalisers generalise the notion of ``solution set to an equation''
  or the domain of the common image of two morphisms.
-  
+
  An \emph{equaliser} of $f,g$, with $\src f = \src g$, is an object $\Eq\, f\, g$, a morphism $[f \eq g] : \Eq\,f\, g \to \src\, f$, and a
  function $-\over[f \eq g]$ with the following properties
 
@@ -1601,7 +1683,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
  \NTHM{}{Identity}{$\Id_{\Eq\,f\,g} \eqs [f \eq g] \over [f \eq g]$}
 
- \NTHM{}{PreFusion, ``PreComposition into Numerator''}{ 
+ \NTHM{}{PreFusion, ``PreComposition into Numerator''}{
    $x \fcmp ( q \over [f \eq g]) \eqs (x \fcmp q) \over [f \eq g]$}
 
  \NTHM{}{Self, Denominator Cancellation}{
@@ -1644,7 +1726,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
      \spot\!\!\!\!_B\overset{f}{\text{\tiny$\longleftarrow$}} \!\!
      \spot\!\!\!\!_A\overset{g}{\text{\tiny$\longrightarrow$}}\!\!\spot\!\!\!\!_C
    $
-  
+
  Working out the details and simplifying, we find that $\bigvee D$
  has objects morphism-pairs $p,q$ that post-equalise $f$ and $g$ in that $f \fcmp p \eqs g \fcmp q$, and morphisms
  $x : (p,q) \to (p',q') \equivS x : \tgt p \to \tgt p' \lands (p', q') \eqs (p,q) \fcmp x$.
@@ -1745,7 +1827,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
  + Product is essentially symmetric
    - /swap := ⟨ snd , fst ⟩/ is an involution witnessing /A × B ≅ B × A/
    - In programming, where products are records, /swap/ can be re-interpreted as a guarantee that one
-     does not lose (or gain) anything in swapping fields in struct or record datatypes. 
+     does not lose (or gain) anything in swapping fields in struct or record datatypes.
 
  + Product is essentially associative
    - “associate to the right”, /assocr := ⟨ fst . fst , snd × Id ⟩ : A × (B × C) ⟵ (A × B) × C/
@@ -1807,7 +1889,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
 \usepackage{amsmath,amssymb}
 
-\usepackage{CalcStyleV9} % http://calccheck.mcmaster.ca/ 
+\usepackage{CalcStyleV9} % http://calccheck.mcmaster.ca/
 \usepackage{calculation} % https://ctan.org/pkg/calculation
 \parindent0pt\parskip0.6ex % Better for literate code.
 
@@ -1835,7 +1917,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 % suffixes:
 % 's' for a ``little'' bit    of space
 % 'S' for a ``large''  amount of space
- 
+
 \def\equivS{\qquad \equiv \qquad}
 
 \def\eqs{\quad = \quad}
@@ -1881,7 +1963,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
  Composition is the basis for gluing morphisms together to build more complex morphisms.
  However, not every two morphisms can be glued together by composition.
 
- # $f : A ← C$ and $g : B ← C$ 
+ # $f : A ← C$ and $g : B ← C$
  For instance, functions $A \overset{f}{\longleftarrow} C \overset{g}{\longrightarrow} B$
  do not compose with each other since the source of one is not the target of the other.
 
@@ -1975,7 +2057,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
  A compact notation leads to shorter documents, less lines of code
  in programming, in which patterns are easier to identify and reason
  about. Properties can be stated in clear-cut, one-line long equations
- which are easy to memorise. 
+ which are easy to memorise.
  #
  # Backus' FP and Iverson's APL are examples of pointfree programming
  # languages; look them up ;-)
@@ -2077,7 +2159,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
  Pointwise: $f^A\, g = f ∘ g$ --so $f^A$ is the “compose with $f$” functional combinator.
  # Indeed:
- # 
+ #
  #     fᵃ = T(f . ap)
  # ≡   f . ap = ap ∘ (fᵃ × Id)                 exp-Char
  # ≡   f . ap (g, a) = ap ∘ (fᵃ × Id) (g, a)   extensionality
@@ -2265,7 +2347,7 @@ for(int j=0; j<n; j++)
  \eqn{conditional-product-Fusion}{ k ∘ ⟨ (p → f,h) , (p → g, i) ⟩  \eqs p → k ∘ ⟨f, g⟩ , k ∘ ⟨h, i⟩ }
 
  %
- %   k ∘ ⟨ (p → f,h) , (p → g, i) ⟩ 
+ %   k ∘ ⟨ (p → f,h) , (p → g, i) ⟩
  % = k ∘ ⟨ [f,h] ∘ p? , [g, i] ∘ p? ⟩
  % = k ∘ ⟨ [f,h] , [g, i] ⟩ ∘ p?
  % = k ∘ [ ⟨f, g⟩ , ⟨h, i⟩ ] ∘ p?
@@ -2294,7 +2376,7 @@ for(int j=0; j<n; j++)
   \room
 
   Here's an illustration of how /smart/ pointfree algebra can be in reasoning about
-  functions that /one does not actually defined explicitly/. 
+  functions that /one does not actually defined explicitly/.
 
   It also shows how relevant the /natural properties/ are.
 
@@ -2302,7 +2384,7 @@ for(int j=0; j<n; j++)
   likely unsuitable to prove facts such as, for instance,
   \[ p? ∘ f = (f + f) ∘ (p ∘ f)? \]
   Thinking better, instead of `inventing' \ref{?-Defn}, we might --and perhaps should!--
-  have defined 
+  have defined
   \eqn{two-Defn}{2  \;≅\; 1 + 1}
   \eqn{double-Defn}{2 × A \;≅\; A + A}
   \eqn{?-Defn-Pointfree}{ p? = double ∘ ⟨p, \Id⟩ }
@@ -2352,18 +2434,18 @@ Include:
 + Also, notice that we have natural transformations
    $\initial{-} : \K 0 \natTo \mathsf{Id}$
    and $\final{-} : \mathsf{Id} \natTo \K 1$
-  
+
    Claim?
-  
+
    the cat has a final element iff identity endofunctor has a colimit.
    ie the final element is the union of all elements and so is the
    top or maximal element ;)
-  
+
    $1 \cong CoLim \, \mathsf{Id}$
    where $\final{-} = \gamma$ is the witnessing family?
-  
-+ Provide a /calculational/ proof of: if a category J has a terminal object 1, 
-   then the colimit of any functor F:J→C is just F(1), with the cocone defined by the maps F(τj):F(j)→F(1). 
+
++ Provide a /calculational/ proof of: if a category J has a terminal object 1,
+   then the colimit of any functor F:J→C is just F(1), with the cocone defined by the maps F(τj):F(j)→F(1).
 
    Hint: https://math.stackexchange.com/questions/1210440/given-a-mathcalc-rightarrow-mathcale-when-does-operatornamecolim
 ** COMMENT TODO Generalise Exchange Law to arbitrary colimits and limits xD
@@ -2373,13 +2455,13 @@ Include:
 #  \NTHM{}{Principle of Duality}{
 #    A statement $S$ is true about $\mathcal{C}$
 #    iff it's dual $S[\fcmp \,:=\, \circ]$ is true about $\mathcal{C}^{op}$. }
-# 
+#
 #+BEGIN_EXPORT latex
 \def\fst{\mathsf{fst}}
 \def\snd{\mathsf{snd}}
 #+END_EXPORT
 
-#+LaTeX_HEADER: \usepackage{stackengine} 
+#+LaTeX_HEADER: \usepackage{stackengine}
 #
 # \topinset{*}{O}{1pt}{}
 #
@@ -2392,7 +2474,7 @@ known as the “forwards” and “backwards” notations.
 \room
 
 Some people prefer one notation and stick with it; however having both in-hand
-allows us to say: The /dual/ of a categorical statement formed with 
+allows us to say: The /dual/ of a categorical statement formed with
 $﹔,→$ is obtained by syntactically replacing these two with $∘, \leftarrow$ respectively
 while leaving variables and $\Id$'s alone.
 
@@ -2403,16 +2485,16 @@ while leaving variables and $\Id$'s alone.
 #
 For example, applying this process to sums yields /products/:
 \vspace{-0.5em}
-#+begin_calculation latex 
+#+begin_calculation latex
    h = ⟨f, g⟩
 \step{  We define products as dual to sums }
    h = \dual [f, g]
 \step{  dual operation definition }
   \dual\left( h = [f,g] \right)
 \step{  []-Char and Leibniz }
-  \dual\left( \inl ﹔ h = f  \lands  \inr ﹔ h = g\right) 
+  \dual\left( \inl ﹔ h = f  \lands  \inr ﹔ h = g\right)
 \step{  dual operation definition }
-  \dual\left(\inl ﹔ h\right) = f  \lands  \dual\left(\inr ﹔ h\right) = g) 
+  \dual\left(\inl ﹔ h\right) = f  \lands  \dual\left(\inr ﹔ h\right) = g)
 \step{  dual operation definition }
   \dual \text{ } \inl ∘ h = f  \lands  \dual \text{ }  \inr ∘ h = g
 \step{  Define: $\fst = \dual\, \inl$, $\snd = \dual\, \inr$ }
@@ -2488,7 +2570,7 @@ C-c C-c: evalute src block
 #+NAME: make-readme
 #+BEGIN_SRC emacs-lisp :results none
 (with-temp-buffer
-    (insert 
+    (insert
     "#+EXPORT_FILE_NAME: README.md
      #+HTML: <h1> CatsCheatSheet </h1>
      # OPTIONS: toc:nil
@@ -2498,14 +2580,14 @@ C-c C-c: evalute src block
      *The repo contains other articles I've written on Category Theory;*
      *which may be read in a blog-format at:*
      https://alhassy.github.io/blog/categories/#categorytheory
-     
-     *The listing sheet, as PDF, can be found [[https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf][here]]*, 
+
+     *The listing sheet, as PDF, can be found [[https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf][here]]*,
      while below is an unruly html rendition.
-     
+
      This reference sheet is built around the system https://github.com/alhassy/CheatSheet
-     
+
      #+TOC: headlines 2
-     #+INCLUDE: CheatSheet.org     
+     #+INCLUDE: CheatSheet.org
     ")
     ;; (set-visited-file-name "ReadIt2.md")
     (org-mode)
