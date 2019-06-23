@@ -105,7 +105,7 @@ However here are some reasons I've decided to switch to the traditional format:
 #
 A *category* 𝒞 consists of a collection of “objects” $\Obj\, 𝒞$,
   a collection of  “(homo)morphisms” $\Hom_𝒞(a,b)$ for any $a,b : \Obj\,𝒞$
-  --also denoted “$a \,\to_𝒞\, b$”--,
+  ---also denoted “$a \,\to_𝒞\, b$”---,
   an operation $\Id$ associating a morphism $\Idₐ : \Hom(a,a)$ to each object $a$,
   and a dependently-typed “composition” operation
   $\_∘\_ : ∀\{A \, B \, C : \Obj\} → \Hom(B,C) → \Hom(A,B) → \Hom(A,C)$
@@ -167,13 +167,13 @@ Examples:
   Composition is catenation of paths and identity is the empty path.
 
 + Suppose we have an `interface', in the programming sense,
-  of constant, function, and relation symbols --this is also called a /signature/.
+  of constant, function, and relation symbols ---this is also called a /signature/.
 
   Let 𝒯 be any collection of sentences in the first-order language of signature $\Sigma$.
   Then we can define a category $\mathsf{Mod}\,𝒯$ whose objects are
   implementations of interface $\Sigma$ satisfying constraints 𝒯, and whose morphisms
   are functions that preserve the $\Sigma$ structure.
-  Ignoring 𝒯, gives us `functor algebras'.
+  Ignoring constraints 𝒯 gives us `functor algebras'.
 
   Particular examples include monoids and structure-preserving maps between them;
   likewise digraphs, posets, rings, etc and their homomorphisms.
@@ -181,7 +181,7 @@ Examples:
 \room
 
 Even when morphisms are functions, the objects need not be sets:
-Sometimes the objects are /operations/ --with an appropriate definition
+Sometimes the objects are /operations/ ---with an appropriate definition
 of typing for the functions. The categories of /F/-algebras are an example
 of this.
 
@@ -268,11 +268,14 @@ A /transpose/ arises when we need to combine a binary morphism with a unary morp
   B^A \overset{\transpose{f}}{\longleftarrow} C
   }
 
+  % By the well-formedness of the terms, we necessairly have
+  % C = tgt g = fst (src f). Hence, both sides have the same information.
+  %
 \eqn{transpose-combination}{
   B \overset{f}{\longleftarrow}{C × A}
   \lands
   C \overset{g}{\longleftarrow} D
-  \impliesS
+  \equivS
   B^A \overset{\transpose{f} ∘ g}{\xleftarrow{\hspace*{1cm}}} D
   }
 \endeqns
@@ -314,7 +317,7 @@ The two axioms are equivalent to the single statement that
 
 Use of Functors.
 + In the definition of a category, “objects” are “just things” for which no internal
-  structure is observable by categorical means --composition, identities, morphisms, typing.
+  structure is observable by categorical means ---composition, identities, morphisms, typing.
   /Functors form the tool to deal with “structured” objects./
 
   Indeed in 𝒮ℯ𝓉 the aspect of a structure is that it has “constituents”, and that it is possible
@@ -339,7 +342,7 @@ Use of Functors.
 
 Category $𝒜lℊ(F)$
 + For a functor /F : 𝒜 → 𝒟/, this category has /F-algebras/, /F/-ary operations in 𝒟 as, objects
-  -- i.e., objects are 𝒟-arrows $F\, A → A$ --
+  --- i.e., objects are 𝒟-arrows $F\, A → A$ ---
   and /F/-homomorphisms as morphisms, and it inherits composition and identities from 𝒟.
 
   #+BEGIN_EXPORT latex
@@ -386,8 +389,8 @@ and /F/ denotes the structure itself.
 \hspace{-1em}:
 $\bin$ is the structure of pairs, /Seq/ is the structure of sequences,
 /Seq Seq/ the structure of sequences of sequences,
-$\bin \, Seq$ the structure of pairs of sequences --which is naturally isomorphic
-to $Seq \, \bin$ the structure of sequences of pairs!--, and so on.
+$\bin \, Seq$ the structure of pairs of sequences ---which is naturally isomorphic
+to $Seq \, \bin$ the structure of sequences of pairs!---, and so on.
 
 \room
 
@@ -497,7 +500,7 @@ Dually for the other direction.
 \room
 
 That is,
-/each L-algebra g is uniquely determined --as an L-map followed by an ε-reduce--/
+/each L-algebra g is uniquely determined ---as an L-map followed by an ε-reduce---/
 /by its restriction to the adjunction's unit η./
 
 \room
@@ -701,12 +704,12 @@ $f\inverse$ with
 \eqn{inverse-Char}{ f ∘ f\inverse = \Id \landS f\inverse ∘ f = \Id}
 
 To /construct/ $f\inverse$, we begin by identifying its type which may give
-insight into its necessary `shape' --e.g., as a sum or a product--
+insight into its necessary `shape' ---e.g., as a sum or a product---
 then we pick one of these equations and try to reduce it as much as possible
 until we arrive at a definition of $f˘$, or its `components'.
   + E.g., $coassocr = [\Id + \inl, \inr ∘ \inr] : (A + B) + C ≅ A + (B + C)$, its inverse
     /coassocl/ must be of the shape $[x, [y, z]]$ for unknowns $x,y,z$ which can be calculated
-    by solving the equation $[x, [y, z]] ∘ coassocr = \Id$ --Do it!
+    by solving the equation $[x, [y, z]] ∘ coassocr = \Id$ ---Do it!
 
 # --E.g., the inverse of ~assoc~.
 
@@ -769,6 +772,8 @@ If a composition is epic then its last arrow is epic.
 \NTHM{}{Iso}{ Both epic and monic ; i.e., monic and split epic }
 
 
+* space newpage                                                      :ignore:
+  \newpage
 * Skolemisation
 # “Up to Isomorphism”
 
@@ -783,7 +788,7 @@ but the two-point set is not.
 
 For example, an object /A/ is ``initial'' iff
 $∀ B  \;•\;  ∃₁ f  \;•\;  f : A → B$, and such objects are unique
-up to unique isomorphism --prove it!
+up to unique isomorphism ---prove it!
 The formulation of the definition is clear but it's not very well suited for /algebraic manipulation/.
 
 \room
@@ -829,13 +834,13 @@ by truthifying each side, namely `Self' and `Id'. A bit more on the naming:
 
 Note that the last 3 indicate how the concept interacts with the categorical structure:
 $=, ﹔, \Id$. Also note that Self says there's at least one solution and Uniq says there is
-at most one solution, so together they are equivalent to ℱ-Char --however those two proofs
+at most one solution, so together they are equivalent to ℱ-Char ---however those two proofs
 are usually not easier nor more elegant than a proof of ℱ-Char directly.
 
 \room
 
 *Proving ℱ-Char* is straightforwardly accomplished by providing a definition for ℱ
-and establishing ℱ-Char --these two steps can be done in parallel! Almost every such
+and establishing ℱ-Char ---these two steps can be done in parallel! Almost every such
 proof has the following format, or a circular implication thereof: For arbitrary $x$ and $y$,
 
 # \vspace{2em}
@@ -1008,8 +1013,8 @@ The fraction notation better suggests the \emph{calculational} properties.
 \vspace{2ex}
 Notice that for given $x : C → C'$ the equation $δ ╱ γ = x$ \underline{defines}
 δ, since by $\slash$-Char that one equation equivales the family of equations
-$δ_A = x ∘ γ_A$. This allows us to define a natural transformation --or `eithers' in
-the case of sums-- using a single function \emph{having} the type of the mediating arrow.
+$δ_A = x ∘ γ_A$. This allows us to define a natural transformation ---or `eithers' in
+the case of sums--- using a single function \emph{having} the type of the mediating arrow.
 
 \eqn{$\slash$-Self ; Cancellation}{ \const{δ╱γ} ∘ γ = δ}
 
@@ -1032,7 +1037,7 @@ the case of sums-- using a single function \emph{having} the type of the mediati
 
 \vspace{2ex}
 The following law confirms the choice of notation once more
---just as the above fusion law is nearly mutliplication into the numerator.
+---just as the above fusion law is nearly mutliplication into the numerator.
 
 \eqn{$\slash$-Compose}{ε╱δ ∘ δ╱γ  = ε╱γ}
 
@@ -1042,7 +1047,7 @@ The following law confirms the choice of notation once more
 \vspace{2ex}
 The next law tells us that functors distribute over the ╱-notation
 provided the implicit well-formedness condition that
-$Fγ$ is a colimit holds --clearly this condition is valid when $F$
+$Fγ$ is a colimit holds ---clearly this condition is valid when $F$
 preserves colimits.
 
 \eqn{$\slash$-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
@@ -1152,7 +1157,7 @@ such that \ref{[]-Type} and \ref{[]-Char} hold.
 \vspace{2ex}
 The implicit well-formedness condition in the next law is that
 $(F\,\inl, F\,\inr, F(A+B))$ form a sum of $F\,A$ and $F\, B$.
-%  --which clearly holds if $F$ preserves sums.
+%  ---which clearly holds if $F$ preserves sums.
 
 \eqn{[]-Functor-Dist}{F \, [f, g]_𝒞 = [F \, f , F \, g]_𝒟 \qquad\text{ where } F : 𝒞 → 𝒟}
 %
@@ -1356,8 +1361,8 @@ by [[https://maartenfokkinga.github.io/utwente/][Maarten Fokkinga]]
 \vspace{1em}
 
 An excellent introduction to category theory with examples motivated from programming, in-particular
-working with sequences. All steps are shown in a calculational style --which Fokkinga
-has made [[https://ctan.org/tex-archive/macros/latex/contrib/calculation][available]] for use with LaTeX-- thereby making it suitable for self-study.
+working with sequences. All steps are shown in a calculational style ---which Fokkinga
+has made [[https://ctan.org/tex-archive/macros/latex/contrib/calculation][available]] for use with LaTeX--- thereby making it suitable for self-study.
 
 \vspace{1em}
 
@@ -1611,74 +1616,6 @@ By lad fusion, or:
 
 # \newpage
 
-* COMMENT Coequaliser
-
-# $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
-#
-Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
-where $f,g : A → B$ are given.
-Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
-with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $δ_A ∘ \const{C} h = D h ∘ δ_B$; in-particular
-$q' = f ∘ q = g ∘ q$ whence $q'$ is fully-determined by $q$ alone.
-
-Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $-p╱$ in-place of $-╱γ$, then the ╱-laws
-yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $-╱p$ such that /CoEq-Type/ and
-/CoEq-Char/ hold.
-
-#+BEGIN_EXPORT latex
-\begineqns
-
-\eqn{CoEq-Type}{ f ∘ q =  g ∘ q \impliesS q╱p : \tgt\, p → \tgt\,q}
-
-\vspace{2ex}
-Well-formedness convention: In each law the variables are quantified
-in such a way that the premise of \ref{CoEq-Type} is met.
-The notation $q╱⋯$ is only senseful if $f ∘ q = g ∘ q$,
-like in arithmetic where the notation $m \div n$ is only sensful if $n$ differs from 0.
-
-\eqn{CoEq-Char}{ x ∘ p = q \equivS x = q ╱ p }
-
-\eqn{CoEq-Self}{ q╱p ∘ p = q}
-
-\eqn{CoEq-Id}{p╱p = \Id}
-
-\eqn{CoEq-Fusion}{x ∘ q╱p = (x ∘ q)╱p}
-
-\eqn{CoEq-Unique}{x ∘ p = y ∘ p \impliesS x = y}
-
-\eqn{CoEq-Compose}{r╱q ∘ q╱p = r╱p}
-%%
-%% \eqn{?╲-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
-%%
-%% \eqn{?╲-Pre-Functor-Elim}{δF╱γF = δ╱γ}
-%%
-\endeqns
-#+END_EXPORT
-
-# CoEqualisers generalise the notion of induced equivalence relation.
-
-\vfill
-
-\iffalse
-
-  Taking $D$ and $\mathcal{D}$ as suggested by
-  $D\,\mathcal{D}:$
-  $ \raisebox{6pt}{$\spot$}
-  \overset{ \overset{f}{\text{\tiny$\longrightarrow$}}
-    }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
-  \raisebox{6pt}{$\spot$}
-  $
-
-Now call the category $\bigvee D$ by the name $\bigvee(f \,|\!|\, g)$:
-it has objects morphisms that post-equalise $f$ and $g$, and morphisms
-$x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q$
-
-A \emph{coequaliser} of $f,g$ is an initial object in
-$\bigvee(f \,|\!|\, g)$.
-
-\fi
-
-# coEqualiser-Fusion, ``Composition into Numerator''
 * COMMENT Why Monads Matter
 
 Suppose the output of the producer function $g$ is /T-times more elaborate/
@@ -1700,14 +1637,14 @@ Given by $f ◇ g = μ ∘ T f ∘ g$, where $μ : T ←̣ T²$ is a suitable po
 Together with a unit function $η : T ←̣ Id$, datatype T forms a so-called /monad/ type.
 
 The simplest of all monads is the /identity monad/ $T X = X$, which is such that
-$μ = id, η = id, f ◇ g = f ∘ g$. So --in a sense-- the /whole functional discipline/
+$μ = id, η = id, f ◇ g = f ∘ g$. So ---in a sense--- the /whole functional discipline/
 studied thus far was already /monadic/, living inside the simplest of all monads: The identity.
 Put in other words, such functional discipline can be framed into a wider discipline in which
 an arbitrary monad is present.
 
 
-Kleisli Composition is assocatiive with identity η --which coincide, for the identity monad,
-to the usual composition and identity laws of functions--
+Kleisli Composition is assocatiive with identity η ---which coincide, for the identity monad,
+to the usual composition and identity laws of functions---
 and μ = Id ◇ Id and we have the fusion laws:
 + (f ◇ g) ∘ h = f ◇ (g ∘ h)     -- ◇-∘ mutual associtivity
 +  (f ∘ g) ◇ h = f ◇ (T g ∘ h)  -- ∘-◇ fusion
@@ -1741,25 +1678,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
 * COMMENT Old Category Theory Theorem List
 
-** Category Theory Notation :latex:ignore:
-#+BEGIN_EXPORT latex
-% identity morphism
-\def\Id{\mathsf{id}}
-
-% source and target
-\def\src{\mathsf{src}\,}
-\def\tgt{\mathsf{tgt}\,}
-
-% constant functor
-\def\K#1{ \mathcal{K}\, #1 }
-
-% natural transformation
-\def\natTo{\mathrel{\ooalign{\,$\longrightarrow$\cr\quad.}}}
-
-\def\under{ \backslash }
-#+END_EXPORT
-
-** COMMENT Pullbacks
+** Pullbacks
  \heading{Pullbacks}
 
  \def\Pb{ \operatorname{\mathsf{Pb}} }
@@ -1807,7 +1726,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
  \def\eq{\approx}
  \def\Eq{\mathsf{Eq}}
 
-** COMMENT Equalisers
+** Equalisers
  \heading{Equalisers}
 
  Equalisers generalise the notion of ``solution set to an equation''
@@ -1844,7 +1763,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
  \NTHM{}{ X }{ Y }
 
  \todo rewrite this section: Too much text. Introduce heuristics.
-** COMMENT Finality
+** Finality
 
  \heading{Finality}
  \def\final#1{ \mbox{!}_#1 }
@@ -1860,7 +1779,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
  \NTHM{}{final-Fusion / Post-absorption}{$f : B \to C \impliesS f \fcmp \final{B} \eqs \final{C} $}
 
  \NTHM{}{initial-final Coincidence}{$\initial{1} \eqs \final{0}$}
-** COMMENT Pushouts
+** Pushouts
  \kern4ex
  \heading{Pushouts}
 
@@ -1913,7 +1832,6 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
  \NTHM{}{Pushout-Fusion, ``Composition into Numerator''}{ \\
    $\big((f , g) \under (p , q)\big) \fcmp x \eqs (f , g) \under \big( (p , q) \fcmp (x,x)\big)$}
-* COMMENT Content from older repo
 ** Functions and Contracts
 
  What do we want functions for? If we ask this question to a physician or engineer
@@ -1947,10 +1865,6 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
  The inputs can be “injected” into this new composite source via two new combinators:
  /inl : A + B ⟵ A/ and /inr : A + B ⟵ B/.
-
- The gluing is specfied by the equation: /h = [f , g]  ≡  h . inl = f ∧ h . inr = g/
- Read, “/h/ is the sum of /f/ and /g/ precisely when it behaves like /f/ when following a left
- injection and behaves like /g/ when following a right injection.”
 
  # From this property it follows that the injections do not confuse inputs, i.e., are jointly-injective.
  Indeed the property above could be thought of as ensuring /no-junk and no-confusion/.
@@ -1991,30 +1905,13 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
  For example, applying this rule to the expression /⟨ [ fst , fst ] , [ inl . snd , inr . snd] ⟩/
  yields the familiar /un-distribute-right/ operation /undistr = [ Id × inl , Id × inr ] : A × (B + C) ⟵ (A × B) + (A × C)/.
 
-** material to be included
-
- *types*
+** typechecking and gluing
 
   Formally, a “type checking” discipline can be expressed in terms of compositional rules which
  check for functional expression wellformedness.
 
- *?*
-
- A case arises wherever two functions do not compose but share the same codomain.
- [...] then we use the sum combinator.
-
- Composition is certainly the most basic of all functional combinators. It is the
- first kind of “glue” which comes to mind when programmers need to combine, or
- chain functions (or processes) to obtain more elaborate functions (or processes).
- This is because of one of its most relevant properties, associtivity: /(f · g) · h = f · (g · h)/.
-
- (
-
  I really like this approach you are promoting: Construing high-order combinators as
- variations on composition. I particularly like this idea when we get to the product
- and sum functors. Excellent! :-)
-
- )
+ variations on composition.
 
 ** LaTeX Matter To Utilise
 
@@ -2100,6 +1997,74 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
 \theorem{}{{\color{gray}Absorption /} Induced Definition of Casing}
         { $\[ f , g \] \cdot (i \+ j) = \[ f \cdot i , g \cdot j \]$ }
+** COMMENT Coequaliser
+
+ # $D𝒟 = \left( \overset{A}{•} \overset{\overset{f}{\rightrightarrows}}{g} \overset{B}{•} \right)$.
+ #
+ Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)$;
+ where $f,g : A → B$ are given.
+ Then a cocone δ for $D$ is a two-member family $δ = (q', q)$
+ with $q' : A → C, q : B → C, C = \tgt\,\delta$ and $δ_A ∘ \const{C} h = D h ∘ δ_B$; in-particular
+ $q' = f ∘ q = g ∘ q$ whence $q'$ is fully-determined by $q$ alone.
+
+ Let $γ = (p', p) : Obj(⋁D)$ be a colimit for $D$ and write $-p╱$ in-place of $-╱γ$, then the ╱-laws
+ yield: /$p$ is a coequaliser of $(f,g)$/ if there is a mapping $-╱p$ such that /CoEq-Type/ and
+ /CoEq-Char/ hold.
+
+ #+BEGIN_EXPORT latex
+ \begineqns
+
+ \eqn{CoEq-Type}{ f ∘ q =  g ∘ q \impliesS q╱p : \tgt\, p → \tgt\,q}
+
+ \vspace{2ex}
+ Well-formedness convention: In each law the variables are quantified
+ in such a way that the premise of \ref{CoEq-Type} is met.
+ The notation $q╱⋯$ is only senseful if $f ∘ q = g ∘ q$,
+ like in arithmetic where the notation $m \div n$ is only sensful if $n$ differs from 0.
+
+ \eqn{CoEq-Char}{ x ∘ p = q \equivS x = q ╱ p }
+
+ \eqn{CoEq-Self}{ q╱p ∘ p = q}
+
+ \eqn{CoEq-Id}{p╱p = \Id}
+
+ \eqn{CoEq-Fusion}{x ∘ q╱p = (x ∘ q)╱p}
+
+ \eqn{CoEq-Unique}{x ∘ p = y ∘ p \impliesS x = y}
+
+ \eqn{CoEq-Compose}{r╱q ∘ q╱p = r╱p}
+ %%
+ %% \eqn{?╲-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
+ %%
+ %% \eqn{?╲-Pre-Functor-Elim}{δF╱γF = δ╱γ}
+ %%
+ \endeqns
+ #+END_EXPORT
+
+ # CoEqualisers generalise the notion of induced equivalence relation.
+
+ \vfill
+
+ \iffalse
+
+   Taking $D$ and $\mathcal{D}$ as suggested by
+   $D\,\mathcal{D}:$
+   $ \raisebox{6pt}{$\spot$}
+   \overset{ \overset{f}{\text{\tiny$\longrightarrow$}}
+     }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
+   \raisebox{6pt}{$\spot$}
+   $
+
+ Now call the category $\bigvee D$ by the name $\bigvee(f \,|\!|\, g)$:
+ it has objects morphisms that post-equalise $f$ and $g$, and morphisms
+ $x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q$
+
+ A \emph{coequaliser} of $f,g$ is an initial object in
+ $\bigvee(f \,|\!|\, g)$.
+
+ \fi
+
+ # coEqualiser-Fusion, ``Composition into Numerator''
 * COMMENT Maybe move to README
 ** Gluing functions which do not compose -- products         :move_to_readme:
 
@@ -2114,7 +2079,7 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
 
  Since $f$ and $g$ share the same source, their outputs can be paired: $c ↦ (f\, c, g\, c)$.
  We may think of the operation which pairs the outputs of $f$ and $g$ as a new function
- combinator: $⟨f, g⟩ = c ↦ (f\, c, g\, c)$ --read “$f$ /split/ $g$”.
+ combinator: $⟨f, g⟩ = c ↦ (f\, c, g\, c)$ ---read “$f$ /split/ $g$”.
 
  \room
 
