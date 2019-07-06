@@ -2,25 +2,44 @@
 #+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]] @@latex:{\tiny\hspace{5.5em}\url{https://github.com/alhassy/CatsCheatSheet}}@@
 #+EMAIL: alhassy@gmail.com
 #+DESCRIPTION: Cheatsheet of category theory: Adjunctions, [co]limits, [co]products, [co]terminals, etc.
-#+STARTUP: hideblocks
-#+STARTUP: overview
-#+TODO: TODO | Space
+#+TODO: TODO | space
 #+OPTIONS: d:nil
 
-# Important shortcuts:
-# f7 preview changes
-# f8 commit each change
-# f9 push changes
+# (shell-command "rm CheatSheet.aux")
+
+* More :ignore:
 
 #+LATEX_HEADER: \usepackage[utf8]{inputenc}
 #+LATEX_HEADER: \usepackage{newunicodechar}
 #+LATEX_HEADER: \newunicodechar{﹔}{\ensuremath{\raisebox{0.4ex}{\tiny \,;\,}}}  %% forward composition ﹔
+
+#+LATEX_HEADER: \newunicodechar{Δ}{\ensuremath{\Delta}}
+#+LATEX_HEADER: \newunicodechar{𝒳}{\ensuremath{\mathcal{X}}}
+#+LATEX_HEADER: \newunicodechar{𝒱}{\ensuremath{\mathcal{V}}}
+#+LATEX_HEADER: \newunicodechar{𝒲}{\ensuremath{\mathcal{W}}}
+
+#+LATEX_HEADER: \newunicodechar{̇}{\ensuremath{.}}
+#+LATEX_HEADER: \newunicodechar{′}{\ensuremath{'}}
+
 
 #+LATEX_HEADER: \usepackage{calculation}
 
 #+INCLUDE: CheatSheet/CheatSheetSetup.org
 
 # https://en.wikipedia.org/wiki/Linguistic_relativity#Programming_languages
+
+:nonstop:
+(setq org-latex-pdf-process
+      '("pdflatex  -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+(setq org-latex-pdf-process
+      '("pdflatex  -shell-escape -output-directory %o %f"))
+
+:End:
+
+# (async-shell-command "rm CheatSheet.tex")
+
+# latex_header: \newunicodechar{𝒞}{\mathcal{C}}
 
 * COMMENT In Defence of Backwards Composition :for_future_self:
 
@@ -41,11 +60,11 @@ However here are some reasons I've decided to switch to the traditional format:
 * LaTeX Setup :ignore:
 
 # INCLUDE: /Users/musa/MyUnicodeSymbols/MyUnicodeSymbols.sty
-#+LATEX_HEADER: \usepackage{/Users/musa/MyUnicodeSymbols/MyUnicodeSymbols}
+#+LATEX_HEADER: \usepackage{CheatSheet/UnicodeSymbols}
 # LATEX_HEADER: \usepackage[utf8]{inputenc}
 # LATEX_HEADER: \usepackage[T1]{fontenc}
-# LATEX_HEADER: \usepackage{amssymb}
-# LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage{amssymb}
+#+LATEX_HEADER: \usepackage{amsmath}
 # LATEX_HEADER: \usepackage{newunicodechar}
 
 # ➩ \pointer from wasysym package
@@ -53,6 +72,10 @@ However here are some reasons I've decided to switch to the traditional format:
 #+LATEX_HEADER: \newunicodechar{α}{\ensuremath{\alpha}}
 #+LATEX_HEADER: \newunicodechar{ρ}{\ensuremath{\rho}}
 #+LATEX_HEADER: \newunicodechar{➩}{\,{\text{\pointer}}\,}
+
+#+LATEX_HEADER: \newunicodechar{ϕ}{\ensuremath{\phi}}
+#+LATEX_HEADER: \newunicodechar{⟵}{\ensuremath{\longleftarrow}}
+#+LATEX_HEADER: \newunicodechar{‼}{\ensuremath{! \! !}}
 
 #+begin_export latex
 \def\providedS{ \qquad\Leftarrow\qquad }
@@ -87,6 +110,9 @@ However here are some reasons I've decided to switch to the traditional format:
 \def\src{\mathsf{src}}
 \def\tgt{\mathsf{tgt}}
 \def\Id{\mathsf{Id}}
+
+\def\inl{\mathsf{inl}}
+\def\inr{\mathsf{inr}}
 
 \def\bin{I\!\!I}
 #+END_EXPORT
@@ -185,18 +211,18 @@ Sometimes the objects are /operations/ ---with an appropriate definition
 of typing for the functions. The categories of /F/-algebras are an example
 of this.
 
-
-\newpage
-
 * “Gluing” Morphisms Together
 
 Traditional function application is replaced by the more generic concept of
 functional /composition/ suggested by morphism-arrow chaining:
+
+
 Whenever we have two morphisms such that the target type of one
 of them, say $g : B ← A$ is the same as the source type of the other,
 say $f : C ← B$ then “$f$ after $g$”, their /composite morphism/,
 $f ∘ g : C ← A$ can be defined. It “glues” $f$ and $g$ together,
 “sequentially”:
+
 #+BEGIN_EXPORT latex
 \eqn{composition-Type}{
   C \overset{f}{\longleftarrow} % B \lands
@@ -253,7 +279,7 @@ A /transpose/ arises when we need to combine a binary morphism with a unary morp
 \eqn{split-Type}{ A \overset{f}{\longleftarrow} C \overset{g}{\longrightarrow} B
  \hspace{5.8em}\equivS A × B \overset{\;\;⟨f,g⟩}{\xleftarrow{\hspace*{0.5cm}}} C }
 
-\eqn{$\times$-Type}{ A \overset{f}{\longleftarrow} C \lands B \overset{g}{\longleftarrow} D
+\eqn{x-Type}{ A \overset{f}{\longleftarrow} C \lands B \overset{g}{\longleftarrow} D
  \hspace{1.9em} \equivS A × B \overset{f × g}{\xleftarrow{\hspace*{0.5cm}}} C × D }
 
 \eqn{either-Type}{ A \overset{f}{\longrightarrow} C \overset{g}{\longleftarrow} B
@@ -592,9 +618,9 @@ by shifting to a possibly easier equality obligation.
 \eqn{rad-Unique}{ε ∘ L f \,= ε ∘ L f′ \,\equivS f = f′}
 
 \vspace{2ex}
-Lad and rad are natural transformations in the category $ℱ𝓊𝓃𝒸(𝒜ᵒᵖ × ℬ, 𝒮ℯ𝓉)$ realising
+Lad and rad are natural transformations in the category $ℱ𝓊𝓃𝒸(𝒜^{op} × ℬ, 𝒮ℯ𝓉)$ realising
 $(L X → Y) ≅ (X → G Y)$ where $X, Y$ are the first and second projection functors
-and $(-→-) : 𝒞ᵒᵖ × 𝒞 → 𝒮ℯ𝓉$ is the hom-functor such that $(f → g) h = g ∘ h ∘ f$.
+and $(-→-) : 𝒞^{op} × 𝒞 → 𝒮ℯ𝓉$ is the hom-functor such that $(f → g) h = g ∘ h ∘ f$.
 \\ By extensionality in 𝒮ℯ𝓉, their naturality amounts to the laws:
 
 \eqn{lad-Fusion}{⌊ y ∘ g ∘ L x  ⌋ \;=\; R y ∘ ⌊g⌋ ∘ x }
@@ -646,8 +672,6 @@ are bridged explicitly by the constant functor:
 #+BEGIN_EXPORT latex
 \eqn{Functor-Bridge}{ F ∘ \const{c} = \const{F \, c}}
 #+END_EXPORT
-
-\newpage
 
 # Observe that /constant arrows that are epic necessarily target a terminal object./
 * Monics and Epics
@@ -707,8 +731,11 @@ To /construct/ $f\inverse$, we begin by identifying its type which may give
 insight into its necessary `shape' ---e.g., as a sum or a product---
 then we pick one of these equations and try to reduce it as much as possible
 until we arrive at a definition of $f˘$, or its `components'.
-  + E.g., $coassocr = [\Id + \inl, \inr ∘ \inr] : (A + B) + C ≅ A + (B + C)$, its inverse
-    /coassocl/ must be of the shape $[x, [y, z]]$ for unknowns $x,y,z$ which can be calculated
+
+  + E.g.,
+    $coassocr = [\Id + \inl, \inr ∘ \inr]$ of type $(A + B) + C ≅ A + (B + C)$,
+    its inverse  /coassocl/ must be of the shape $[x, [y, z]]$ for unknowns
+    $x,y,z$ which can be calculated
     by solving the equation $[x, [y, z]] ∘ coassocr = \Id$ ---Do it!
 
 # --E.g., the inverse of ~assoc~.
@@ -771,8 +798,7 @@ If a composition is epic then its last arrow is epic.
 
 \NTHM{}{Iso}{ Both epic and monic ; i.e., monic and split epic }
 
-
-* space newpage                                                      :ignore:
+* COMMENT space newpage                                                      :ignore:
   \newpage
 * Skolemisation
 # “Up to Isomorphism”
@@ -854,8 +880,6 @@ proof has the following format, or a circular implication thereof: For arbitrary
     y = ℱ \kern0.5ex x
 #+end_calculation
 
-\newpage
-
 #  [Dangerous] Convention:
 #  free variables are quantified implicitly in such a way that the laws in which they appear
 #  are well-defined.
@@ -884,7 +908,7 @@ dependency on 0 explicit.
 \eqn{initial-Uniq}{ f, g : 0 → B \impliesS f = g }
 
 % Pre-absorption
-\eqn{initial-Fusion{ f : B → C \impliesS f ∘ ⦇ B ⦈ = ⦇ C ⦈ }
+\eqn{initial-Fusion}{ f : B → C \impliesS f ∘ ⦇ B ⦈ = ⦇ C ⦈ }
 
 \vspace{2ex}
 {\tiny Provided objects $B, C$ are both in 𝒜 and ℬ,
@@ -994,7 +1018,7 @@ Writing $-╱γ$ for $⦇-⦈$ and working out the definition of co-cone in term
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{$\slash$-Type}{ δ \text{ cocone for } D \impliesS δ╱γ : \tgt\, γ → \tgt\,δ}
+\eqn{Colimit-Type}{ δ \text{ cocone for } D \impliesS δ╱γ : \tgt\, γ → \tgt\,δ}
 
 \vspace{2ex}
 Well-formedness convention: In each law the variables are quantified
@@ -1002,7 +1026,7 @@ in such a way that the premise of $\slash$-Type is met.
 The notation $δ╱⋯$ is only senseful if δ is a co-cone for $D$,
 like in arithmetic where the notation $m \div n$ is only sensful if $n$ differs from 0.
 
-\eqn{$\slash$-Char}{ \const{x} ∘ γ = δ \equivS x = δ ╱ γ }
+\eqn{Colimit-Char}{ \const{x} ∘ γ = δ \equivS x = δ ╱ γ }
 
 \vspace{2ex}
 The fraction notation better suggests the \emph{calculational} properties.
@@ -1016,11 +1040,11 @@ Notice that for given $x : C → C'$ the equation $δ ╱ γ = x$ \underline{def
 $δ_A = x ∘ γ_A$. This allows us to define a natural transformation ---or `eithers' in
 the case of sums--- using a single function \emph{having} the type of the mediating arrow.
 
-\eqn{$\slash$-Self ; Cancellation}{ \const{δ╱γ} ∘ γ = δ}
+\eqn{Colimit-Self ; Cancellation}{ \const{δ╱γ} ∘ γ = δ}
 
-\eqn{$\slash$-Id}{γ╱γ = \Id}
+\eqn{Colimit-Id}{γ╱γ = \Id}
 
-\eqn{$\slash$-Fusion}{x ∘ δ╱γ = (\const{x} ∘ δ) ╱ γ}
+\eqn{Colimit-Fusion}{x ∘ δ╱γ = (\const{x} ∘ δ) ╱ γ}
 % Direct Proof:
 %
 %    γ╲δ ﹔ x = γ ╲ (δ ﹔ _x_)
@@ -1029,7 +1053,7 @@ the case of sums--- using a single function \emph{having} the type of the mediat
 % ≡  δ ﹔ _x_ = δ ﹔ _x_                         ╲-self
 % ≡ true                                        =-reflexivity
 
-\eqn{$\slash$-Unique ; JointlyEpic}{\const{x} ∘ γ = \const{y} ∘ γ \impliesS x = y}
+\eqn{Colimit-Unique ; JointlyEpic}{\const{x} ∘ γ = \const{y} ∘ γ \impliesS x = y}
 
 % \vspace{2ex}
 % This expresses that colimits γ have an epic-like property: \\
@@ -1039,7 +1063,7 @@ the case of sums--- using a single function \emph{having} the type of the mediat
 The following law confirms the choice of notation once more
 ---just as the above fusion law is nearly mutliplication into the numerator.
 
-\eqn{$\slash$-Compose}{ε╱δ ∘ δ╱γ  = ε╱γ}
+\eqn{Colimit-Compose}{ε╱δ ∘ δ╱γ  = ε╱γ}
 
 % # ? \alert{where} $\delta$ and $\epsilon$ are $D$ cocones
 % # ? and anything appearing to the left? of $\under$ being a colimit!
@@ -1050,15 +1074,18 @@ provided the implicit well-formedness condition that
 $Fγ$ is a colimit holds ---clearly this condition is valid when $F$
 preserves colimits.
 
-\eqn{$\slash$-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
+\eqn{Colimit-Functor-Dist}{F(δ╱γ) = Fδ ╱ Fγ}
 
-\eqn{$\slash$-Pre-Functor-Elim}{δF╱γF = δ╱γ}
+\eqn{Colimit-Pre-Functor-Elim}{δF╱γF = δ╱γ}
 
 % Recall $\eta F$ be the natural transformation $x \mapsto \eta_{F\, x}$.
 %  Let $\gamma$ and $\gamma F$ be colimits for the same diagram, then
 
 \endeqns
 #+END_EXPORT
+
+
+
 
 \room
 \room
@@ -1090,21 +1117,21 @@ As usual, there is the implicit well-formedness condition.
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{$\backslash$-Type}{ δ \text{ cone for } D \impliesS γ ╲ δ : \src\, δ → \src\,γ}
+\eqn{Limit-Type}{ δ \text{ cone for } D \impliesS γ ╲ δ : \src\, δ → \src\,γ}
 
-\eqn{$\backslash$-Char}{ γ ∘ \const{x}  = δ \equivS x = γ ╲ δ }
+\eqn{Limit-Char}{ γ ∘ \const{x}  = δ \equivS x = γ ╲ δ }
 
-\eqn{$\backslash$-Self}{ γ ∘ \const{γ ╲ δ}  = δ}
+\eqn{Limit-Self}{ γ ∘ \const{γ ╲ δ}  = δ}
 
-\eqn{$\backslash$-Id}{γ╲γ = \Id}
+\eqn{Limit-Id}{γ╲γ = \Id}
 
-\eqn{$\backslash$-Fusion}{γ╲δ  ∘ x = γ ╲ (δ ∘ \const{x})}
+\eqn{Limit-Fusion}{γ╲δ  ∘ x = γ ╲ (δ ∘ \const{x})}
 
-\eqn{$\backslash$-Unique ; JointlyMonic}{γ ∘ \const{x} = γ ∘ \const{y} \impliesS x = y}
+\eqn{Limit-Unique ; JointlyMonic}{γ ∘ \const{x} = γ ∘ \const{y} \impliesS x = y}
 
-\eqn{$\backslash$-Functor-Dist}{F(γ ╲ δ) = Fγ ╲ Fδ}
+\eqn{Limit-Functor-Dist}{F(γ ╲ δ) = Fγ ╲ Fδ}
 
-\eqn{$\backslash$-Pre-Functor-Elim}{γF ╲ δF = γ╲δ}
+\eqn{Limit-Pre-Functor-Elim}{γF ╲ δF = γ╲δ}
 % Direct proof:
 %
 %    δF╱γF = δ╱γ
@@ -1121,9 +1148,6 @@ As usual, there is the implicit well-formedness condition.
 
 \newpage
 * Sums
-#+LaTeX: \def\inl{\mathsf{inl}}
-#+LaTeX: \def\inr{\mathsf{inr}}
-
 Take $D$ and $𝒟$ as suggested by $D𝒟 = \left( \overset{A}{•} \;\;\; \overset{B}{•} \right)$.
 Then a cocone δ for $D$ is a two-member family $δ = (f, g)$ with
 $f : A → C$ and $g : B → C$, where $C = \tgt\, δ$.
@@ -1233,19 +1257,19 @@ $⟨-,-⟩$ satisfying the Char and Type laws below; from which we obtain a host
 #+BEGIN_EXPORT latex
 \begineqns
 
-\eqn{$\langle\rangle$-Type}{f : C → A \lands g : C → B \impliesS ⟨f, g⟩ : C → A × B}
+\eqn{Pair-Type}{f : C → A \lands g : C → B \impliesS ⟨f, g⟩ : C → A × B}
 
-\eqn{$\langle\rangle$-Char}{ \fst ∘ x = f \lands \snd ∘ x = g \equivS x = ⟨f, g⟩ }
+\eqn{Pair-Char}{ \fst ∘ x = f \lands \snd ∘ x = g \equivS x = ⟨f, g⟩ }
 
-\eqn{$\langle\rangle$-Cancellation; $\langle\rangle$-Self}{ \fst ∘ ⟨f, g⟩ = f \landS \snd ∘ ⟨f, g⟩ = g}
+\eqn{Pair-Cancellation; Pair-Self}{ \fst ∘ ⟨f, g⟩ = f \landS \snd ∘ ⟨f, g⟩ = g}
 
-\eqn{$\langle\rangle$-Id}{ ⟨\fst, \snd⟩ = \Id}
+\eqn{Pair-Id}{ ⟨\fst, \snd⟩ = \Id}
 
-\eqn{$\langle\rangle$-Unique}{ \fst ∘ x = \fst ∘ y  \lands \snd ∘ x = \snd ∘ y \impliesS x = y}
+\eqn{Pair-Unique}{ \fst ∘ x = \fst ∘ y  \lands \snd ∘ x = \snd ∘ y \impliesS x = y}
 
-\eqn{$\langle\rangle$-Fusion}{ ⟨f , g⟩ ∘ x = ⟨f ∘ x , g ∘ x⟩ }
+\eqn{Pair-Fusion}{ ⟨f , g⟩ ∘ x = ⟨f ∘ x , g ∘ x⟩ }
 
-\eqn{$\langle\rangle$-Functor-Dist}{F \, ⟨f, g⟩_𝒞 = ⟨F \, f , F \, g⟩_𝒟 \qquad\text{ where } F : 𝒞 → 𝒟}
+\eqn{Pair-Functor-Dist}{F \, ⟨f, g⟩_𝒞 = ⟨F \, f , F \, g⟩_𝒟 \qquad\text{ where } F : 𝒞 → 𝒟}
 
 \endeqns
 #+END_EXPORT
@@ -1276,7 +1300,7 @@ For categories in which products exist, we define for $f : A → B$ and $g : C �
 
 \begineqns
 
-\eqn{$\times$-Definition}{ f × g = ⟨ f ∘ \fst, g ∘ \snd ⟩ : A × C → B × D}
+\eqn{x-Definition}{ f × g = ⟨ f ∘ \fst, g ∘ \snd ⟩ : A × C → B × D}
 
 \eqn{Projections-Naturality}{ \fst ∘ (f × g) = f ∘ \fst \landS \snd ∘ (f × g) = g ∘ \snd }
 
@@ -1284,14 +1308,13 @@ For categories in which products exist, we define for $f : A → B$ and $g : C �
 
 \eqn{Absorption}{ (f × g) ∘ ⟨h, j⟩ = ⟨f ∘ h, g ∘ j⟩ }
 
-\eqn{$\times$-BiFunctoriality}{ \Id × \Id = \Id \landS (f × g) ∘ (h × j) = (f ∘ h) × (g ∘ j)}
+\eqn{x-BiFunctoriality}{ \Id × \Id = \Id \landS (f × g) ∘ (h × j) = (f ∘ h) × (g ∘ j)}
 
 \eqn{Structural Equality}{ ⟨f,g⟩ = ⟨h, j⟩ \equivS f = h \lands g = j }
 
 \endeqns
 
-\newpage
-
+# \newpage
 * Finitary Sums and Products
 
 All properties studied for binary /splits/ and binary /eithers/ extend to the
@@ -1328,7 +1351,7 @@ E.g., $\mathsf{undistr}  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id �
 
 \eqn{Cool-Property}{ [f × g, h × k] \;=\; ⟨ [f, h] ∘ (\fst + \fst), [g, k] ∘ (\snd + \snd)⟩ }
 
-\eqn{Co-cool-Property}{ ⟨f + g, h + k⟩ \;=\; [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)] }
+\eqn{Co-cool-Property}{ ⟨f + g, h + k⟩ \;=\; [ (\inl × \inl) ∘ ⟨f, h⟩, (\inr × \inr) ∘ ⟨g, k⟩] }
 # Direct proof:
 #
 #   [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)]
@@ -1348,7 +1371,7 @@ Also, since constants ignore their inputs,
 # = ⟨ [f, g], _k_ ∘ [ Id, Id ]⟩   fusion
 # = ⟨ [f, g], _k_ ⟩               constants
 
-* space vfill                                                        :ignore:
+* COMMENT space vfill                                                        :ignore:
     \vfill
 * References
 
@@ -1384,6 +1407,30 @@ The category theory is mostly implicit, but presented elegantly!
 
 \vspace{-0.5em}
 
+:More:
++ [ ] [[https://link.springer.com/content/pdf/10.1007%2F978-3-642-32202-0_2.pdf][Generic Programming with Adjunctions]]
++ [ ] [[http://www.cs.ox.ac.uk/people/jeremy.gibbons/publications/acmmpc-calcfp.pdf][Calculating Functional Programs]]
+      - [[https://www.sciencedirect.com/science/article/pii/S157106610480906X?via%3Dihub][When is a function a fold or an unfold?]]
+      - [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.1735][The Under-Appreciated Unfold]]
+
++ [ ] [[https://www.researchgate.net/profile/Lambert_Meertens/publication/267305882_Category_Theory_for_Program_Construction_by_Calculation/links/54dbd91f0cf2a7769d9403a6/Category-Theory-for-Program-Construction-by-Calculation.pdf][Category Theory for Program Construction by Calculation]]
++ [ ] [[http://maartenfokkinga.github.io/utwente/mmfphd.pdf][Law and Order in Algorithmics]]
++ [ ] [[http://maartenfokkinga.github.io/utwente/mmf90.pdf][Homo- and Catamorphisms, Reductions and Maps: An Overview]]
++ [ ] [[http://maartenfokkinga.github.io/utwente/#detail_0000003538][Monadic Maps and Folds for Arbitrary Datatypes]]
++ [ ] [[http://www.cs.nott.ac.uk/~pszgmh/bananas.pdf][Bananas in Space: Extending Fold and Unfold to Exponential Types]]
++ [ ] [[http://maartenfokkinga.github.io/utwente/mmf90j.pdf][Adjunctions formulated as cata/anamorphisms]]
++ [X] [[http://www.cs.ox.ac.uk/jeremy.gibbons/publications/reladj.pdf][Relational Algebra by Way of Adjunctions]]
++ [X] [[http://www.comlab.ox.ac.uk/jeremy.gibbons/publications/hodgp-journal.pdf][Design Patterns as Higher−Order Datatype−Generic Programs]]
++ [ ] [[http://www.cs.ox.ac.uk/jeremy.gibbons/publications/proyo.pdf][What You Needa Know about Yoneda]]
+      - [[http://www.cs.ox.ac.uk/people/jeremy.gibbons/publications/poptics.pdf][Profunctor Optics]]
+
+[[http://www.cs.ox.ac.uk/people/nicolas.wu/papers/Hylomorphisms.pdf][Conjugate Hylomorphisms, Or: The Mother of All Structured Recursion Schemes]]
+
+[[http://www.cs.ox.ac.uk/jeremy.gibbons/publications/progorn.pf][Programming with Ornaments]] ---how dependent types show binomial heaps as fancy binary numbers?
+  - [[http://www.cs.ox.ac.uk/people/hsiang-shang.ko/pcOrn/pcOrn.pdf][Modularising Inductive Families]]
+
+:End:
+
 ** COMMENT Further Reads
 
  + Roland Backhouse
@@ -1396,6 +1443,15 @@ The category theory is mostly implicit, but presented elegantly!
  + Backus' FP and Iverson's APL are examples of pointfree programming
    languages; look them up ;-)
 
+* To Read
+
+  + [[http://www.cwru.edu/artsci/math/wells/pub/ttt.html][Toposes, Triples and Theories]] by Michael Barr and Charles Wells
+  + [[https://arxiv.org/pdf/1803.05316.pdf][Seven Sketches in Compositionality: An Invitation to Applied Category Theory]]
+  + [[https://arxiv.org/abs/math/0502550][Frobenius algebras and ambidextrous adjunctions]] by Aaron Lauda
+  + [[http://www.tac.mta.ca/tac/reprints/articles/5/tr5.pdf][Functorial Semantics of Algebraic Theories]] by F. William Lawvere
+  + [[http://www.tac.mta.ca/tac/reprints/articles/10/tr10.pdf][Basic Concepts of Enriched Category Theory]] by G.M. Kelly
+  + [[http://golem.ph.utexas.edu/category/2008/03/physics_topology_logic_and_com.html][Rosetta Stone]]
+
 * space newpage                                                      :ignore:
   \newpage
 * Monoidal and Closed Categories
@@ -1406,13 +1462,17 @@ The category theory is mostly implicit, but presented elegantly!
   Examples include products with the initial object, sums with the terminal object, or for
   the category of endofunctors: Functor composition with the identity functor.
 
+  # Monoidal categories are also called “tensor categories”
+
   \room
 
   A /monoidal category/ /(𝒞, ⊗, I, α, λ, ρ)/ consists of a category 𝒞 with bifunctor
   \newline
-  $\_{}⊗\_{} : 𝒞^2 → 𝒞$ and object /I : Obj 𝒞/ and three natural isomorphisms:
+  $\_{}⊗\_{} : 𝒞^2 → 𝒞$ and object /I : Obj 𝒞/
+  ---referred to as the ‘tensor product’ and ‘tensor unit---
+  and three natural isomorphisms:
   \newline
-  The ‘associator’ /α_{A, B, C} : A ⊗ (B ⊗ C) ≅ (A ⊗ B) ⊗ C/ and
+  The ‘(right-to-left) associator’ /α_{A, B, C} : A ⊗ (B ⊗ C) ≅ (A ⊗ B) ⊗ C/ and
   \newline
   the ‘unitors’  /λ_A : I ⊗ A ≅ A/ and /ρ_A : A ⊗ I ≅ A/ such that:
 
@@ -1426,6 +1486,400 @@ The category theory is mostly implicit, but presented elegantly!
      $\Id_A ⊗ λ_B \eqs (ρ_A ⊗ \Id_B) \;∘\; α_{A, I, B}$.
 
   Mnemonic: λ, ‘L’ambda, is for ‘L’eft unitor; ρ, ‘R’ho, is for ‘R’ight unitor.
+
+  \room
+
+  Unfolding some of that up yields:
+  + $\Id ⊕ \Id = \Id$ and $(f ∘ g) ⊗ (h ∘ k) = (f ⊗ h) ∘ (g ⊗ k)$
+  + $α ∘ (f ⊗ (g ⊗ h)) = ((f ⊗ g) ⊗ h) ∘ α$
+  + $λ ∘ (\Id ⊗ f) = f ∘ λ$
+  + $ρ ∘ (f ⊗ \Id) = f ∘ ρ$
+
+  *Mac Lane's coherence theorem:* Any well-typed diagram built from ⊗, α, λ, ρ commutes.
+
+  :TO_PROVE:
+  + Iteration Laws ? :: $λ_{X ⊗ Y} = (λ_X ⊗ \Id_Y) ∘ α$ and $ρ_{X ⊗ Y} = \Id_X ⊗ ρ_Y ∘ α˘$
+
+    Proof
+
+     Let's show the first one only.
+
+          Id ⊗ λ_{X ⊗ Y}
+       =  ρ ⊗ Id_{X ⊗ Y} ∘ α
+       =  ρ ⊗ (Id_X ⊗ Id_Y) ∘ α
+       =  α˘ ∘ ((ρ ⊗ Id_X) ⊗ Id_Y) ∘ α ∘ α
+       =  α˘ ∘ (((Id ⊗ λ_X) ∘ α˘) ⊗ Id_Y) ∘ α ∘ α
+       =  α˘ ∘ (Id ⊗ λ_X) ⊗ α˘ ∘ α ∘ α
+       =  α˘ ∘ α ∘ Id ⊗ (λ_X ⊗ α˘) ∘ α˘ ∘ α ∘ α
+       =  Id ⊗ (λ_X ⊗ α˘) ∘ α
+
+       MA: Shuchks! ???
+
+       λ_{X ⊗ Y} = λ_X ⊗ Id_Y
+     ≡{ unit-equivalence-left, see below }
+       Id ⊗ λ_{X ⊗ Y} = Id ⊗ (λ_X ⊗ Id_Y)
+     ≡{ unitor law }
+       (ρ ⊗ Id_{X ⊗ Y}) ∘ α = Id ⊗ (λ_X ⊗ Id_Y)
+     ≡{ BiFunctoriality }
+       (ρ ⊗ (Id_X ⊗ Id_Y)) ∘ α = Id ⊗ (λ_X ⊗ Id_Y)
+     ≡{ α naturality; α invertible }
+       α˘ ∘ ((ρ ⊗ Id_X) ⊗ Id_Y) ∘ α ∘ α = Id ⊗ (λ_X ⊗ Id_Y)
+     ≡{ unitors; α invertible }
+       α˘ ∘ (((Id ⊗ λ_X) ∘ α˘) ⊗ Id_Y) ∘ α ∘ α = Id ⊗ (λ_X ⊗ Id_Y)
+     ≡{ unitors; α invertible }
+       α˘ ∘ (((Id ⊗ λ_X) ∘ α˘) ⊗ Id_Y) ∘ α ∘ α = Id ⊗ (λ_X ⊗ Id_Y)
+
+
+     λ_{X ⊗ Y} : I ⊗ (X ⊗ Y) → X ⊗ Y
+     (λ_X ⊗ Id_Y) ∘ α˘
+
+  + Agreement Law :: $λ_I = ρ_I$
+    Proof
+
+      Since -⊗ Id is an equivalence,
+
+         λ_I ⊗ Id_I
+      =  λ_{I ⊗ I} ∘ α˘     ;; iteration law
+      =  (Id_I ⊗ λ_I) ∘ α˘  ;; λ naturality with f := λ, then eliminate λ since it's invertible
+      =  (ρ_I ⊗ Id_I) ∘ α ∘ α˘ ;; unitors
+      =   ρ_I ⊗ Id_I
+
+      Thus, λ_I = ρ_I.
+
+  Elementary remarks on units in monoidal categories
+  https://arxiv.org/pdf/math/0507349.pdf
+
+  :END:
+
+  :Theorems:
+
+  1. Id ⊗ λ ∘ α˘ = ρ ⊗ Id   ---duh, from unitors
+  2. λ_I = ρ_I
+
+     Proof:   λ = ρ ⇔ Id ⊗ λ = Id ⊗ ρ ⇔ p ⊗ Id ∘ α = Id ⊗ ρ ⇔{ ρ invertible} p ∘ p ⊗ Id ∘ α = p ∘ Id ⊗ ρ ⇔ ρ ∘ ρ ∘ α = ρ ∘ ρ ⇔ α = Id ???
+  3. λ ∘ α˘ = λ ⊗ Id
+  4. Id ⊗ ρ = ρ ∘ α
+  5. λ_{I ⊗ X} = Id ⊗ λ_X
+
+     Proof: λ ∘ Id ⊗ λ ={ naturality } λ ∘ λ
+            Whence, since λ invertible, Id ⊗ λ = λ  :-)
+
+  6. ρ_{I ⊗ X} = ρ_X ⊗ Id
+
+     See (5)
+
+  7. The unit object, I, is unique up to unique isomorphism; ie if I′, λ′, ρ′ is another unit object then I ≅ I′.
+
+  :End:
+  :More:
+  Moreover, the two obvious maps (I ⊗ A) ⊗ B → A ⊗ B, namely λ ⊗ Id and λ ∘ α˘,
+  can be shown to coincide.
+
+  Why?
+
+     λ ⊗ Id = λ ∘ α˘
+  ≡  λ ⊗ Id ∘ α = λ
+
+  --
+
+  1. α ∘ α = α ⊗ Id ∘ α ∘ Id ⊗ α  ─associtator
+  2. Id ⊗ λ = ρ ⊗ Id ∘ α   ─unitors
+  3. (Id ⊗) is an equivalence
+  4. ∴ WTS: Id ⊗ (λ ⊗ Id) = Id ⊗ (λ ∘ α˘)
+  5. BiFunctoriality of ⊗ means WTS:
+     Id ⊗ (λ ⊗ Id) = (Id ⊗ λ) ∘ (Id ⊗ α˘).
+  6. α ∘ Id ⊗ (λ ⊗ Id) = (Id ⊗ λ) ⊗ Id ∘ α  ─naturality of α applied to Id, λ, Id
+  7. α ∘ Id ⊗ (λ ⊗ Id) = (ρ ⊗ Id ∘ α) ⊗ Id ∘ α  ─using 2 on 6
+  8. α ∘ Id ⊗ (λ ⊗ Id) = (ρ ⊗ Id) ⊗ Id  ∘  α ⊗ Id  ∘  α  ─bifunctoriality of ⊗
+  9. Id ⊗ (λ ⊗ Id) = α˘ ∘ (ρ ⊗ Id) ⊗ Id  ∘  α ⊗ Id  ∘  α  ─invertibility of α
+  10. Id ⊗ (λ ⊗ Id) = ρ ⊗ (Id ⊗ Id) ∘ α˘  ∘  (α ⊗ Id)  ∘  α  ─naturality of α
+  11. Id ⊗ (λ ⊗ Id) = ρ ⊗ Id ∘ α˘  ∘  (α ⊗ Id)  ∘  α  ─bifunctoriality of ⊗
+  12. Id ⊗ (λ ⊗ Id) = (Id ⊗ λ) ⊗ α˘ ∘ α˘  ∘  (α ⊗ Id)  ∘  α  ─using (2), note α invertible
+  13. Id ⊗ (λ ⊗ Id) = α˘ ∘ Id ⊗ (λ ⊗ α˘) ∘ (α ⊗ Id)  ∘  α  ─naturality of α
+  14. Id ⊗ (λ ⊗ Id) = α˘ ∘ (Id ∘ α) ⊗ ((λ ⊗ α˘) ∘ Id) ∘  α  ─BiFunctoriality of ⊗
+  15. Id ⊗ (λ ⊗ Id) = α˘ ∘ (α ⊗ (λ ⊗ α˘)) ∘  α  ─BiFunctoriality of ⊗
+  16. Id ⊗ (λ ⊗ Id) = (α ⊗ λ) ⊗ α˘ ∘ α˘ ∘ α  ─naturality of α
+  17. Id ⊗ (λ ⊗ Id) = (α ⊗ λ) ⊗ α˘  ─inverses and units
+
+  derp :'(
+
+  :End:
+  :Also:
+
+  We can show that λ = ρ : I ⊗ I ≅ I.
+
+  1. α ∘ α = α ⊗ Id ∘ α ∘ Id ⊗ α  ─associtator
+  2. Id ⊗ λ = ρ ⊗ Id ∘ α   ─unitors
+  3. (⊗ Id) is an equivalence.
+  4. WTS: λ ⊗ Id = ρ ⊗ Id
+  5. λ ∘ α˘ = λ ⊗ Id ─from the “other” unit coherence
+  6. (Id ⊗ λ) ∘ α˘ = ρ ⊗ Id ─(2)
+  7. WTS: λ ∘ α˘ = (Id ⊗ λ) ⊗ α˘
+  8. WTS: λ = (Id ⊗ λ) ⊗ α˘ ∘ α
+
+     derp :'(
+
+  :End:
+
+  \room
+
+  \eqn{Unit-Equivalence-Left}{ \Id ⊗ f = \Id ⊗ g  \equivS  f = g }
+  \eqn{Unit-Equivalence-Right}{ f ⊗ \Id = g ⊗ \Id \equivS  f = g }
+  :Unit-equiv-pf:
+  Note e is the unit of · precisely when e · e = e and both (e·), (·e) are bijective.
+
+  As such, (I ⊗) and (⊗ I) are equivalences; in particular, they reflect equalities.
+
+    Id ⊗ f = Id ⊗ g
+  ⇒ λ ∘ Id ⊗ f = λ ∘ Id ⊗ g   ;; composition
+  ⇒ f ∘ λ = g ∘ λ             ;; λ Naturality
+  ⇒ f = g                     ;; λ invertible
+
+  Whence: Id ⊗ f = Id ⊗ g  ≡  f = g
+
+  :End:
+  :More_attempts:
+
+  Id ⊗ λ = ρ ⊗ Id ∘ α
+  ρ ⊗ Id = (Id ⊗ λ) ∘ α˘
+
+  ??
+
+  1. ρ ⊗ Id = (Id ⊗ λ) ∘ α˘
+  2. λ ∘ α˘ = λ ⊗ Id
+  3. Id ⊗ ρ = ρ ∘ α
+
+  For 1:
+  1) ρ ⊗ Id = Id ⊗ λ ∘ α˘ ─unitors
+  2)
+
+  For 2:
+
+  1) α ∘ α = α ⊗ Id ∘ α ∘ Id ⊗ α  ─associtator
+  2) Id ⊗ λ = ρ ⊗ Id ∘ α   ─unitors
+  3) (Id ⊗) is an equivalence
+  4)
+
+        λ ∘ α˘ = λ ⊗ Id
+     ≡  Id ⊗ (λ ∘ α˘) = Id ⊗ (λ ⊗ Id)
+     ≡  α ∘ Id ⊗ (λ ∘ α˘) = α ∘ Id ⊗ (λ ⊗ Id)
+     ≡  α ∘ Id ⊗ (λ ∘ α˘) = (Id ⊗ λ) ⊗ Id ∘ α
+     ≡  α ∘ Id ⊗ (λ ∘ α˘) = ((ρ ⊗ Id) ∘ α˘) ⊗ Id ∘ α
+     ≡  α ∘ Id ⊗ (λ ∘ α˘) = ((ρ ⊗ Id) ∘ α˘) ⊗ (Id ∘ Id) ∘ α
+     ≡  α ∘ Id ⊗ (λ ∘ α˘) = (ρ ⊗ Id) ⊗ Id ∘ (α˘ ⊗ Id) ∘ α
+
+
+
+      Id ⊗ (λ ⊗ Id)
+    = α˘ ∘ ((Id ⊗ λ) ⊗ Id) ∘ α
+    = α˘ ∘ (((ρ ⊗ Id) ⊗ Id) ∘ α) ∘ α
+    = (α˘ ∘ ((ρ ⊗ Id) ⊗ Id)) ∘ α ∘ α
+    = ((ρ ⊗ Id) ∘ α˘) ∘ α ∘ α
+    = (ρ ⊗ Id) ∘ α˘ ∘ α ∘ α
+    = (ρ ⊗ Id) ∘ α
+    = ((Id ⊗ λ) ∘ α˘) ∘ α
+    = Id ⊗ λ
+
+
+     ⇔  Id ⊗ (λ ⊗ Id) = (Id ⊗ λ) ∘ (Id ⊗ α˘)
+     ⇔  Id ⊗ (λ ⊗ Id) = Id ⊗ (λ ⊗ α˘)
+     ⇔  λ ⊗ Id = λ ⊗ α˘   (•̀ᴗ•́)و
+
+  :End:
+
+  \room
+
+  Examples
+  + Common examples include preordered monoids thought of as monoidal categories.
+  + Functor categories $𝒞^𝒞$ with tensor being functor composition.
+  + Any category with finite co/products is monoidal using sums or products.
+  + The ‘free strict monoidal category’ on 𝒞 has objects being
+    finite lists of 𝒞-objects where an arrow exists only between equal length
+    lists and it is a list of 𝒞-morphisms between the corresponding components;
+    tensor is catenation with the empty list as the unit object.
+    # + The category 𝒞𝒶𝓉 is cartesian closed: The internal-hom is the functor category of functors and natural transformations.
+  + Symmetric monoidal categories are closed under products, and this has a right
+    adjoint yielding functor categories of sym. mon. cats.
+
+  Interestingly, tensor distributes over sums: ~(A + B) ⊗ C ≅ (A ⊗ C) + (B ⊗ C)~.
+  :Proof:
+  By Yoneda,
+
+   (A + B) ⊗ C  → X
+  ≅ A + B  →  C ⇨ X
+  ≅ (A  →  C ⇨ X) × (B  →  C ⇨ X)
+  ≅ (A ⊗ C  →  X) × (B ⊗ C  →  X)
+  ≅ (A ⊗ C) + (B ⊗ C)  →  X
+
+  :End:
+
+  \room
+
+  A *lax monoidal functor* $F : 𝒱 ⟶ 𝒱′$ is a functor that sub-factors over product:
+  $F \, x_0 ⊗ ⋯ ⊗ F\, x_n ⟶̇ F(x₀ ⊗ ⋯ ⊗ x_n)$.
+  :More_detail:
+  More formally, there are transformations
+  $ϕ : I ⟶̇ F\, I$ and $ϕ : F\,X ⊗ F\,Y ⟶̇ F(X ⊗ Y)$ that are natural in $X$ and $Y$
+  that are compatible with the monoidal structure:
+  The obvious arrows $I ⊗ F\, X ⟶ F\, X$ coincide as do those for
+  $F\, X ⟵ F\, x ⊗ I$, namely $λ = F λ ∘ ϕ ∘ ϕ ⊗ \Id$ and $ρ = F ρ ∘ ϕ ∘ \Id ⊗ ϕ$,
+  and re-associating commutes with functor application in that the two ways
+  $(F\, X ⊗ F\, Y) ⊗ F\, Z ⟶ F\, (X ⊗ (Y ⊗ Z))$ coincide, namely
+  $F\, α ∘ ϕ ∘ ϕ ⊗ \Id  = ϕ ∘ \Id ⊗ ϕ ∘ α$.
+  If the transformations are isomorphims, the qualifier ‘lax‘ is dropped
+  and sometimes replaced by ‘strong’.
+  :End:
+
+  \room
+
+  \room
+  A *Cartesian-closed category* is a monoidal category where the tensor
+  is categorical product and all exponentials exist.
+  These categories are in correspondence with the models of simply typed
+  lambda-calculus. If it has all finite sums as well, then it's known as
+  *bicartesian closed*, in which case products necessarily distribute over sums.
+
+  𝒱 is *semicartesian* if any of the following equivalent statements is true.
+  1. Unit object $I$ is terminal; in which case one says 𝒱 is *semicartesian.*
+  2. It has a natural ‘deletion’ $‼_X : X ⟶ I$ with $‼_I = \Id_I$.
+  3. It has natural ‘projections’ $πᵢ : X₁ ⊗ X₂ ⟶ Xᵢ$ with $π₁ : I ⊗ I ≅ I : λ˘$.
+     :FurtherLaws:
+     The following can then be shown to be true?
+
+     + π₁ ∘ π₁ = π₁ ∘ α   :  (X ⊗ Y) ⊗ Z ⟶ X
+     + π₂ ∘ π₂ = π₂ ∘ α˘  :  X ⊗ (Y ⊗ Z) ⟶ Z
+     + Projections involving a unit equal to ρ or λ; e.g.,
+       π₁ˣⁱ = ρ.
+
+     :End:
+
+  # Whence, having projections and deletion maps is a property, not a structure!
+  :EquivalenceProofs:
+  We demonstrate the proof chain 2 ⇒ 1 ⇒ 3 ⇒ 2 to show the equivalences.
+
+  --------------------------------------------------------------------------------
+  2 ⇒ 1:
+
+     Let's show I ≅ 𝟙, the terminal object with !_X : X ⟶ 𝟙.
+     Indeed ‼ ∘ ! : I ⟶ I and by naturality of !!,
+     this equals !!_I which is Id_I by assumption.
+
+     Likewise, ! ∘ !! ={ naturality } !_𝟙 ={ unicity } Id_𝟙.
+
+     Whence I ≅ 1 with !˘ = !!.
+
+     Whence, !! is a unique map X ⟶ I for any X; indeed
+     for any f,g:
+
+        f, g : X ⟶ I
+     ⇒  ! ∘ f, ! ∘ g : X ⟶ 𝟙
+     ⇒  ! ∘ f = ! ∘ g
+     ≡  f = g , since ! is post inverse !!.
+
+  --------------------------------------------------------------------------------
+  1 ⇒ 3:
+
+     Let π₁ : X₁ ⊗ X₂ ⟶ X₁ := ρ ∘ (Id ⊗ !)
+
+     This is indeed natural: For any f : X ⟶ Y,
+     π₁ ∘ (f ⊗ f) = f ∘ π₁ as follows.
+
+        π₁ ∘ (f ⊗ f)
+     =  ρ ∘ (Id ⊗ !) ∘ (f ⊗ f)
+     =  ρ ∘ ((Id ∘ f) ⊗ (! ∘ f))
+     =  ρ ∘ (f ⊗ !)                ;; identity and naturality of !
+     =  ρ ∘ (f ⊗ Id)               ;; coherency of !!_I = Id_I
+     =  f ∘ ρ                      ;; naturality of ρ
+     = f ∘ Id ∘ ρ                  ;; Identities
+     = f ∘ ρ ∘ (Id ⊗ Id)           ;; naturality of ρ
+     = f ∘ ρ ∘ (Id ⊗ !)            ;; coherency of !!_I = Id_I
+     = f ∘ π₁
+
+     This proof was constructed by “burning the candle” at both ends;
+     i.e., simultaneously rewriting both sides until they met.
+
+     Likewise π₂ can be formed and found to be natural.
+
+     The coherency condition, π₁ : I ⊗ I ≅ I is proven by finding an
+     inverse i as follows.
+
+        i ∘ π
+     ={ i : I ⟶ I ⊗ I, so inverse of λ_I = ρ_I is a good candidate for i }
+        ρ˘ ∘ π
+     ={ definition of π }
+        ρ˘ ∘ ρ ∘ (Id_I ⊗ !_I)
+     ={ Inverses and coherency of ! }
+        Id_I ⊗ Id_I
+     ={ BiFunctoriality }
+        Id_I
+
+     Neato!
+
+  --------------------------------------------------------------------------------
+  3 ⇒ 2:
+
+
+     Let !!_X : X ⟶ I :=  π₁ ∘ λ˘
+
+     This is natural:
+
+       !! ∘ f
+     = π₁ ∘ λ˘ ∘ f
+     = π₁ ∘ (Id ⊗ f) ∘ λ ˘  ;; naturality of λ˘ is (Id ⊗ g) ∘ λ ˘ = λ ˘ ∘ g
+     = Id ∘ π₁ ∘ λ ˘        ;; naturality of π₁
+     = !!                   ;; identities and definition of !!
+
+    Moreover, it is coherent, !! = π₁ ∘ λ˘ = Id, by the coherency of π₁.
+  :End:
+
+  If in addition it is symmetric with (natural involution) $σ : X ⊗ Y ⟶ Y ⊗ X$
+  and has a natural ‘diagonal’ $Δ_X : X ⟶ X ⊗ X$
+  such that the obvious maps $X ⟶ X$ coincide
+  --- i.e., $λ ∘ (! ⊗ Id) ∘ Δ = Id = ρ ∘ (Id ⊗ !) ∘ Δ$,
+  “duplicating data, then deleting a copy, is the same as doing nothing”---
+  then it is necessairly cartesian!
+
+  :Cartesian_SemiProof:
+  For any A and B, let us show that A ⊗ B is their product.
+  That is, for any f : C ⟶ A and g : C ⟶ B
+  let us construct a unique map ⟨f, g⟩ : C ⟶ A ⊗ B
+  whose projections are f and g.
+
+  Let us try to use whatever's lying around to construct something
+  of type C ⟶ A ⊗ B then define that to be ⟨f,g⟩.
+
+     f : C ­→ A  ∧  g : C ⟶ B
+  ⇒  f ⊗ g : C ⊗ C → A ⊗ B
+  ⇒  f ⊗ g ∘ Δ : C → A ⊗ B
+
+  ∴ Define ⟨f, g⟩ := f ⊗ g ∘ Δ
+
+  Components are extracted by projections:
+
+     π₁ ∘ ⟨f , g⟩
+  =  π₁ ∘ f ⊗ g ∘ Δ
+  = { naturality of π₁ }
+    f ∘ π₁ ∘ Δ
+  = { claim }
+    f
+
+  Where I claim π₁ ∘ Δ : X → X “drop after duplication” is the identity:
+
+     π₁ ∘ Δ
+  = { identities }
+    Id ∘ π₁ ∘ Δ
+  = { naturality }
+    π₁ ∘ (Id ⊗ !) ∘ Δ
+  = { coherency of Δ }
+    π₁ ∘ ρ˘
+  = { Projections involving a unit equal to ρ or λ }
+    Id
+:End:
+
+# So, a symmetric monoidal category
+# becomes a category with finite products when we can duplicate and
+# discard.
+#
 
   \room
 
@@ -1488,13 +1942,6 @@ By Yoneda,
   \room
   When exponentials always exists, one refers to $\_{}➩\_{} : 𝒞 × 𝒞^{op} → 𝒞$
   as /the internal hom/ and says /(𝒞, ⊗, I, α, λ, ρ, ➩)/ is a *closed monoidal category*.
-
-  \room
-  A *Cartesian-closed category* is a monoidal category where the tensor
-  is categorical product; i.e., it's a category with finite products and exponentials.
-  These categories are in correspondence with the models of simply typed
-  lambda-calculus. If it has all finite sums as well, then it's known as
-  *bicartesian closed*, in which case products necessarily distribute over sums.
 
   \room
   In the cartesian case, the /entire/ collection of morphisms $X → Y$
@@ -1615,6 +2062,42 @@ By lad fusion, or:
 :End:
 
 # \newpage
+
+* Enrichment & Internal Algebraic Structures
+
+  A *Category 𝒳 enriched in a monoidal category 𝒱* or a *𝒱-category*
+    is essentially a category but its hom-types are objects of 𝒱.
+    Formally, there is a collection ~Obj 𝒳~ and for each pair ~A, B~
+    of such ‘objects’ there is a ‘hom-object’ ~𝒳(A, B)~ in 𝒱,
+    and there are two 𝒱-morphisms:
+    1. Composition: $μ_{A, B, C} : 𝒳(B, C) ⊗ 𝒳(A, B) ⟶ 𝒳(A, C)$
+       - Associativity: The two obvious ways $(𝒳(C, D) ⊗ 𝒳(B, C)) ⊗ 𝒳(A, B) ⟶ 𝒳(A, D)$
+         coincide.
+    2. Identities:  $η_A : I ⟶ 𝒳(A, A)$.
+       - Unity: The obvious maps $I ⊗ 𝒳(A, B) ⟶ 𝒳(A, B)$ coincide,
+         as do the obvious maps $𝒳(A, B) ⊗ I ⟶ 𝒳(A, B)$.
+
+   \room
+   A usual category is just a 𝒮ℯ𝓉-category.
+
+   \room
+   A /monoid in 𝒱/ is an object $M$ along with two morphisms
+   $μ : M ⊗ M ⟶ M, η : I ⟶ M$ such that the former is associative
+   and has the latter as unit. Notice that monoids /in/ 𝒱 are ‘untyped’
+   analogues of 𝒱-categories. A ‘monad’ is a monoid in a category
+   of endofunctors with composition as tensor.
+   - If M is a monoid in 𝒱 and F : 𝒱 ⟶ 𝒲 is a monoidal functor,
+     then F M is a monoid in 𝒲. Woah!
+
+   \room
+   In a monoidal category with natural transformations ‘discard’
+   $!_X : X ⟶̇ I$ and ‘duplicate’ $Δ_X : X ⟶̇ X ⊗ X$,
+   such as Cartesian monoidal categories, a /group/ is like a monoid but with
+   an additional morphism $i : M ⟶ M$ such that the inverse axioms
+   hold; e.g., $e = x · x^{-1}$ takes the point-free shape
+   $η ∘ !_M = μ ∘ (\Id ⊗ i) ∘ Δ$.
+   In an arbitrary monoidal category, a /Hopf algebra/ is like a group
+   where $Δ_M$ and $!_M$ exist for our specific $M$. These generalise groups.
 
 * COMMENT Why Monads Matter
 
@@ -2065,6 +2548,31 @@ From an adjunction L ⊣ R, a monad T = R ∘ G arises defined by
  \fi
 
  # coEqualiser-Fusion, ``Composition into Numerator''
+** COMMENT Naturality
+ 0. The arrow category $𝒞^→$ has objects being 𝒞-arrows, and arrows $f → g$ are
+    pairs $(h, k)$ of 𝒞-morphisms that yield commuting squares: $k ∘ f = g ∘ h$.
+    Composition is the pasting of commuting diagrams; i.e., component-wise.
+
+    - This gives rise to two functors $𝒮𝓇𝒸, 𝒯ℊ𝓉 : 𝒞^→ → 𝒞$ that project that
+      morphisms from the pairs.
+
+    - Observe that 𝒞-commuting cubes can be construed as objects of $(𝒞^→)^→$.
+
+ + A natural transformation η : F → G : 𝒞 → 𝒟 is precisely
+   a functor $η : 𝒞 → 𝒟^→$ where $𝒮𝓇𝒸 ∘ η = F \lands 𝒯ℊ𝓉 ∘ η = G$.
+
+   - That η is a functor to the arrow category of 𝒟 means that
+     for each object A of 𝒞, there is a 𝒟-arrow η_A;
+     and for each morphism f : A → B, there is a 𝒟-commuting square
+     $(h, k) : η_A → η_B$; i.e., $k ∘ η_A = η_B ∘ h$.
+
+  - By the constraints on η, we know $F f = (𝒮𝓇𝒸 ∘ η) f = h$
+    and $G f = (𝒯ℊ𝓉 ∘ η) f = k$.
+
+    Thus, we have $G f ∘ η_A = η_B ∘ F f$.
+
+ + A natural transformation is invertible precisely when its components are all invertible; i.e., (η˘)ₐ = (ηₐ)˘.
+
 * COMMENT Maybe move to README
 ** Gluing functions which do not compose -- products         :move_to_readme:
 
@@ -2669,7 +3177,6 @@ For categories in which sums and products exist, we define for $f : A → B$ and
 \room
 
 Notice that the last law above is self-dual.
-
 
 * COMMENT README
 
