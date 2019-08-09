@@ -1,0 +1,314 @@
+#+TITLE: Reference Sheet for Simple Type Theory
+#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]] @@latex:{\tiny\hspace{5.5em}\url{https://github.com/alhassy/CatsCheatSheet}}@@
+#+EMAIL: alhassy@gmail.com
+# DESCRIPTION: Cheatsheet of category theory: Adjunctions, [co]limits, [co]products, [co]terminals, etc.
+#+TODO: TODO | space
+#+OPTIONS: d:nil
+
+* More :ignore:
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{newunicodechar}
+#+LATEX_HEADER: \newunicodechar{﹔}{\ensuremath{\raisebox{0.4ex}{\tiny \,;\,}}}  %% forward composition ﹔
+
+#+LATEX_HEADER: \newunicodechar{Δ}{\ensuremath{\Delta}}
+#+LATEX_HEADER: \newunicodechar{𝒳}{\ensuremath{\mathcal{X}}}
+#+LATEX_HEADER: \newunicodechar{𝒱}{\ensuremath{\mathcal{V}}}
+#+LATEX_HEADER: \newunicodechar{𝒲}{\ensuremath{\mathcal{W}}}
+
+#+LATEX_HEADER: \newunicodechar{̇}{\ensuremath{.}}
+#+LATEX_HEADER: \newunicodechar{′}{\ensuremath{'}}
+
+
+#+LATEX_HEADER: \usepackage{calculation}
+
+#+INCLUDE: CheatSheet/CheatSheetSetup.org
+
+# https://en.wikipedia.org/wiki/Linguistic_relativity#Programming_languages
+
+:nonstop:
+(setq org-latex-pdf-process
+      '("pdflatex  -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+(setq org-latex-pdf-process
+      '("pdflatex  -shell-escape -output-directory %o %f"))
+
+:End:
+
+# (async-shell-command "rm CheatSheet.tex")
+
+# latex_header: \newunicodechar{𝒞}{\mathcal{C}}
+
+* LaTeX Setup :ignore:
+
+# INCLUDE: /Users/musa/MyUnicodeSymbols/MyUnicodeSymbols.sty
+#+LATEX_HEADER: \usepackage{CheatSheet/UnicodeSymbols}
+# LATEX_HEADER: \usepackage[utf8]{inputenc}
+# LATEX_HEADER: \usepackage[T1]{fontenc}
+#+LATEX_HEADER: \usepackage{amssymb}
+#+LATEX_HEADER: \usepackage{amsmath}
+# LATEX_HEADER: \usepackage{newunicodechar}
+
+# ➩ \pointer from wasysym package
+#+LATEX_HEADER: \usepackage{wasysym}
+#+LATEX_HEADER: \newunicodechar{α}{\ensuremath{\alpha}}
+#+LATEX_HEADER: \newunicodechar{ρ}{\ensuremath{\rho}}
+#+LATEX_HEADER: \newunicodechar{➩}{\,{\text{\pointer}}\,}
+
+#+LATEX_HEADER: \newunicodechar{ϕ}{\ensuremath{\phi}}
+#+LATEX_HEADER: \newunicodechar{⟵}{\ensuremath{\longleftarrow}}
+#+LATEX_HEADER: \newunicodechar{‼}{\ensuremath{! \! !}}
+
+#+begin_export latex
+\def\providedS{ \qquad\Leftarrow\qquad }
+
+\def\impliesS{ \qquad\Rightarrow\qquad }
+
+\def\landS{ \qquad\land\qquad }
+\def\lands{ \quad\land\quad }
+
+\def\eqs{ \quad=\quad}
+
+\def\equivs{ \quad\equiv\quad}
+\def\equivS{ \qquad\equiv\qquad}
+
+\def\begineqns{ \begingroup\setlength{\abovedisplayskip}{-1pt}\setlength{\belowdisplayskip}{-1pt} }
+\def\endeqns{ \endgroup }
+% \def\endeqns{ \endgroup \setlength{\belowdisplayskip}{2pt} } % put belowspace back to desired setting
+#+END_EXPORT
+
+# See defn-Type, below for an expanded usage; \eqn{name}{formula}
+# LaTeX: \setlength{\abovedisplayskip}{5pt} \setlength{\belowdisplayskip}{2pt}
+#+LaTeX: \def\eqn#1#2{ \begin{flalign*} #2 && \tag*{\sc #1} \label{#1} \end{flalign*}  }
+
+# LATEX_HEADER: \setlength{\parskip}{1em}
+# LaTeX: \setlength{\parskip}{0.5em}
+
+#+LaTeX: \def\room{\vspace{0.5em}}
+
+#+BEGIN_EXPORT latex
+\def\Obj{\mathsf{Obj}}
+\def\Hom{\mathsf{Hom}}
+\def\src{\mathsf{src}}
+\def\tgt{\mathsf{tgt}}
+\def\Id{\mathsf{Id}}
+
+\def\inl{\mathsf{inl}}
+\def\inr{\mathsf{inr}}
+
+\def\bin{I\!\!I}
+#+END_EXPORT
+
+* Abbreviations
+
+#+latex: \hspace{-1.2em}
+The phrase “ϕᵢ : sᵢ → tᵢ is a family of functions for each $i$”
+is abbreviated “$ϕ : ∀ i • sᵢ → tᵢ$”.
+
+Whereas the phrase “ψ maps each $i$ of $I$ to a member of $tᵢ$”
+is abbreviated “$ψ : (i : I) → tᵢ$”.
+
+* STT has a simple and highly uniform syntax
+
+#+LATEX_HEADER: \newunicodechar{ℳ}{\ensuremath{\mathcal{M}}}
+#+LATEX_HEADER: \newunicodechar{𝑷}{\ensuremath{\mathbf{P}}}
+#+LATEX_HEADER: \newunicodechar{𝓜}{\ensuremath{\mathcal{M}}}
+#+LATEX_HEADER: \newunicodechar{ψ}{\ensuremath{\psi}}
+#+LATEX_HEADER: \newunicodechar{𝓋}{\ensuremath{\mathcal{V}}}
+#+LATEX_HEADER: \newunicodechar{ι}{\ensuremath{\iota}}
+#+LATEX_HEADER: \newunicodechar{β}{\ensuremath{\beta}}
+#+LATEX_HEADER: \newunicodechar{⟦}{\ensuremath{\llbracket}}
+#+LATEX_HEADER: \newunicodechar{⟧}{\ensuremath{\rrbracket}}
+
+# Removing the red box that appears in "minted" when using unicode.
+# Src: https://tex.stackexchange.com/questions/343494/minted-red-box-around-greek-characters
+#
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \AtBeginEnvironment{minted}{\dontdofcolorbox}
+#+LATEX_HEADER: \def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+#+LATEX_HEADER: \makeatother
+
+
+  STT has to kinds of syntactic objects.
+    - /Expressions/ denote values including truth values ~true~ and ~false~;
+      they do what both terms and formulae do in first-order logic.
+    - /Types/ denote nonempty sets of values; they are used to restrict the scope of variables,
+      control the formation of expressions, and classify expressions by their values.
+
+    A ‘type’ is a string of symbols defined inductively by the following formation rules.
+    The first two being being for the base types of ‘individuals’ and Booleans, while the third being
+    an infinite hierarchy of ‘function’ types.
+
+  #+BEGIN_SRC haskell
+𝒯 ::= ι | 𝔹 | (𝒯 → 𝒯)
+#+END_SRC
+
+  Semantically, a function type denotes a domain of /total functions/:
+  $⟦α → β⟧ = ⟦α⟧ → ⟦β⟧$.
+
+  A /language/ is a pair $L = (C, τ)$ consisting of a set of /constant symbols/ $C$
+  which are assigned types by the total function $τ : C → 𝒯$; i.e., a ‘signature’
+  of primitive symbols used to construct expressions of the language.
+
+  /Expressions E of type α of a language L/ are strings of symbols defined inductively by the following formation rules.
+#+BEGIN_SRC haskell
+e  ::=  (𝓋 : α)    -- annotation of variable
+      | e e       -- application
+      | (λ 𝓋 • e) -- abstraction
+      | 𝒸         -- constant symbol
+      | e = e     -- equality
+      | (I 𝓋 • e) -- definite description
+#+END_SRC
+Of course not all combinations of symbols are meaningful.
+A string of symbols ~e~ is considered an expression only if it can be assigned a type; i.e.,
+we can find some ~γ ∈ 𝒯~ so that ~e : γ~ according to the following rules.
+That is “_:_” is an inductively defined binary predicate; which is determinstic in its second argument.
+#+BEGIN_SRC haskell
+0. e = (x : α)       ⇒  e : α
+1. f : α → β, e : α  ⇒  f e : β
+2. e : β             ⇒  (λ x : α • e) : α → β
+3. c ∈ C             ⇒  c : τ(c)
+4. e : α, d : α      ⇒  (e = d) : 𝔹
+5. p : 𝔹             ⇒  (I x : α • p) : α
+#+END_SRC
+
+  Write $ℰ \, α$ for the collection of expressions of type $α$.
+
+ + Abstraction defines functions from expressions mentioning variables.
+ + Definite description builds an expression that denotes the unique value that satisfies a given property.
+
+   $(I x : α • p)$ denotes the unique value $x$ of type $α$ satisfying $p$, if it exists and is a
+   canonical “error” value of type $α$ otherwise.
+
+ + Annotation constructs a variable by assingin a type to a member of 𝓋, an infinite set of symbols.
+
+ - Different kinds of expressions are distinuisghed /by type/ instead of /by form/.
+ - Within the body of a qunatification over variable $x : α$, we will write just $x$ rather than $(x : α)$.
+
+ The syntax of STT with types in addition to expressions is a bit more complex than the syntax of first-order logic.
+ However, the syntax is also more uniform than the syntax of first-order logic since
+ /expressions serve as both terms and formulae/ and /constant include individual constants, function symbols, and predicate/
+ /symbols as well as constants of many other types./ There are *no propositional or predicate connectives* in STT,
+ but we will see later that these can be easily defined in STT using function application, abstraction, and equality.
+
+* The semantics of STT is based on a small collection of well-established ideas
+
+  A /standard model/ for a language $L$ is a triple $𝓜 = (⟦-⟧₀, ⟦-⟧₁, err)$ where
+  1. $⟦-⟧₀ : 𝒯 → 𝒮ℯ𝓉$ assigns each type a non-emppty set.
+     - $⟦𝔹⟧₀$ is the Booleans.
+     - $⟦α → β⟧₀ = ⟦α⟧₀ → ⟦β⟧₀$ are the total functions between the interpreted sets.
+  2. $⟦-⟧₁ : (c : C) → ⟦τ c⟧₁$ is a dependent-function, it assigns each constant symbol
+     to a value in the interpreation of the symbol's type.
+  3. $err : (α : 𝒯) → ⟦α⟧₀$ is a function associating each type with a ‘error’ value.
+
+  The subscripts of ~⟦-⟧ᵢ~ will generally be omitted.
+
+  + ⟦ι⟧ corresponds to the ‘universe of discourse’ in a first-order model.
+  + Note that the function domains of a standard model are determined by the choice of ⟦ι⟧ alone.
+
+  # nice
+
+  1. A /variable assignment/ into ℳ is a variable-to-value assignment $σ : ∀ α • 𝓋 → ⟦α⟧$.
+  2. One then defines the /valuation/ function $⟦-⟧₂ = ⟦-⟧_σ : ∀ α • ℰ α → ⟦α⟧$ that takes expressions to values as follows:
+     1. $⟦(x : α)⟧₂ = σ(x)$
+     2. $⟦c⟧₂ = ⟦c⟧₁$ for $c ∈ C$
+     3. $⟦f e⟧₂ = ⟦f⟧₂ ⟦e⟧₂$, for function application.
+     4. $⟦ λ x : α • e⟧₂$, for $e : β$, is the function $f : ⟦α⟧ → ⟦β⟧$ such that, for
+        each $a ∈ ⟦α⟧$, we have $f(a) = ⟦e⟧₂′$ where $⟦-⟧₂′$ uses $σ[(x : α) ↦ a]$ instead of $σ$.
+
+        The semantics of function abstraction is defined using the same trick, due to Tarski, that is
+        used to define the semantics for universal quantification in first-order logic.
+     5. $⟦e = d⟧₂$ is ~true~ if $⟦e⟧₂ = ⟦d⟧₂$ and ~false~ otherwise.
+     6. $⟦I x : α • p⟧₂$ is the unique $a ∈ ⟦α⟧₀$ with $⟦p⟧′₂ = true$ if it exists, and is
+        $err_α$ otherwise.
+
+  Some jargon:
+  1. A value $a ∈ ⟦α⟧$ is /nameable/ if it is the value of some closed expression ~e~; i.e., $⟦e⟧₂ = a$.
+  2. /A is valid in 𝓜/, written $M ⊨ A$, if $⟦A⟧_σ = true$ for all variable assignment $σ$ into 𝓜.
+  3. /A is a semantic consequence/ of a set Σ of sentences, written $Σ ⊨ A$, if for every model ℳ,
+     whenever $ℳ ⊨ B$ for all $B ∈ Σ$ then $ℳ ⊨ A$.
+  4. A /theory/ $T = (L, Γ)$ is a language $L$ along with a set of sentences $Γ$, called /the axioms of T./
+     - Semantic conseqence for theories: $T ⊨ A$ means $Γ ⊨ A$.
+     - A /standard model for theory T/ is a standard model ℳ for $L$ such that $M ⊨ B$ for all $B ∈ Γ$.
+
+  # nice
+
+  The two semantics of first-order logic and STT are based on essentially the same ideas: Domains of discourse,
+  truth values, and functions; models for languages; variable assignments; and valuation functions defined
+  recursively on the syntax of expressions.
+
+* STT is a highly expressive logic
+
+  Even though STT is formulated as a ‘function theory’, it is a form of higher-order predicate logic.
+  Indeed its higher-order quantification lets us define the following connectives.
+
+  | Operation   | Definition                                                                    |
+  |-------------+-------------------------------------------------------------------------------|
+  | ~true~        | $(λ x : 𝔹 • x) = (λ x : 𝔹 • x)$                                               |
+  | ~false~       | $(λ x : 𝔹 • true) = (λ x : 𝔹 • x)$                                            |
+  | ~p ∧ q~       | $(λ f : 𝔹 → (𝔹 → 𝔹) • f \; true \; true) = (λ f : 𝔹 → (𝔹 → 𝔹) • f \; p \; q)$ |
+  | ~∀ x : α • p~ | $(λ x : α • p) = (λ x : α • true)$                                            |
+  | $⊥_α$       | $I x : α • x ≠ x$                                                             |
+
+  Where the remaining connectives are obtained by duality:
+  $¬ p ≡ (p = false)$, $p ∨ q ≡ ¬(¬ p ∧ ¬ q)$, $(∃ x : α • p) = ¬ (∀ x : α • ¬ p)$,
+  and $p ≠ q ≡ ¬(p = q)$.
+
+  Since STT is equipped with full higher-order quantification and definite description,
+  most mathematical notions can be directly and naturally expressed in STT.
+  None of the following examples can be directly expressed in first-order logic.
+  1. Function composition is expressed by $λ f : ι → ι • λ g : ι → ι • λ x : ι • f (g\, x)$.
+  2. Inverse image is expressed by $λ f : ι → ι • λ s : ι → 𝔹 • I s′ : ι → 𝔹 • ∀ x : ι • s′ \,x = s\, (f\, x)$.
+
+  | ⟪Its simple semantics makes STT suitable for general purpose logic.⟫ |
+
+  Theoretically speaking the inclusion of definite description adds no additional expressivitiy,
+  however from a practicaly stand-point it makes it easy to actually express ideas.
+  See Russell's “On Denoting”. The removal of definite description does simplify the semantics
+  since error values would no longer be needed. However, without definite description it would
+  not be possible to directly express the many mathematical concepts that are defined in informal
+  mathematics using the phrasing “the $x$ that satisfies $P$” such as the notion of the limit
+  of a function.
+
+* TODO COMMENT Virtue 4: STT admits categorical theories of infinite structures
+* STT has a simple, elegant, and powerful proof system
+
+  + A /proof system/ 𝑷 consists of a finite set of axiom schemas and rules of inference.
+  + A /proof/ of a formula $A$ from theory $T = (L, Γ)$ in 𝑷 is a finite sequence of formulas
+    of $L$ where $A$ is the last member of the sequence and every member of the sequence is an
+    instance of one of the axiom schemas of 𝑷, a member of Γ, or is inferred from previous
+    members by a rule of inference of 𝑷.
+  + Let $T ⊢_𝑷 A$ mean there is a proof of $A$ from $T$ in 𝑷.
+  + If for every theory $T$ and formula $A$, if $T ⊢_𝑷 A \;⇒\; T ⊨ A$ then say 𝑷 is /sound/.
+  + If for every theory $T$ and formula $A$, if $T ⊢_𝑷 A \;⇐\; T ⊨ A$ then say 𝑷 is /complete./
+
+* space vfill                                                 :ignore:
+  \vfill
+* References
+
+#+LaTeX: {\color{white}.}
+
+[[http://www.cas.mcmaster.ca/sqrl/papers/SQRLreport18_rev2.pdf][The Seven Virtues of Simple Type Theory]]
+\newline
+by
+[[http://imps.mcmaster.ca/wmfarmer/][William Farmer]]
+
+\vspace{1em}
+
+A nifty exposition of type theory and how it compares to first-order logic,
+with an emphasies on /practicality/.
+
+\vspace{1em}
+
+A beautiful read.
+
+* COMMENT footer
+
+(find-file "CheatSheet.el")
+
+# Local Variables:
+# eval: (org-babel-tangle)
+# eval: (progn (org-babel-goto-named-src-block "make-readme") (org-babel-execute-src-block) (outline-hide-sublevels 1))
+# eval: (load-file "CheatSheet.el")
+# compile-command: (my-org-latex-export-to-pdf)
+# End:
