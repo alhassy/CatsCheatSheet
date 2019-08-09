@@ -197,7 +197,7 @@ That is “_:_” is an inductively defined binary predicate; which is determins
   1. $⟦-⟧₀ : 𝒯 → 𝒮ℯ𝓉$ assigns each type a non-emppty set.
      - $⟦𝔹⟧₀$ is the Booleans.
      - $⟦α → β⟧₀ = ⟦α⟧₀ → ⟦β⟧₀$ are the total functions between the interpreted sets.
-  2. $⟦-⟧₁ : (c : C) → ⟦τ c⟧₁$ is a dependent-function, it assigns each constant symbol
+  2. $⟦-⟧₁ : (c : C) → ⟦τ c⟧₁$ assigns each constant symbol
      to a value in the interpreation of the symbol's type.
   3. $err : (α : 𝒯) → ⟦α⟧₀$ is a function associating each type with a ‘error’ value.
 
@@ -237,7 +237,7 @@ That is “_:_” is an inductively defined binary predicate; which is determins
   truth values, and functions; models for languages; variable assignments; and valuation functions defined
   recursively on the syntax of expressions.
 
-* STT is a highly expressive logic
+* STT is a highly expressive (classical) logic
 
   Even though STT is formulated as a ‘function theory’, it is a form of higher-order predicate logic.
   Indeed its higher-order quantification lets us define the following connectives.
@@ -270,7 +270,45 @@ That is “_:_” is an inductively defined binary predicate; which is determins
   mathematics using the phrasing “the $x$ that satisfies $P$” such as the notion of the limit
   of a function.
 
-* TODO COMMENT Virtue 4: STT admits categorical theories of infinite structures
+* STT admits categorical theories of infinite structures
+
+  A theory is /categorical/ if it has exactly one model up to isomorphism.
+  - These are useful for when we want to capture eseentially the only model
+    we're interested in; in a clean minimal fashion.
+  - E.g., completely ordered fields are categorical ---the real numbers.
+  - E.g., any algebraic data type is categorical, that's why we can code safely in
+    functional programming.
+    * ADTs are initial and so unique up to unique isomorphism.
+  - E.g., Peano Arithmetic is categorical ---the natural numbers.
+
+ The theory PA, of Peano Arithmetic, has constants ~0, s~ with ~τ = 0 ↦ ι, s ↦ ι → ι~
+  and axioms that zero is not a successor, ~s~ is injective, and the induction principle (IP)
+  which may be rendered as the STT expression
+  | $∀ p : ι → 𝔹 • (p\,0 \;∧\; (∀ x : ι • p\,x ⇒ p\,(s\, x))) ⇒ ∀ x : ι • p\, x$ |
+
+  PA *cannot* be directly formalised in first-order logic because the induction principle
+  involves quantification over predicates, which is not directly expressible in first-order
+  logic. Instead, in FOL one resorts to an infinite collection of formulaes called the
+  /induction schema/:
+  #+begin_quote org
+  As axiom take each sentence that is a universal closure of a formula of the form
+  | (B[0] ∧ (∀ x • B[x] ⇒ B[s\, x])) ⇒ ∀ x • B[x]|
+  where ~B[x]~ is a formula.
+  #+end_quote
+  This approximates the IP since it includes just a countable number
+  of instances of IP ---one for each equivalence class of formulas related by logical
+  equivalence--- while IP has a continuum number of instances ---one for each property of the
+  natural numbers. Consequently, such a formulation of PA is not categorical since it
+  does not contain all instances of IP. As such, it has “nonstandard” models containing
+  infinite natural numbers by the compactness theorem of FOL.
+
+    #+latex: \vspace{1em}
+  /By the compactness theorem of FOL, any first-order theory that has an infinite
+  model has infinitely many (infinite) nonisomorphic models!/
+  Whence, lack of categoricity is a fundamental weakness of FOL:
+  A first-order theory that is inteded to specifiy a single infinite structure cannot be
+  categorical.
+
 * STT has a simple, elegant, and powerful proof system
 
   + A /proof system/ 𝑷 consists of a finite set of axiom schemas and rules of inference.
@@ -281,6 +319,47 @@ That is “_:_” is an inductively defined binary predicate; which is determins
   + Let $T ⊢_𝑷 A$ mean there is a proof of $A$ from $T$ in 𝑷.
   + If for every theory $T$ and formula $A$, if $T ⊢_𝑷 A \;⇒\; T ⊨ A$ then say 𝑷 is /sound/.
   + If for every theory $T$ and formula $A$, if $T ⊢_𝑷 A \;⇐\; T ⊨ A$ then say 𝑷 is /complete./
+
+  By Godel's Incompleteness Theorem,
+  STT has no sound & complete proof system, which is a sign of its strength.
+
+  #+latex: \vspace{1em}
+  STT has simple proof system consisting of the following 6 axiom schemas
+  and a single rule of inference. ( They are schemas since the type variables ‘α’
+  cannot be quantified. )
+  + A1 :: Truth Values;
+          $∀ f : 𝔹 → 𝔹 • (f \,\mathsf{true} \,∧\, f\,\mathsf{false})
+           \,=\, (∀ x : 𝔹 • f\, x)$.
+  + A2 :: Leibniz' Law;
+          $∀ x, y : α • x = y ⇒ ∀ p : α → 𝔹 • p\,x = p\,y$
+  + A3 :: Extensionality;
+          $∀ f, g : (α → β) • (f = g) = (∀ x : α • f\,x = g\, x)$
+  + A4 :: Beta-Reduction;
+          $(λ x : α • e) \, d \;=\; e[x ≔ d]$
+
+          ( λ-abstraction acts as the converse rule. )
+  + A5 :: Definite Description Introduction;
+          $(∃₁ x : α • p) ⇒ p[x ≔ (I x : α • p)]$ where ∃₁ is the usual unique-existence.
+  + A6 :: Definite Description Elimination:
+          $¬(∃₁ x : α • p) ⇒ (I x : α • p) = ⊥_α$
+  + R1 :: Equality Substitution:
+         From $L = R$ and $E$ infer the result of replacing one occurence of $L$ in $E$
+         by an occurence of $R$, provided that the occurrence of $L$ in $E$ is not
+         a variable immediately preceded by λ or I.
+
+  #+latex: \vspace{1em}
+  Even though its necessairly incomplete, as mentioned earlier,
+  the following system is sound since each instance of the schemas can be shown to be valid
+  in any standard model and the rule preserves validity.
+
+  #+latex: \vspace{1em}
+  Does this system have sufficient provability power to be useful?
+  Yes! Why? By experience, including the number of proof assistants based on this system
+  such as HOL and Isabelle.
+
+  # Adding an axiom that says the domain of individuals is infinite allows us to
+  # encode PA and prove IP.
+
 
 * space vfill                                                 :ignore:
   \vfill
