@@ -108,13 +108,157 @@ is abbreviated “$ϕ : ∀ i • sᵢ → tᵢ$”.
 Whereas the phrase “ψ maps each $i$ of $I$ to a member of $tᵢ$”
 is abbreviated “$ψ : (i : I) → tᵢ$”.
 
+* Higher-Order Logic
+
+  /higher-order logic/, HOL, is an extension of the /simply typed lambda calculus/ with logical connectives
+  and quantifiers, permitting logical reasoning about functions in a very general way.
+  In particular, it allows quantification over higher-order entities such as predicates and relations.
+  It is sufficient for expressing most ordinary mathematical theories and has a simple set-theoretic semantics.
+
+  In informal mathematics, functions have to be introduced with an explicit name before they can be used.
+  Lambda calculus provides a machanism for building expressions that denote functions, so that functions can
+  be used without explicit definitions and naming. Functions are constructed by /λ-abstraction/; e.g.,
+  $λ n : ℕ • n + 1$ is the function sending a number $n$ to its successor $n + 1$; the “λ n : ℕ” porition
+  indicates that $n$ is the argument to the function and it should be of ‘type’ ℕ, the rest is the result of the function.
+  We may /apply/ a λ-expression to obtain a value by replacing the argument; e.g., $(λ n : ℕ • n + 1)\,2 = 2 + 1 = 3$.
+
+  A /signature/ is a set of pairs consisting of a ‘name’ $c$ and furthur data which will be denoted $τ(c)$.
+
+* Types
+  A ‘type’ is an expression that denotes a /nonempty/ set.
+  Higher-order logic postulates two atomic types ---𝔹 to denote the two-element set of /truth values/,
+  and ι to denote an infinite set of /individuals/--- and one type-operator which denotes a set-forming
+  operation ---namely, $α → β$ denotes all total functions from the set denoted by α to the set denoted by β.
+
+  For practicality, let $AT$ be a signature ‘type operators’; i.e., a set of name-number pairs.
+#+BEGIN_SRC haskell
+-- “Types over AT”
+𝒯 ::= ι | 𝔹 | 𝒯₁ → 𝒯₂ | Op(𝒯₁, …, 𝒯ₙ)
+#+END_SRC
+  In the last alternative, $Op$ is an /n/-ary type operator in $AT$ that constructs a new type out of the types $𝒯₁, …, 𝒯ₙ$.
+
+  + Part of the power of HOL comes from the fact that we can iterate type construction to ever higher levels of
+    functionality. For instance, $(ι → 𝔹) → 𝔹$ denotes the set of functions that take functions from individuals
+    to truth values as arguments and return truth values as results. This is a set of /higher-order functions/.
+
+* Terms
+
+  The /terms/ of HOL are expressions that denote elements of types. Each term is associated with a unique type.
+
+  For practicality, let $SG$ be a signature of ‘constants’; i.e., a set of name-type pairs.
+
+  # The second ‘∣’ is actually \mid.
+  #+caption: Terms over SG
+  | $t$ | ::=     | $𝓋_α$        | (variable)    |
+  |     | $\;\,∣$ | 𝒸            | (constant)    |
+  |     | $\;\,∣$ | $t₁ \, t₂$   | (application) |
+  |     | $\;\,∣$ | $(λ 𝓋_α • t₁)$ | (abstraction) |
+
+  Terms are associatedd with types as follows; where we write $t : α$ to express that $t$ has type $α$.
+  + $𝓋_α : α$
+  + $𝒸 : τ(c)$
+  + Likewise application and abstraction.
+
+  A term is /well-typed/ if it has a type according to these rules; in which case it denotes a value
+  in the set denoted by the type.
+
+  + It is common to write $𝓋 : α$ instead of $𝓋_α$, especially when $α$ is complex.
+    Moreover, one writes $𝓋$ rather than $𝓋_α$ when $α$ can be easily deduced.
+
+* Standard Types & Constants
+  Just as we insist that every 𝔹 is a nullary type operator, we insist that every constant signature
+  contains a constant called /equality/, $= : α → α → 𝔹$, for each type $α$, which denotes equality
+  on the set denoted by the type $α$.
+
+* Semantics
+
+  Let 𝒮ℯ𝓉 denote a collection of sets.
+
+  A /model/ of a type signature is given by associating every /n/-ary type operation with
+  a function $𝒮ℯ𝓉ⁿ → 𝒮ℯ𝓉$, which acts as the /meaning/ of the operation.
+  The type operators 𝔹 and → must be given their /standard meaning/ as the Booleans
+  and as the collection of all total functions between sets. We write $⟦-⟧₀$ for a model.
+
+  A /model/ for a constant signature is a model for a type signature along with a function
+  $⟦-⟧₁ : (c : C) → ⟦τ(c)⟧₀$ that gives the meaning of $c$ as a value of $⟦τ(c)⟧₀$.
+  We insist that the equality constant is given its meaning as the equality operation on a set.
+
+* Deductive Systems
+
+  A /deductive system/ lets us prove properties of elements denoted by terms.
+
+  + A /formula/ is a term of type 𝔹.
+  + A /sequent/ is a pair $(ϕ, t)$, that is written “ϕ ⊢ t”, where ϕ is a finite set of
+    formulas and $t$ is a single formula known as the /assumptions/ and /conclusion/, respectively.
+    - A sequent is /satisfied/ if any environment making the formulas of ϕ true also makes $t$ true.
+    - A sequent is /valid/ if it is satisfied in every standard model.
+  + An /inference (rule)/ is a list of /n+1/ sequents; it is usually written as a fraction with
+    the /hypotheses/, the first /n/, sequents are above the line; and the last sequent, the /conclusion/ is below the line.
+    - An inference is /valid/ if any standard model that satisfies the hypothesis also satisfies the conclusion.
+    - An inference with no hypothesis is called an /axiom./
+    - A /schema/ is an inference that mentions metavariables, which stand for arbitrary (sets of) phrases; the instantiations
+      of which may need to satisfy ‘associated side conditions’.
+
+  A /deductive system/ $DS$ is a set of inference rules.
+
+  + Inference rules can be ‘composed’: If the conclusion of R₁ is one of the premises of R₂,
+    then we draw R₂ in fraction form then above it's /i/-th hypothesis we draw a fraction line
+    above which is the hypotheses of R₁. The result of such an iterated process is a /deduction (tree)./
+    - For schemas, such a tree with hypothesis and a conclusion and accumulated side-conditions
+      is known as a /derivied inference rule/.
+
+  + A /theorem/ is a sequent having a /proof/; i.e., a deduction without any hypothesis
+    and with the sequent as its conclusion ---this is known as a /natural deduction proof/.
+    - This form does not scale for large deductions; an alternative is the /calculational proof style/
+      where-in rules are displayed sideways & upsidedown: One places the conclusion at the top
+      then itemises the conclusions vertically underneath; then composition means each item will have
+      its own children hypothesis vertically under it, possibly none. (See Back and von Wright)
+
+  #+caption: A theory
+    | type signature     | ⇒ | What types can be formed?          |
+    | constant signature | ⇒ | What terms can be formed?          |
+    | inference rules    | ⇒ | What theorems can be proven & how? |
+
+  + Consistent :: There's some underivable sequent; in particular, if ~false~ cannot be proven.
+  + Sound :: (wrt to a given model) if every provable sequent is valid in the model.
+  + Complete :: (wrt to a given model) if every valid theorem can be proved using the deductive system.
+
+* Quantification
+
+  The /quantifiers/ ∀ and ∃ take predicates as their arguments
+   | ∀, ∃ : (α → 𝔹) → 𝔹 |
+
+   In FOL, we have to build quantifiers into the syntax of formulas;
+   in HOL, quantifiers may be taken as constants.
+   One writes $(∀ x • t)$ instead of $∀ (λ x • t)$; likewise for ∃.
+
+   The /selection, or choice, operator/ ε takes a predicate
+   and returns a solution to it, if there are any; otherwise
+   the result is an unknown element. This operator embodies the “axiom of choice”.
+   | ε : (α → 𝔹) → α |
+
+   + Introduction: (∃ x • t) ⇒ t[x ≔ (ε x • t)]
+   + Elimination: If we can show t ⇒ s where x is not free in s,
+     then t[x ≔ (ε x • t)] ⇒ s.
+     - That is, we prove properties involving ε by proving properties
+       without making any assumptions about which value is chosen
+       excpet that it is a solution to $t$.
+
+    We have an arbitrary element of any type: $⊥_α = (ε x : α • false)$;
+    the only information about it we have is its type.
+
 * STT has a simple and highly uniform syntax
 
+#+LATEX_HEADER: \usepackage{caption}
+#+LATEX_HEADER: \DeclareCaptionTextFormat{italicsunderline}{ \textit{\underline{#1}}  }
+#+LATEX_HEADER: \captionsetup{labelformat=empty,skip=0pt,textformat=italicsunderline}
+
+#+LATEX_HEADER: \newunicodechar{ⁿ}{\ensuremath{^n}}
 #+LATEX_HEADER: \newunicodechar{ℳ}{\ensuremath{\mathcal{M}}}
 #+LATEX_HEADER: \newunicodechar{𝑷}{\ensuremath{\mathbf{P}}}
 #+LATEX_HEADER: \newunicodechar{𝓜}{\ensuremath{\mathcal{M}}}
 #+LATEX_HEADER: \newunicodechar{ψ}{\ensuremath{\psi}}
-#+LATEX_HEADER: \newunicodechar{𝓋}{\ensuremath{\mathcal{V}}}
+#+LATEX_HEADER: \newunicodechar{𝓋}{\ensuremath{v}}
 #+LATEX_HEADER: \newunicodechar{ι}{\ensuremath{\iota}}
 #+LATEX_HEADER: \newunicodechar{β}{\ensuremath{\beta}}
 #+LATEX_HEADER: \newunicodechar{⟦}{\ensuremath{\llbracket}}

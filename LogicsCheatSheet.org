@@ -1,0 +1,451 @@
+# MA: Copied to dropbox Dec 15 2019
+
+#+TITLE: Logics CheatSheet
+#+SUBTITLE: ---Reference Sheet for “What I'm Currently Learning”---
+# DATE: << Winter 2019 >> When we don't provide a date, one is provided for us.
+# ─CheatSheet Configurations: Change the first two‼─
+#+MACRO: URL https://github.com/alhassy/CheatSheet
+#+MACRO: blurb Pretty cheat sheets, or “reference cards”, obtainable from Org-mode files. See section [[#getting-started]] below to get started making your own cheat sheets!
+#+MACRO: ShowURL @@latex:{\tiny\hspace{6em}\url{ {{{URL}}} } }@@
+#+AUTHOR: [[http://www.cas.mcmaster.ca/~alhassm/][Musa Al-hassy]] {{{ShowURL}}}
+#+EMAIL: alhassy@gmail.com
+#+TODO: Todo | spacing begin end LaTeX
+#+OPTIONS: d:nil
+#+INCLUDE: CheatSheetSetup.org
+
+:Ignore:
+Why org-mode? To use org-babel tangle!
+#+begin_quote
+/‘Why’, said the Dodo, ‘the best way to explain it is to do it.’/
+
+---Alice's Adventures in Wonderland
+#+end_quote
+:End:
+* LaTeX Extra, Local, Setup :ignore:
+
+#+LATEX_HEADER: \usepackage{UnicodeSymbols}
+
+# Removing the red box that appears in "minted" when using unicode.
+# Src: https://tex.stackexchange.com/questions/343494/minted-red-box-around-greek-characters
+#
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \AtBeginEnvironment{minted}{\dontdofcolorbox}
+#+LATEX_HEADER: \def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+#+LATEX_HEADER: \makeatother
+
+#+LATEX_HEADER: \usepackage{newunicodechar}
+#+LATEX_HEADER: \newunicodechar{𝑻}{\ensuremath{T}}
+#+LATEX_HEADER: \newunicodechar{⊕}{\ensuremath{\oplus}}
+#+LATEX_HEADER: \newunicodechar{≈}{\ensuremath{\approx}}
+
+* COMMENT ~\LaTeX~ commands ↦ ~#+latex: \LaTeX~
+
+  Execute the following block, with ~C-c C-c~ anywhere inside it,
+  to hide all LaTeX specific items away so that, for example, the generated HTML
+  does not show them.
+
+  #+BEGIN_SRC emacs-lisp :results no
+(defun my/replace-in-buffer (this that)
+  "Replace every occurance of regexp ‘this’ with ‘that’
+   in the current buffer."
+   (interactive)
+   (save-excursion
+    (beginning-of-buffer)
+    (while (re-search-forward this nil t)
+      (replace-match that)
+    ))
+)
+
+;; Replace newline, any number of space, then room or vspace with a #+latex: beforehand.
+(let (this that)
+  (dolist (kp '( ( "^[ ]*\\\\room" . "#+latex: \\\\room")
+         ( "^[ ]*\\\\vspace" . "#+latex: \\\\vspace")
+         ( "^[ ]*\\\\newpage" . "#+latex: \\\\newpage")
+         ( "^[ ]*\\\\columnbreak" . "#+latex: \\\\columnbreak")
+         ))
+    (setq this (car kp))
+    (setq that (cdr kp))
+    (my/replace-in-buffer this that)
+   )
+)
+  #+END_SRC
+
+  #+RESULTS:
+
+* Definitions
+
+  + Signature :: A pair of sets /Σ = (S, Ω)/ called the /sorts/ and /operations/;
+                 each operation is a tuple written /f : s₁ × ⋯ × sₙ → s/
+                 where the /sᵢ/ are sorts. I.e., a hypergraph.
+
+  + Algebra :: An implementation of a signature.
+
+               A Σ-algebra /A/ is a pair of functions assigning:
+    1. A set $A \ s$ to each sort /s/, called the /carrier set of sort s/
+    2. A total function /A f : A s₁ × ⋯ × A sₙ → A s/ to each operation
+       symbol /f : s₁ × ⋯ × sₙ → s/.
+
+  + Homomorphism :: Mappings between the carrier sets of Σ-algebras
+   that “respect” the function symbols of Σ.
+
+                    A Σ-<<<homomorphism>>> ~h : A ⟶ B~ between two
+                    Σ-algebras ~A~ and ~B~ is a family of functions ~∀ {s}
+                    → A s → B s~ such that for any
+                    operation ~f : s₁ × ⋯  × sₙ → s~, we have
+                    ~hₛ (A f (a₁, …, aₙ)) = B f (hₛ₁ a₁, …, hₛₙ aₙ)~; i.e.,
+                    ~h ∘ A f = B f ∘ map h~.
+
+   ( Algebras are functors and homomorphisms are natural transformations! )
+
+ + Abstract data type :: An abstract data type is a class of
+        algebras closed under isomorphism.
+
+         An <<<abstract data type>>> for a signature
+        Σ is a class $𝒞 ⊆ 𝒜𝓁ℊ Σ$ such that if ~A ≅ B ∈ 𝒞~ then ~A ∈ 𝒞~,
+        for any Σ-algebras ~A~ and ~B~.
+
+       An abstract data type is called /monomorphic/ if all its algebras
+        are isomorphic to each other; otherwise it is called
+        /polymorphic/.
+
+
+  | *Academia*     | *Programming*              |
+  |--------------+--------------------------|
+  | Signatures   | Interface                |
+  | Algebra      | Implementation           |
+  | Homomorphism | Coherent transformations |
+  |              |                          |
+
+* Signature Morphisms
+
+ + Signature morphism :: a signature morphism is a mapping of
+      signatures that respects the arity of the operations.
+
+      Since signatures are hypergraph, signature morphisms are
+      just hypergraph morphisms: A /signature morphism/ $μ : Σ ⟶ Σ′$
+      is a pair of functions, between sorts and operation symbols, such that
+      /f : s₁ × ⋯ × sₙ → s  ⇒  μ f : μ s₁ × ⋯ × μ sₙ → μ s/.
+
+      Signature morphisms are simply a change of notation.
+
++ Reducts :: These are the semantical counterpart of the syntactical notion of
+             signature morphisms.
+
+             If /μ/ : Σ → Σ′ and /A′/ is a Σ′-algebra, then the /μ-reduct
+             of A′/ is the Σ-algebra /A′ ∘ μ/ defined by $(A′ ∘ μ)(x) = A′(μ x)$.
+
+             When μ is an inclusion, /A′ ∘ μ/ simply “forgets” the extra parts /Σ′ - Σ/
+             and so it is a ‘constrained’ algebra. Of-course, μ could be the identity
+             and this perception of constrained is void.
+
+             $A′ ∘ μ$ is a Σ-algebra with the semantics of Σ′-algebra /A′/:
+             We ‘pull’ the interpretation of /A′/ ‘back’ along μ.
+
+             Likewise, the /μ/-reduct of a Σ′-homomorphism $h′$ is
+             the Σ-homomorphism $h′_μ \;:\; A′ ∘ μ ⟶ B$ defined by
+             $(h′_μ) \, s\, x = h′_{μ s}\, x$.
+
+An algebra is also sometimes called a model.
+So, if $μ : Σ ⟶ Σ′$ then $Mod\, μ : Mod\, Σ′ ⟶ Mod\, Σ$
+is obtained by using a Σ′-model to give a Σ-model whose semantics
+are the semantics of the orignal via a change-in-notation μ.
++ $Mod\, μ\, A′ = A′ ∘ μ$.
+
+* Logics
+
+An /algebra logic, or logic/ for short, /L/ consists of:
+- A decidable set /L Σ/ of ‘formulas’ for each signature Σ;
+  - Signatures provide the non-logical symbols, which
+    represent predicates, functions, and constants on the domain of discourse.
+- A ‘formula morphism’, function, /L μ : L Σ ⟶ L Σ′/ for each signature
+  morphism /μ/ : Σ ⟶ Σ′;
+  + This is a way to extend, apply, a signature morphism onto the syntactic formulae.
+- A ‘satisfaction relation’ /_⊨_ : 𝒜𝓁ℊ Σ ↔ L Σ/ for each signature Σ.
+  + One says formula /ϕ ∈ L Σ/ is *valid in Σ-algebra A*, or
+    *A satisfies ϕ*, if $A ⊨_Σ ϕ$.
+
+Such that the following two conditions hold:
+
+1. /Isomorphism Condition:/ Isomorphic algebras satisfy the same formulae.
+
+   For isomorphic Σ-algebras /A/ and /B/, and formula /ϕ ∈ L Σ/,
+   \[ A ⊨_Σ ϕ \;⇔\; B ⊨_Σ ϕ \]
+
+2. /Satisfaction Condition:/
+
+   Satisfaction is invariant under change of notation:
+   For any signature morphism $μ : Σ ⟶ Σ′$, formula /ϕ ∈ L Σ/, and
+   Σ′-algebra /A′/, \[A′ ∘ μ ⊨_Σ ϕ \;⇔\; A′ ⊨_{Σ′} L μ \, ϕ \]
+
+   When we think of μ as a form of constraints, this says:
+       A formula is satisfied in a ‘constrained’ subpart of an algebra
+   iff the algebra satisfies the ‘constrained’ form of the formula.
+
+   Writing $Sen\, μ = L\, μ$ for the sentences, formulae, operation,
+   and $Mod\, μ$ for the reduct; the condition becomes a property of sentences-&-models, of syntax-&-semantics: Satisfaction is invariant under change of notation:
+   \[Mod\, μ\, A′ ⊨_Σ ϕ \;⇔\; A′ ⊨_{Σ′} Sen\, μ \, ϕ \]
+
+A logic /L/ is called a /logic with equality/ if, for any signature Σ and
+any ground terms /t/ and /u/ of the same sort in Σ, there is a formula,
+say $ϕ_{t,u} ∈ L\, Σ$ which is validated as equality by every
+Σ-algebra /A/: \[A ⊨ ϕ_{t, u} \;⇔\; A t \,=\, A u\]
+
+This is a satisfaction-based view of logic; a proof-based view is also possible.
+
+** Institutions
+
+The necessary ingredients for a logic are captured tersely in an [[https://en.wikipedia.org/wiki/Institution_(computer_science)][“institution”]]
+which gives us a category of signatures, a functor $Sen$ that assigns them sentences,
+and a functor $Mod$ that assigns them categories, along with satisfication relations.
+
+Alternatively, an institution is a functor from a category of signatures to the
+category of [[http://iks.cs.ovgu.de/~till/papers/derived.pdf][rooms]].
+
+* Equational Logic, /EL/
+
+# This logic is defined as follows.
+
++ Formulae are universally quantified equations:
+  \[EL(Σ) = \{∀ X. t = u ❙ \text{X is a set of variables; t and u are Σ-terms of the same sort using variables X}\}\]
+
+  The =,∀ are meta-symbols; the formulae are just triples $(X, t, u)$
+  but we use a suggestive notation for the satisfaction relation below.
+
++ Formula morphisms apply signature morphisms component-wise:
+  \[EL\, μ \,(∀ X. t = u) \;=\; (∀ μ(X). μ t = μ u)\]
+
++ A formula is satisfied when all variable assignments result in true equalities:
+    $A ⊨_Σ ∀X.t=u$ if and only if ~A α t = A α u~ for all assignments $α : X → A$.
+
+  In-particular, if variables ~X~ have their sorts interpreted by ~A~ as empty
+  sets, then there would be no assignments ~α~ to consider, and so the formula would
+  be vacuously satisfied.
+
+This is a logic with equality: The equality of /t/ and /u/ is the ground equation
+/∀ ∅. t = u/.
+
+* Conditional Equational Logic, /CEL/
+
+CEL is a mild generalisation of EL that is easier to use.
+
++ Formulae are universally quantified equations with conjunctive provisos:
+  \[CEL(Σ) = \{∀ X. t₁ = u₁ ∧ ⋯ ∧ tₙ = uₙ \,⇒\, tₙ₊₁ = uₙ₊₁\}\]
+  where each pair ~tᵢ, uᵢ~ are terms of the same sort and ~X~ is a set of variables.
+
+  The ∀,=,∧,⇒ are meta-symbols; the formulae are just tuples $(X,
+  ((t₁,u₁), …,(tₙ, uₙ)),(t, u))$ but we use a suggestive notation for
+  the satisfaction relation below.
+
++ Formula morphisms apply signature morphisms component-wise:
+  \[CEL\,μ\,(∀ X. t₁ = u₁ ∧ ⋯ ∧ tₙ = uₙ \,⇒\, tₙ₊₁ = uₙ₊₁) \;=\; (∀
+  μ(X). μ t₁ = μ u₁ ∧ ⋯ ∧ μ tₙ = μ uₙ \,⇒\, μ tₙ₊₁ = μ uₙ₊₁)\]
+
++ A formula is satisfied when all variable assignments result in true equalities
+  /assuming/ the provisos are all true:
+
+  ~A ⊨ ∀ X. t₁ = u₁ ∧ ⋯ ∧ tₙ = uₙ ⇒ tₙ₊₁ = uₙ₊₁~ iff for every
+  assignment $α : X → A$, if $A\, α\, tᵢ \;=\; A\, α\, uᵢ$ for all
+  $i : 1..n$, then $A\, α\, tₙ₊₁ \;=\; A\, α\, uₙ₊₁$.
+
+* Predicate Logic, /PL/ and ---/Prop/
+
+PL generalises classical first-order predicate logic for many-sorted algebras.
+It's also known as Predicate Calculus.
+
+Formulae ϕ are defined inductively: ~ϕ ::= t = u | ϕ ∧ ϕ′ | ¬ ϕ | (∀ x : s. ϕ)~
+ - Provided /t, u/ are Σ-terms of the same sort; /x/ is a variable; /s/ is a sort.
+ - As usual, it is possible to introduce additional logical symbols
+   such as $true, false, ∨, ⇒, ⇔, ∃$ as abbreviations; e.g., ~true~ is an abbreviation
+   for the formula ~t = t~ where ~t~ is a Σ-term.
+
+The signature morphisms ~PL μ~ are defined by ‘distributing’ ~μ~ over the
+metasymbols, down to the terms.
+
+The satisfaction relation is defined by ~A ⊨ ϕ~ iff $A\, α \, ϕ$ is true
+for all assignments $α : free-variables(ϕ) → A$, where $A\, α$ extends
+to formulae by ‘distributing’ over the metasymbols =,∧,¬,∀ to get the
+semantical notions of equality, conjunction, negation, and universal
+quantification.
+
+PL, FOL, quantifies only variables that range over individuals;
+second-order logic, in addition, also quantifies over sets/functions;
+third-order logic also quantifies over sets of sets, and so
+on. Higher-order logic, HOL, is the union of all nth-order logics and
+so admits quantification over sets that are nested arbitrarily deeply.
+
+Propositional logic /Prop/, ‘zero-order logic’, does not deal with
+non-logical objects, predicates about them, or quantifiers.  It is
+obtained from PL by ignoring =,∀, and including variables that may
+only take on Boolean values, as well as the constant ~true~.
+Satisfication is defined by assignments α to the Boolean values;
+whence algebras become irrelevant.
+
+Intuitionistic Logic omits the law of the excluded middle and so connectives
+are not interdefinable. It is obtained from PL by omitting ¬, and including
+⊤,⊥,∨,⇒,∃. Furthermore, satisfication is defined to mean a formula is valid
+iff it receives the value of the top element for any assignment
+and the metasymbols ∧,∨,⇒ are interpreted in an /arbitrary/ [[https://en.wikipedia.org/wiki/Heyting_algebra][Heyting algebra]]
+rather than the classical Boolean algebra 𝔹 of truth values.
+
+* Models & Theories
+
+Let /L/ be a logic ---so we can speak of satisfaction---
+and let /Ψ ⊆ L Σ/ be a set of formulae over signature Σ.
+
++ A Σ-algebra /A/ is a *model of Ψ* if /A ⊨ ϕ/ for each /ϕ ∈ Ψ/ ---denoted /A ⊨ Ψ/.
+
+  Let $Mod_Σ(Ψ)$ denote all Σ-algebras that are models of Ψ.
+
++ The *theory* of a Σ-algebra /A/ wrt /L/ is the set of formulae modelled by
+  /A/: \[ Th_L(A) = \{ϕ ∈ L\, Σ ❙ A ⊨ ϕ\} \]
+
+  A theory is ‘larger’ when the logic is more ‘powerful’.
+
+Theorems:
+1. $Mod_Σ(∅) = 𝒜𝓁ℊ Σ$.
+2. $Mod_𝒰(Ψ)$ is an abstract data type; i.e., it is a class of
+   Σ-algebras that is closed under isomorphism.
+3. Homomorphism: $Mod(Ψ ∪ Ψ′) = Mod(Ψ) ∩ Mod(Ψ′)$.
+4. Homomorphism: $Th(A ∪ B) = Th(A) ∩ Th(B)$.
+5. Antitonicity: $Ψ ⊆ Ψ′ ⇒ Mod(Ψ′) ⊆ Mod(Ψ)$.
+6. Antitonicity: $A ⊆ B ⇒ Th(B) ⊆ Th(A)$.
+7. Theories cannot distinguish between isomorphic algebras:
+   $A ≅ B ⇒ Th(A) = Th(B)$.
+8. If /L/ is a logic with equality, and if $A$ and $B$ are generated,
+   then $A ≅ B ⇐ Th(A) = Th(B)$.
+
+It is possible to show that $Mod$ and $Th$ constitute a Galois connection.
+
+* Logical Consequence ---Semantic Entailment
+
+Let /L/ be a logic ---so we can speak of satisfaction---
+and let /Ψ ⊆ L Σ/ be a set of formulae over signature Σ,
+and ϕ a formula.
+
++ Say *ϕ is a logical consequence of Ψ* whenever an algebra models Ψ it also models ϕ
+  ---denoted $Ψ ⊨_Σ ϕ$.
++ *ϕ is valid* whenever it is a logical consequence of the empty set of formulae;
+  one also says *ϕ is a tautology*
+  ---denoted $⊨_Σ ϕ$.
+
+ Theorems:
+  1. Componentwise: /⊨ ϕ/ iff /A ⊨ ϕ/ for all Σ-algebras /A/.
+  2. Componentwise: $Mod(Ψ) ⊨ ϕ$ iff $Ψ ⊨ ϕ$.
+  3. Empty Inconsistency: If $Mod(Ψ)$ is empty, then $Ψ ⊨ L\,Σ$.
+  4. A theory is closed under logical consequence.
+  5. A theory contains all tautologies.
+
+* Calculi ---Deduction Systems
+
+  A calculus, or ‘proof system’,
+  is an inductive definition of a set of strings ---e.g., formulae---
+  whose goal is to /syntactically/ grasp the notion of logical consequence
+  and, in principle, permit /mechanical/ proofs of statements such as /Ψ ⊨ ϕ/.
+
+** Formal Definition
+
+A *calculus* 𝒦 for a logic /L/ and signature Σ is a finite set of
+  ‘inference rules’ each of which is a decidable subset of /L(Σ)ⁿ ×
+  L(Σ)/ for some /n : ℕ/.
+
+- A rule $\{((ϕ₁, …, ϕₙ), ϕ) ❙ ⋯\}$ is generally presented as
+      #+BEGIN_EXAMPLE
+    ϕ₁ ⋯ ϕₙ
+    ------
+      ϕ
+#+END_EXAMPLE
+
+- Rule with /n = 0/ are called ‘axiom schemas’, and an element of an axiom scheme is
+  called an ‘axiom’.
+
+The meaning of a calculus is what it allows to be derived:
+*ϕ is derivable from Ψ*, denoted $Ψ ⊢_𝒦 ϕ$, if it is /provable within 𝓚/; i.e.,
+there is a finite non-empty sequence /ϕ₁, …, ϕₖ/ with /ϕₖ = ϕ/ and each /ϕᵢ
+is either an assumption, /ϕᵢ ∈ Ψ/, or is the result of an inference rule applied to previous elements of the sequence; i.e., there are indices $j₁, …, jₙ$
+such that $((ϕ_{j₁}, …, ϕ_{jₙ}), ϕᵢ)$ is an element of an inference rule of 𝓚
+---in particular, $ϕᵢ$ could be an axiom.
+
+
+** Grasping the notion of logical consequence
+
+The purpose of a calculus is to grasp the notion of logical consequence.
+
+Let /Ψ ⊆ L(Σ)/ and /ϕ ∈ L(Σ)/.
+
++ *𝒦 is sound* if 𝒦-provability implies logical consequence:
+  For any Ψ, ϕ: \[Ψ ⊢^𝒦 ϕ \;⇒\; Ψ ⊨ ϕ\]
++ *𝒦 is complete* if logical consequence implies 𝒦-provability:
+  For any Ψ, ϕ: \[Ψ ⊢^𝒦 ϕ \;⇐\; Ψ ⊨ ϕ\]
+
+** A Nifty Table
+
+| Signature Σ       | ⇒ | What terms can be formed?                     |
+| Logic /L/           | ⇒ | What formulae can be formed? & What is truth? |
+| Inference Rules 𝒦 | ⇒ | How are theorems proven?                      |
+
+* spacing COMMENT newpage                                                    :ignore:
+#+latex: \newpage
+* COMMENT Making README
+
+C-c C-c: Evaluate src block.
+
+:'( For some reason using {{{title}}} below would not work.
+
+#+NAME: make-readme
+#+BEGIN_SRC emacs-lisp
+(with-temp-buffer
+    (insert
+    "#+EXPORT_FILE_NAME: README.org
+     ,# HTML: <h1> Easily Making CheatSheets with Org-mode </h1>
+     ,#+OPTIONS: toc:nil d:nil
+     # Toc is displayed below at a strategic position.
+
+     {{{blurb}}}
+
+     :Hide:
+     This project is to contain a listing of common results in X Theory.
+
+     ,*The repo contains other articles I've written on X Theory;*
+     ,*which may be read in a blog-format at:*
+     https://alhassy.github.io/blog/categories/#Xtheory
+     :End:
+
+    ,*The listing sheet, as PDF, can be found
+     [here]({{{URL}}}/blob/master/CheatSheet.pdf)*,
+     while below is an unruly html rendition.
+
+     This reference sheet is built around the system
+     https://github.com/alhassy/CheatSheet.
+
+     ,#+TOC: headlines 2
+     ,#+INCLUDE: CheatSheet.org
+    ")
+
+    ;; No code execution on export
+    ;; ⟪ For a particular block, we use “:eval never-export” ⟫
+    ;;
+    (let ((org-export-use-babel nil))
+      (org-mode)
+      ; (org-md-export-to-markdown)
+      (org-org-export-to-org)
+      )
+)
+#+END_SRC
+
+#+RESULTS: make-readme
+: README.org
+
+* COMMENT footer
+
+The first “eval” below is convenience matter
+that should be loaded whenever CheatSheet.org is opened.
+
+The second “eval” makes a README for the repo, whenever the file is opened,
+and is then bound to ~f11~ for convenience.
+
+# Local Variables:
+# eval: (progn (visual-line-mode t) (require 'ox-extra) (ox-extras-activate '(ignore-headlines)))
+# eval: (local-set-key (kbd "<f11>") '(lambda () (interactive) (org-babel-goto-named-src-block "make-readme") (org-babel-execute-src-block) (outline-hide-sublevels 1)))
+# eval: (progn (visual-line-mode t) (require 'ox-extra) (ox-extras-activate '(ignore-headlines)))
+# compile-command: (my-org-latex-export-to-pdf)
+# End:

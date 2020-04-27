@@ -6,7 +6,7 @@ This project is to contain a listing of common theorems in elementary category t
 **which may be read in a blog-format at:**
 <https://alhassy.github.io/blog/categories/#categorytheory>
 
-**The listing sheet, as PDF, can be found [here](https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf)**, 
+**The listing sheet, as PDF, can be found [here](https://github.com/alhassy/CatsCheatSheet/blob/master/CheatSheet.pdf)**,
 while below is an unruly html rendition.
 
 This reference sheet is built around the system <https://github.com/alhassy/CheatSheet>
@@ -14,24 +14,26 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 # Table of Contents
 
-1.  [Categories](#org6ce4178)
-2.  [“Gluing” Morphisms Together](#org6501b00)
-3.  [Functors](#orga93653d)
-4.  [Naturality](#orgd05d8fe)
-5.  [Adjunctions](#org547447f)
-6.  [Constant Combinators](#org2994fb1)
-7.  [Monics and Epics](#org338f6ab)
-8.  [Isos](#org94389b2)
-9.  [Skolemisation](#orge24bc8e)
-10. [Initiality](#orgbc04450)
-11. [Colimits](#orgba92b29)
-12. [Limits](#org14fc834)
-13. [Sums](#orgca28f3e)
-14. [Products](#org19ab07a)
-15. [Finitary Sums and Products](#org97b9cb4)
-16. [Mixing products and coproducts](#org7a3bdb5)
-17. [Coequaliser](#orgb35f74a)
-18. [References](#orgb4c05f4)
+1.  [Categories](#org190f6a8)
+2.  [“Gluing” Morphisms Together](#org417a0df)
+3.  [Functors](#org42710d1)
+4.  [Naturality](#orgd826582)
+5.  [Adjunctions](#org18cc334)
+6.  [Constant Combinators](#orge6a49a5)
+7.  [Monics and Epics](#org61d71cb)
+8.  [Isos](#orgbb74ee3)
+9.  [Skolemisation](#org4b4d8fd)
+10. [Initiality](#org1176ce5)
+11. [Colimits](#orgbbe90f6)
+12. [Limits](#orgc00a537)
+13. [Sums](#orgd3b4147)
+14. [Products](#org52f269b)
+15. [Finitary Sums and Products](#org6d13b13)
+16. [Mixing products and coproducts](#org08ec4d2)
+17. [References](#org824df47)
+18. [To Read](#orgf2ec4a5)
+19. [Monoidal and Closed Categories](#org53fdf4f)
+20. [Enrichment & Internal Algebraic Structures](#org08ad92a)
 
 
 
@@ -44,13 +46,15 @@ This reference sheet is built around the system <https://github.com/alhassy/Chea
 
 
 
-<a id="org6ce4178"></a>
+
+
+<a id="org190f6a8"></a>
 
 # Categories
 
 A **category** 𝒞 consists of a collection of “objects” \(\Obj\, 𝒞\),
   a collection of  “(homo)morphisms” \(\Hom_𝒞(a,b)\) for any \(a,b : \Obj\,𝒞\)
-  &#x2013;also denoted “\(a \,\to_𝒞\, b\)”&#x2013;,
+  &#x2014;also denoted “\(a \,\to_𝒞\, b\)”&#x2014;,
   an operation \(\Id\) associating a morphism \(\Idₐ : \Hom(a,a)\) to each object \(a\),
   and a dependently-typed “composition” operation
   \(\_∘\_ : ∀\{A \, B \, C : \Obj\} → \Hom(B,C) → \Hom(A,B) → \Hom(A,C)\)
@@ -60,7 +64,7 @@ It is convenient to define a pair of operations \(\src, \tgt\) from morphisms to
 as follows:
 
 \begin{flalign*}
-    f : X \to_𝒞 Y \quad\equiv\quad \mathsf{src}\; f = X \;\land\; \mathsf{tgt}\; f = Y 
+    f : X \to_𝒞 Y \quad\equiv\quad \mathsf{src}\; f = X \;\land\; \mathsf{tgt}\; f = Y
    &&
    \tag*{$\src,\tgt$-Definition}
    \label{src-tgt-Definition}
@@ -80,45 +84,52 @@ rather than just \(f\).
 
 Here's an equivalence-preserving property that is useful in algebraic calculations,
 
-Example Categories.
+Examples:
 
--   Matrices with real number values determine a category whose objects are the natural numbers,
+-   [Linear Algebra:](https://arxiv.org/abs/1312.4818) Matrices with real number values determine a category whose objects are the natural numbers,
     morphisms \(n → m\) are \(n × m\) matrices, \(\Id\) is the identity matrix, and composition
     is matrix multiplication.
+
 -   Each preorder determines a category: The objects are the elements
     and there is a morphism \(a → b\) named, say, “\((a, b)\)”, precisely when \(a \leq b\);
     composition boils down to transitivity of \(\leq\).
+
+-   Each monoid \((M, ⊕, e)\) gives rise to a category: The objects and the arrows
+    are both the elements of\(M\), and \(k : m → n \;≡\; k ⊕ m = n\).
+    E.g., \((ℕ, ×, 1)\) gives rise to a category whose products are gcd's
+    and so properties of products are thus gcd theorems!
+
 -   Each digraph determines a category: The objects are the nodes
     and the paths are the morphisms typed with their starting and ending node.
     Composition is catenation of paths and identity is the empty path.
+
 -   Suppose we have an \`interface', in the programming sense,
-    of constant, function, and relation symbols &#x2013;this is also called a *signature*.
-    
+    of constant, function, and relation symbols &#x2014;this is also called a *signature*.
+
     Let 𝒯 be any collection of sentences in the first-order language of signature \(\Sigma\).
     Then we can define a category \(\mathsf{Mod}\,𝒯\) whose objects are
     implementations of interface \(\Sigma\) satisfying constraints 𝒯, and whose morphisms
-    are functions that preserve the \(\Sigma\) structure. 
-    Ignoring 𝒯, gives us \`functor algebras'.
-    
+    are functions that preserve the \(\Sigma\) structure.
+    Ignoring constraints 𝒯 gives us \`functor algebras'.
+
     Particular examples include monoids and structure-preserving maps between them;
     likewise digraphs, posets, rings, etc and their homomorphisms.
 
 \room
 
 Even when morphisms are functions, the objects need not be sets:
-Sometimes the objects are *operations* &#x2013;with an appropriate definition
+Sometimes the objects are *operations* &#x2014;with an appropriate definition
 of typing for the functions. The categories of *F*-algebras are an example
 of this.
 
-\newpage
 
-
-<a id="org6501b00"></a>
+<a id="org417a0df"></a>
 
 # “Gluing” Morphisms Together
 
 Traditional function application is replaced by the more generic concept of
 functional *composition* suggested by morphism-arrow chaining:
+
 Whenever we have two morphisms such that the target type of one
 of them, say \(g : B ← A\) is the same as the source type of the other,
 say \(f : C ← B\) then “\(f\) after \(g\)”, their *composite morphism*,
@@ -144,7 +155,7 @@ A *split* arises wherever two morphisms do not compose but share the same source
 A *product* appears when there is no explicit relationship between the types of the morphisms.
 
 -   We regard their sources as projections of a product, whence they can be seen as *splits*.
--   This \((c, d) ↦ (f\, c, g\, d)\) corresponds to the “parallel” application of \(f\) and \(g\), 
+-   This \((c, d) ↦ (f\, c, g\, d)\) corresponds to the “parallel” application of \(f\) and \(g\),
     each with its *own* input.
 
 \room
@@ -174,7 +185,7 @@ A *transpose* arises when we need to combine a binary morphism with a unary morp
 \vspace{1em}
 
 
-<a id="orga93653d"></a>
+<a id="org42710d1"></a>
 
 # Functors
 
@@ -184,17 +195,16 @@ it respects the categorical structure:
 
 \vspace{1em}
 
-The two axioms are equivalent to the single statement that 
+The two axioms are equivalent to the single statement that
 *functors distribute over finite compositions, with \(\Id\) being the empty composition:*
 \[ F(f_0 ∘ \cdots ∘ f_{n-1}) \;=\; F\, f_0 ∘ \cdots ∘ F\, f_{n-1} \]
 
 Use of Functors.
 
 -   In the definition of a category, “objects” are “just things” for which no internal
-    structure is observable by categorical means &#x2013;composition, identities, morphisms, typing.
-    
-    Functors form the tool to deal with “structured” objects
-    
+    structure is observable by categorical means &#x2014;composition, identities, morphisms, typing.
+    *Functors form the tool to deal with “structured” objects.*
+
     Indeed in 𝒮ℯ𝓉 the aspect of a structure is that it has “constituents”, and that it is possible
     to apply a function to all the individual constituents; this is done by
     *F f : F A → F B*.
@@ -210,32 +220,32 @@ Use of Functors.
 
 -   Even though *F A* is still just an object, a thing with no observable internal structure, the
     functor properties enable to exploit the “structure” of *F A* by allowing us to “apply”
-    a *f* to each “constituent” by using *F f*.
+    an *f* to each “constituent” by using *F f*.
 
 \vspace{1em}
 
 Category \(𝒜lℊ(F)\)
 
 -   For a functor *F : 𝒜 → 𝒟*, this category has *F-algebras*, *F*-ary operations in 𝒟 as, objects
-    &#x2013; i.e., objects are 𝒟-arrows \(F\, A → A\) &#x2013;
+    &#x2014; i.e., objects are 𝒟-arrows \(F\, A → A\) &#x2014;
     and *F*-homomorphisms as morphisms, and it inherits composition and identities from 𝒟.
-    
+
     Note that category axiom \eqref{unique-Type} is not fulfilled since a function can be
     a homomorphism between several distinct operations. However, we pretend it is a category
     in the way discussed earlier, and so the carrier of an algebra is fully determined by
     the operation itself, so that the operation itself can be considered the algebra.
-    
+
     <div class="org-center">
     *\ref{comp-Homomorhism} renders a semantic property as a syntactic condition!*
     </div>
 
 \vspace{1em}
 
--   A **contravariant functor** 𝒞 → 𝒟 is just a functor *𝒞ᵒᵖ → 𝒟ᵒᵖ*.
+-   A **contravariant functor** 𝒞 → 𝒟 is just a functor *𝒞ᵒᵖ → 𝒟*.
 -   A **bifunctor** from 𝒞 to 𝒟 is just a functor *𝒞² → 𝒟*.
 
 
-<a id="orgd05d8fe"></a>
+<a id="orgd826582"></a>
 
 # Naturality
 
@@ -250,9 +260,9 @@ and *F* denotes the structure itself.
 
 \hspace{-1em}:
 \(\bin\) is the structure of pairs, *Seq* is the structure of sequences,
-*Seq Seq* the structure of sequences of sequences, 
-\(\bin \, Seq\) the structure of pairs of sequences &#x2013;which is naturally isomorphic
-to \(Seq \, \bin\) the structure of sequences of pairs!&#x2013;, and so on.
+*Seq Seq* the structure of sequences of sequences,
+\(\bin \, Seq\) the structure of pairs of sequences &#x2014;which is naturally isomorphic
+to \(Seq \, \bin\) the structure of sequences of pairs!&#x2014;, and so on.
 
 \room
 
@@ -278,7 +288,9 @@ and functor *G* at the target side.
 
 -   One also says *ηₐ is natural in* its parameter *a*.
 
--   If we take \(G = \Id\), then natural transformations \(F →̣ \Id\) are precisely *F*-homomorphisms.
+-   If we take \(G = \Id\), then natural transformations are *F*-homomorphisms.
+    Thus, naturality is a kind of homomorphism condition.
+
 -   Indeed, a natural transformation is a sort-of homomorphism in that the image of a morphism
     after reshaping is the same as the reshaping of the image.
 
@@ -299,27 +311,27 @@ Example natural transformations
 \room
 
 **Category ℱ𝓊𝓃𝒸(𝒞, 𝒟)**
-consists of functors *𝒞 → 𝒟* as objects and natrual transformations between them as objects.
-The identity transformation is indeed an identity for transformation composition, which is associative. 
+consists of functors *𝒞 → 𝒟* as objects and natural transformations between them as arrows.
+The identity transformation is indeed an identity for transformation composition, which is associative.
 
 \room
 
 **Heuristic** To prove \(φ = φ₁ ∘ ⋯ ∘ φₙ : F →̣ G\) is a natural transformation, it suffices
 to show that each \(φᵢ\) is a natural transformation.
 E.g., without even knowing the definitions, naturality of
-*tails = Seq rev ∘ inits ∘ rev* can be proven &#x2013;just type checking!
+*tails = Seq rev ∘ inits ∘ rev* can be proven &#x2014;just type checking!
 
 \iffalse
 
 -   Theorem \eqref{ntrf-Compose} renders proofs of semantic properties to be trivial type checking!
 -   E.g., It's trivial to prove *tails = rev ﹔ inits ﹔ Seq rev* is a natural transformation
     by type checking, but to prove the naturality equation by using the naturality equations of
-    *rev* and *inits* &#x2013;no definitions required&#x2013; necessitates more writing, and worse: Actual thought!
+    *rev* and *inits* &#x2014;no definitions required&#x2014; necessitates more writing, and worse: Actual thought!
 
 \fi
 
 
-<a id="org547447f"></a>
+<a id="org18cc334"></a>
 
 # Adjunctions
 
@@ -340,7 +352,7 @@ Dually for the other direction.
 \room
 
 That is,
-*each L-algebra g is uniquely determined &#x2013;as an L-map followed by an ε-reduce--*
+*each L-algebra g is uniquely determined &#x2014;as an L-map followed by an ε-reduce---*
 *by its restriction to the adjunction's unit η.*
 
 \room
@@ -357,7 +369,7 @@ of \(f\) to an *L*-homomorphism and write \(g = ⌈f⌉ = ε_B ∘ L f\). The ab
 now reads:
 
 \room
-\vspace{1ex} 
+\vspace{1ex}
 Note that ⌈ is like \`r' and the argument to ⌈⌉ must involve the *R*-ight adjoint in its type;
 
 \room
@@ -382,7 +394,7 @@ Also,
 -   Right adjoints preserve limits such as terminal objects and products.
 
 
-<a id="org2994fb1"></a>
+<a id="orge6a49a5"></a>
 
 # Constant Combinators
 
@@ -393,9 +405,9 @@ same value.
 
 \(\K : 𝒞 → ℱ𝓊𝓃𝒸(𝒟,𝒞)\)
 
--   For objects \(x\), the \`\`constant functor'':   
+-   For objects \(x\), the \`\`constant functor'':
     \(\K{x}\, y = x\) and \(\K{x}\, f = \Id_x\) for objects \(y\) and morphisms \(f\).
--   For morphisms \(f\), the \`\`constant natural transformation'':   
+-   For morphisms \(f\), the \`\`constant natural transformation'':
     \(\K{f} : \K{(\src f)} →̣ \K{(\tgt f)}\)
     sending objects \(y\) to morphism \(\K{f}\, y = f\).
 
@@ -403,22 +415,20 @@ same value.
 Sometimes it is convenient to notate \(\const{c} = \K \, c\)
 and refer to this as the *everywhere c* operation.
 
-The following property defines constant functions at the \`pointfree level':
+The following property defines constant functors at the \`pointfree level':
 
-Constant functions force any difference in behaviour for any two
-functions to disappear:
+Constant functors force any difference in behaviour for any two
+functors to disappear:
 
-Interestingly in 𝒮ℯ𝓉, composition and application
-are bridged explicitly by the constant functions:
-
-\newpage
+Interestingly, functor composition and application
+are bridged explicitly by the constant functor:
 
 
-<a id="org338f6ab"></a>
+<a id="org61d71cb"></a>
 
 # Monics and Epics
 
-Identity functions and constant functions are limit points of the 
+Identity functions and constant functions are limit points of the
 functional spectrum with respect to information preservation.
 All the other functions are in-between: They “lose” some information,
 which is regarded as uninteresting for some reason.
@@ -441,17 +451,17 @@ Functions which do not ignore values of their target are called
 *epics*: They are “pre-cancellable”:
 
 Intuitively, \(h = k\) on all points of their source precisely when
-they are equal on all image points of \(f\), since \(f\) being epic means 
+they are equal on all image points of \(f\), since \(f\) being epic means
 it outputs all values of their source.
 
 \room
 
-It is easy to check that “the” identity function is monic and epic, 
+It is easy to check that “the” identity function is monic and epic,
 while any constant function \(\const{c}\) is not monic and is only
 epic when its target consists only of \(c\).
 
 
-<a id="org94389b2"></a>
+<a id="orgbb74ee3"></a>
 
 # Isos
 
@@ -460,13 +470,15 @@ An arrow is an *iso* iff it is invertible; i.e., there is an “inverse” morph
 \eqn{inverse-Char}{ f ∘ f\inverse = \Id \landS f\inverse ∘ f = \Id}
 
 To *construct* \(f\inverse\), we begin by identifying its type which may give
-insight into its necessary \`shape' &#x2013;e.g., as a sum or a product&#x2013;
+insight into its necessary \`shape' &#x2014;e.g., as a sum or a product&#x2014;
 then we pick one of these equations and try to reduce it as much as possible
 until we arrive at a definition of \(f˘\), or its \`components'.
 
--   E.g., \(coassocr = [\Id + \inl, \inr ∘ \inr] : (A + B) + C ≅ A + (B + C)\), its inverse
-    *coassocl* must be of the shape \([x, [y, z]]\) for unknowns \(x,y,z\) which can be calculated
-    by solving the equation \([x, [y, z]] ∘ coassocr = \Id\) &#x2013;Do it!
+-   E.g.,
+    \(coassocr = [\Id + \inl, \inr ∘ \inr]\) of type \((A + B) + C ≅ A + (B + C)\),
+    its inverse  *coassocl* must be of the shape \([x, [y, z]]\) for unknowns
+    \(x,y,z\) which can be calculated
+    by solving the equation \([x, [y, z]] ∘ coassocr = \Id\) &#x2014;Do it!
 
 \room
 
@@ -490,9 +502,9 @@ around is not true.
 \room
 
 Isomorphisms are very important because they convert data from one
-“format”, say \(A\), to another format, say \(B\), without losing 
+“format”, say \(A\), to another format, say \(B\), without losing
 information. So \(f\) and \(f˘\) are faithful protocols between the two
-formats \(A\) and \(B\). 
+formats \(A\) and \(B\).
 Of course, these formats contain the same “amount” of information
 although the same data adopts a “different” shape in each of them.
 ─c.f. \nameref{SeqPair-is-Pair-Seq}.
@@ -506,17 +518,17 @@ Finally, note that all classes of functions referred to so far
 &#x2014;identities, constants, epics, monics, and isos&#x2014;
 are closed under composition.
 
-Monics to the initial object are necessarily isos! 
+Monics to the initial object are necessarily isos!
 
 
-<a id="orge24bc8e"></a>
+<a id="org4b4d8fd"></a>
 
 # Skolemisation
 
 If a property \(P\) holds for precisely one class of isomorphic objects,
 and for any two objects in the same class there is precisely one
 isomorphism from one to the other, then we say that
-*the P-object is unique up to unique isomorphism*. 
+*the P-object is unique up to unique isomorphism*.
 For example, in 𝒮ℯ𝓉 the one-point set is unique up to a unique isomorphism,
 but the two-point set is not.
 
@@ -524,7 +536,7 @@ but the two-point set is not.
 
 For example, an object *A* is \`\`initial'' iff
 \(∀ B  \;•\;  ∃₁ f  \;•\;  f : A → B\), and such objects are unique
-up to unique isomorphism &#x2013;prove it!
+up to unique isomorphism &#x2014;prove it!
 The formulation of the definition is clear but it's not very well suited for *algebraic manipulation*.
 
 \room
@@ -599,13 +611,13 @@ by truthifying each side, namely \`Self' and \`Id'. A bit more on the naming:
 
 Note that the last 3 indicate how the concept interacts with the categorical structure:
 \(=, ﹔, \Id\). Also note that Self says there's at least one solution and Uniq says there is
-at most one solution, so together they are equivalent to ℱ-Char &#x2013;however those two proofs
+at most one solution, so together they are equivalent to ℱ-Char &#x2014;however those two proofs
 are usually not easier nor more elegant than a proof of ℱ-Char directly.
 
 \room
 
 **Proving ℱ-Char** is straightforwardly accomplished by providing a definition for ℱ
-and establishing ℱ-Char &#x2013;these two steps can be done in parallel! Almost every such
+and establishing ℱ-Char &#x2014;these two steps can be done in parallel! Almost every such
 proof has the following format, or a circular implication thereof: For arbitrary \(x\) and \(y\),
 
 <div class="calculation">
@@ -619,10 +631,8 @@ y = ℱ \kern0.5ex x
 
 </div>
 
-\newpage
 
-
-<a id="orgbc04450"></a>
+<a id="org1176ce5"></a>
 
 # Initiality
 
@@ -647,7 +657,7 @@ in a suitable category, and the mediator \(⦇-⦈\) captures
 can be replaced by initiality arguments! Woah!
 
 
-<a id="orgba92b29"></a>
+<a id="orgbbe90f6"></a>
 
 # Colimits
 
@@ -661,7 +671,7 @@ Each colimit is a certain initial object, and each initial object is a certain c
 
 -   The category \(⋁D\), built upon 𝒞, has objects \(γ : D →̣ \const{C}\) called “co-cones”, for
     some object \(C =: \tgt\, γ\), and a morphism from \(γ\) to \(δ\) is a 𝒞-morphism \(x\) such that \(\const{x} ∘ γ = δ\).
-    
+
     *\`Cones' sit upright on their base, \(D\), on a table; \`CoCones' sit upright on a co-table!*
 
 -   A *colimit for D* is an initial object in \(⋁ D\); which may or may not exist.
@@ -683,7 +693,7 @@ Cocones under \(D\) correspond one-to-one with arrows from its colimit:
 \vspace{-0.8em}
 
 
-<a id="org14fc834"></a>
+<a id="orgc00a537"></a>
 
 # Limits
 
@@ -691,14 +701,14 @@ Dually, the category \(⋀D\) has objects being “cones” \(γ : \const{C} →
 is a 𝒞-object, and a morphism to \(γ\) *from* \(δ\) is a 𝒞-morphism \(x\) such that \(γ ∘ \const{x} = δ\).
 In terms of 𝒞, *\(γ : Obj(⋀ D)\) is a limit for \(D\)* if there is a mapping \(γ╲-\) such that
 the following ╲-Type and ╲-Char hold, from which we obtain a host of corollaries.
-As usual, there is the implicit well-formedness condition. 
+As usual, there is the implicit well-formedness condition.
 
 \vspace{-1em}
 
 \newpage
 
 
-<a id="orgca28f3e"></a>
+<a id="orgd3b4147"></a>
 
 # Sums
 
@@ -745,7 +755,7 @@ For categories in which sums exist, we define for \(f : A → B\) and \(g : C �
 \newpage
 
 
-<a id="org19ab07a"></a>
+<a id="org52f269b"></a>
 
 # Products
 
@@ -763,7 +773,7 @@ Let \(γ=(\fst, \snd)\) be a limit for \(D\), let \(A + B = \tgt\,γ\), and writ
 \room
 \room
 
-The characterisation says that the essential properties of ordered pairs 
+The characterisation says that the essential properties of ordered pairs
 is that their components are retrievable and they are
 completely determined by their components.
 
@@ -783,7 +793,7 @@ For categories in which products exist, we define for \(f : A → B\) and \(g : 
 
 \begineqns
 
-\eqn{$\times$-Definition}{ f × g = ⟨ f ∘ \fst, g ∘ \snd ⟩ : A × C → B × D}
+\eqn{x-Definition}{ f × g = ⟨ f ∘ \fst, g ∘ \snd ⟩ : A × C → B × D}
 
 \eqn{Projections-Naturality}{ \fst ∘ (f × g) = f ∘ \fst \landS \snd ∘ (f × g) = g ∘ \snd }
 
@@ -791,16 +801,14 @@ For categories in which products exist, we define for \(f : A → B\) and \(g : 
 
 \eqn{Absorption}{ (f × g) ∘ ⟨h, j⟩ = ⟨f ∘ h, g ∘ j⟩ }
 
-\eqn{$\times$-BiFunctoriality}{ \Id × \Id = \Id \landS (f × g) ∘ (h × j) = (f ∘ h) × (g ∘ j)}
+\eqn{x-BiFunctoriality}{ \Id × \Id = \Id \landS (f × g) ∘ (h × j) = (f ∘ h) × (g ∘ j)}
 
 \eqn{Structural Equality}{ ⟨f,g⟩ = ⟨h, j⟩ \equivS f = h \lands g = j }
 
 \endeqns
 
-\newpage
 
-
-<a id="org97b9cb4"></a>
+<a id="org6d13b13"></a>
 
 # Finitary Sums and Products
 
@@ -818,12 +826,12 @@ Dually, the standard notation for the empty either \([]\) is \(?_C\).
 \eqn{Empty Exchange Rule}{ ⟨⟩_0 = []_1 }
 
 
-<a id="org7a3bdb5"></a>
+<a id="org08ec4d2"></a>
 
 # Mixing products and coproducts
 
 Any \(f : A + B → C × D\) can be expressed alternatively as an *either*
-or as a *split*. It turns out that both formats are identical: 
+or as a *split*. It turns out that both formats are identical:
 
 \vspace{-1.5em}
 \eqn{Exchange Rule}{ ⟨[f,g], [h,j]⟩ = [⟨f,h⟩,⟨g,j⟩] }
@@ -834,7 +842,7 @@ E.g., \(\mathsf{undistr}  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id 
 
 \eqn{Cool-Property}{ [f × g, h × k] \;=\; ⟨ [f, h] ∘ (\fst + \fst), [g, k] ∘ (\snd + \snd)⟩ }
 
-\eqn{Co-cool-Property}{ ⟨f + g, h + k⟩ \;=\; [ ⟨f, h⟩ ; (\inl × \inl), ⟨g, k⟩ ; (\inr × \inr)] }
+\eqn{Co-cool-Property}{ ⟨f + g, h + k⟩ \;=\; [ (\inl × \inl) ∘ ⟨f, h⟩, (\inr × \inr) ∘ ⟨g, k⟩] }
 
 \endeqns
 
@@ -842,46 +850,8 @@ E.g., \(\mathsf{undistr}  = ⟨[\fst, \fst], \snd + \snd⟩ = [\Id × \inl, \Id 
 
 Also, since constants ignore their inputs,
 
-\newpage
 
-
-<a id="orgb35f74a"></a>
-
-# Coequaliser
-
-Take \(D\) and \(𝒟\) as suggested by \(D𝒟 = \left( \overset{A}{•} \rightrightarrows^f_g \overset{B}{•} \right)\);
-where \(f,g : A → B\) are given. 
-Then a cocone δ for \(D\) is a two-member family \(δ = (q', q)\)
-with \(q' : A → C, q : B → C, C = \tgt\,\delta\) and \(δ_A ∘ \const{C} h = D h ∘ δ_B\); in-particular
-\(q' = f ∘ q = g ∘ q\) whence \(q'\) is fully-determined by \(q\) alone.
-
-Let \(γ = (p', p) : Obj(⋁D)\) be a colimit for \(D\) and write \(-p╱\) in-place of \(-╱γ\), then the ╱-laws
-yield: *\(p\) is a coequaliser of \((f,g)\)* if there is a mapping \(-╱p\) such that *CoEq-Type* and
-*CoEq-Char* hold.
-
-\vfill
-
-\iffalse
-
-Taking \(D\) and \(\mathcal{D}\) as suggested by
-\(D\,\mathcal{D}:\)
-$ \raisebox{6pt}{$\spot$}
-\overset{ \overset{f}{\text{\tiny$\longrightarrow$}}
-  }{ \overset{\longrightarrow}{\text{\tiny$g$}}  }
-\raisebox{6pt}{$\spot$}
-$
-
-Now call the category \(\bigvee D\) by the name \(\bigvee(f \,|\!|\, g)\):
-it has objects morphisms that post-equalise \(f\) and \(g\), and morphisms
-\(x : p \to q \equivS x : \tgt p \to \tgt q \lands p \fcmp x \eqs q\) 
-
-A \emph{coequaliser} of \(f,g\) is an initial object in
-\(\bigvee(f \,|\!|\, g)\).
-
-\fi
-
-
-<a id="orgb4c05f4"></a>
+<a id="org824df47"></a>
 
 # References
 
@@ -892,8 +862,8 @@ by [Maarten Fokkinga](https://maartenfokkinga.github.io/utwente/)
 \vspace{1em}
 
 An excellent introduction to category theory with examples motivated from programming, in-particular
-working with sequences. All steps are shown in a calculational style &#x2013;which Fokkinga
-has made [available](https://ctan.org/tex-archive/macros/latex/contrib/calculation) for use with LaTeX&#x2013; thereby making it suitable for self-study.
+working with sequences. All steps are shown in a calculational style &#x2014;which Fokkinga
+has made [available](https://ctan.org/tex-archive/macros/latex/contrib/calculation) for use with LaTeX&#x2014; thereby making it suitable for self-study.
 
 \vspace{1em}
 
@@ -915,3 +885,200 @@ The category theory is mostly implicit, but presented elegantly!
 
 \vspace{-0.5em}
 
+
+<a id="orgf2ec4a5"></a>
+
+# To Read
+
+-   [Toposes, Triples and Theories](http://www.cwru.edu/artsci/math/wells/pub/ttt.html) by Michael Barr and Charles Wells
+-   [Seven Sketches in Compositionality: An Invitation to Applied Category Theory](https://arxiv.org/pdf/1803.05316.pdf)
+-   [Frobenius algebras and ambidextrous adjunctions](https://arxiv.org/abs/math/0502550) by Aaron Lauda
+-   [Functorial Semantics of Algebraic Theories](http://www.tac.mta.ca/tac/reprints/articles/5/tr5.pdf) by F. William Lawvere
+-   [Basic Concepts of Enriched Category Theory](http://www.tac.mta.ca/tac/reprints/articles/10/tr10.pdf) by G.M. Kelly
+-   [Rosetta Stone](http://golem.ph.utexas.edu/category/2008/03/physics_topology_logic_and_com.html)
+-   [Category Theory for Computing Science &#x2013; Michael Barr and Charles Wells](http://www.math.mcgill.ca/triples/Barr-Wells-ctcs.pdf)
+
+Monoidal:
+
+-   [Elementary remarks on units in monoidal categories](https://arxiv.org/pdf/math/0507349.pdf)
+-   [ASSOCIATIVITY CONSTRAINTS IN MONOIDAL CATEGORIES](http://math.uchicago.edu/~may/TQFT/Boyarchenko%20on%20associativity.pdf)
+-   [Tensor Categories](http://mtm.ufsc.br/~ebatista/2016-2/tensor_categories.pdf)
+
+\newpage
+
+
+<a id="org53fdf4f"></a>
+
+# Monoidal and Closed Categories
+
+It is rather common that we have a notion of pairing for types for which there is a unit type.
+Examples include products with the initial object, sums with the terminal object, or for
+the category of endofunctors: Functor composition with the identity functor.
+
+\room
+
+A *monoidal category* *(𝒞, ⊗, I, α, λ, ρ)* consists of a category 𝒞 with bifunctor
+\newline
+\(\_{}⊗\_{} : 𝒞^2 → 𝒞\) and object *I : Obj 𝒞*
+&#x2014;referred to as the ‘tensor product’ and ‘tensor unit&#x2014;
+and three natural isomorphisms:
+\newline
+The ‘(right-to-left) associator’ *α<sub>A, B, C</sub> : A ⊗ (B ⊗ C) ≅ (A ⊗ B) ⊗ C* and
+\newline
+the ‘unitors’  *λ<sub>A</sub> : I ⊗ A ≅ A* and *ρ<sub>A</sub> : A ⊗ I ≅ A* such that:
+
+1.  The order of re-parensization, outer-most or inner-most first, does not matter; i.e.,
+    the two obvious maps witnessing \(A ⊗ (B ⊗ (C ⊗ D)) → ((A ⊗ B) ⊗ C) ⊗ D\) are identical:
+    \(α_{A ⊗ B, C, D} \;∘\; α_{A, B, C ⊗ D} \eqs α_{A, B, C} ⊗ \Id_D \;∘\; α_{A, B ⊗ C, D}\;∘\; \Id_A ⊗ α_{B, C, D}\).
+
+2.  Unit elimination paths are the same even if unnecessary associtivity is performed; i.e.,
+    the two obvious maps witnessing \(A ⊗ (I ⊗ B) → A ⊗ B\) are identical:
+    \newline
+    \(\Id_A ⊗ λ_B \eqs (ρ_A ⊗ \Id_B) \;∘\; α_{A, I, B}\).
+
+Mnemonic: λ, ‘L’ambda, is for ‘L’eft unitor; ρ, ‘R’ho, is for ‘R’ight unitor.
+
+\room
+
+Unfolding some of that up yields:
+
+-   \(\Id ⊕ \Id = \Id\) and \((f ∘ g) ⊗ (h ∘ k) = (f ⊗ h) ∘ (g ⊗ k)\)
+-   \(α ∘ (f ⊗ (g ⊗ h)) = ((f ⊗ g) ⊗ h) ∘ α\)
+-   \(λ ∘ (\Id ⊗ f) = f ∘ λ\)
+-   \(ρ ∘ (f ⊗ \Id) = f ∘ ρ\)
+
+**Mac Lane's coherence theorem:** Any well-typed diagram built from ⊗, α, λ, ρ commutes.
+
+\room
+
+\eqn{Unit-Equivalence-Left}{ \Id ⊗ f = \Id ⊗ g  \equivS  f = g }
+\eqn{Unit-Equivalence-Right}{ f ⊗ \Id = g ⊗ \Id \equivS  f = g }
+
+\room
+
+The apparent complexity of the definition of monoidal categories vanishes
+when a [geometrical notation](https://qchu.wordpress.com/2012/11/05/introduction-to-string-diagrams/) is used &#x2014;the coherence laws simply become
+expected geometric operations on the plane.
+The geometric interpretation is sound and complete
+&#x2014;i.e., equal morphisms yield ‘equal’ pictures, and conversely.
+
+( [A survey of graphical languages for monoidal categories](https://www.mathstat.dal.ca/~selinger/papers/graphical-2up.pdf) )
+
+\room
+
+Examples
+
+-   Common examples include preordered monoids thought of as monoidal categories.
+-   Functor categories \(𝒞^𝒞\) with tensor being functor composition.
+-   Any category with finite co/products is monoidal using sums or products; e.g., 𝒮ℯ𝓉.
+-   ℛℯ𝓁 with Cartesian product is monoidal, even though this is *not*
+    a categorical product.
+-   The ‘free strict monoidal category’ on 𝒞 has objects being
+    finite lists of 𝒞-objects where an arrow exists only between equal length
+    lists and it is a list of 𝒞-morphisms between the corresponding components;
+    tensor is catenation with the empty list as the unit object.
+-   Symmetric monoidal categories are closed under products, and this has a right
+    adjoint yielding functor categories of sym. mon. cats.
+    -   (Mat(K), ⊗, 1): The category whose objects are natural numbers and whose arrows M : m → n are n × m matrices taking values in field K. Composition is matrix multiplication, the monoidal
+
+product is multiplication of natural numbers (on objects) and the [Kronecker product](https://en.wikipedia.org/wiki/Kronecker_product#Definition) of matrices (on arrows). This category is essentially the category of finite-dimensional vector spaces over K, with a chosen basis for all of its objects.
+
+\room
+
+Interestingly, tensor distributes over sums: `(A + B) ⊗ C ≅ (A ⊗ C) + (B ⊗ C)`.
+
+\room
+
+A **lax monoidal functor** \(F : 𝒱 ⟶ 𝒱′\) is a functor that sub-factors over product:
+\(F \, x_0 ⊗ ⋯ ⊗ F\, x_n ⟶̇ F(x₀ ⊗ ⋯ ⊗ x_n)\).
+
+\room
+
+\room
+A **Cartesian-closed category** is a monoidal category where the tensor
+is categorical product and all exponentials exist.
+These categories are in correspondence with the models of simply typed
+lambda-calculus. If it has all finite sums as well, then it's known as
+**bicartesian closed**, in which case products necessarily distribute over sums.
+
+𝒱 is **semicartesian** if any of the following equivalent statements is true.
+
+1.  Unit object \(I\) is terminal; in which case one says 𝒱 is **semicartesian.**
+2.  It has a natural ‘deletion’ \(‼_X : X ⟶ I\) with \(‼_I = \Id_I\).
+3.  It has natural ‘projections’ \(πᵢ : X₁ ⊗ X₂ ⟶ Xᵢ\) with \(π₁ : I ⊗ I ≅ I : λ˘\).
+
+If in addition it is symmetric with (natural involution) \(σ : X ⊗ Y ⟶ Y ⊗ X\)
+and has a natural ‘diagonal’ \(Δ_X : X ⟶ X ⊗ X\)
+such that the obvious maps \(X ⟶ X\) coincide
+&#x2014; i.e., \(λ ∘ (! ⊗ Id) ∘ Δ = Id = ρ ∘ (Id ⊗ !) ∘ Δ\),
+“duplicating data, then deleting a copy, is the same as doing nothing”&#x2014;
+then it is necessairly cartesian!
+
+\room
+
+An *exponential for Y* is characterised by the following adjoint isomorphism
+that is natural in *Y* and *Z:*
+
+\room
+
+-   Note that ⌊\_⌋ generalises currying, and ⌈\_⌉ generalises uncurrying.
+-   The counit \(\eval_Z = ⌈\Id_{Y ➩ z}⌉ : (Y ➩ Z) ⊗ Y → Z\) is called the *evaluation morphism.*
+
+\room
+When exponentials always exists, one refers to \(\_{}➩\_{} : 𝒞 × 𝒞^{op} → 𝒞\)
+as *the internal hom* and says *(𝒞, ⊗, I, α, λ, ρ, ➩)* is a **closed monoidal category**.
+
+\room
+In the cartesian case, the *entire* collection of morphisms \(X → Y\)
+is encoded by the *single* object \(X ➩ Y\). That is, \(X → Y \quad≅\quad 1 → (X ➩ Y)\) in 𝒮ℯ𝓉.
+
+\room
+
+\room
+More generally, a **closed category** is a category 𝒞 with a bifunctor
+\(\_{}➩\_{}\) and two ‘coherent’ transformations as above.
+
+\room
+
+It is common to notate \(X ➩ Y, ⌊f⌋\) by \(Y^X, \transpose{f}\).
+
+
+<a id="org08ad92a"></a>
+
+# Enrichment & Internal Algebraic Structures
+
+A **Category 𝒳 enriched in a monoidal category 𝒱** or a **𝒱-category**
+  is essentially a category but its hom-types are objects of 𝒱.
+  Formally, there is a collection `Obj 𝒳` and for each pair `A, B`
+  of such ‘objects’ there is a ‘hom-object’ `𝒳(A, B)` in 𝒱,
+  and there are two 𝒱-morphisms:
+
+1.  Composition: \(μ_{A, B, C} : 𝒳(B, C) ⊗ 𝒳(A, B) ⟶ 𝒳(A, C)\)
+    -   Associativity: The two obvious ways \((𝒳(C, D) ⊗ 𝒳(B, C)) ⊗ 𝒳(A, B) ⟶ 𝒳(A, D)\)
+        coincide.
+2.  Identities:  \(η_A : I ⟶ 𝒳(A, A)\).
+    -   Unity: The obvious maps \(I ⊗ 𝒳(A, B) ⟶ 𝒳(A, B)\) coincide,
+        as do the obvious maps \(𝒳(A, B) ⊗ I ⟶ 𝒳(A, B)\).
+
+\room
+A usual category is just a 𝒮ℯ𝓉-category.
+
+\room
+A *monoid in 𝒱* is an object \(M\) along with two morphisms
+\(μ : M ⊗ M ⟶ M, η : I ⟶ M\) such that the former is associative
+and has the latter as unit. Notice that monoids *in* 𝒱 are ‘untyped’
+analogues of 𝒱-categories. A ‘monad’ is a monoid in a category
+of endofunctors with composition as tensor.
+
+-   If M is a monoid in 𝒱 and F : 𝒱 ⟶ 𝒲 is a monoidal functor,
+    then F M is a monoid in 𝒲. Woah!
+
+\room
+In a monoidal category with natural transformations ‘discard’
+\(!_X : X ⟶̇ I\) and ‘duplicate’ \(Δ_X : X ⟶̇ X ⊗ X\),
+such as Cartesian monoidal categories, a *group* is like a monoid but with
+an additional morphism \(i : M ⟶ M\) such that the inverse axioms
+hold; e.g., \(e = x · x^{-1}\) takes the point-free shape
+\(η ∘ !_M = μ ∘ (\Id ⊗ i) ∘ Δ\).
+In an arbitrary monoidal category, a *Hopf algebra* is like a group
+where \(Δ_M\) and \(!_M\) exist for our specific \(M\). These generalise groups.

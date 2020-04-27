@@ -1451,6 +1451,12 @@ The category theory is mostly implicit, but presented elegantly!
   + [[http://www.tac.mta.ca/tac/reprints/articles/5/tr5.pdf][Functorial Semantics of Algebraic Theories]] by F. William Lawvere
   + [[http://www.tac.mta.ca/tac/reprints/articles/10/tr10.pdf][Basic Concepts of Enriched Category Theory]] by G.M. Kelly
   + [[http://golem.ph.utexas.edu/category/2008/03/physics_topology_logic_and_com.html][Rosetta Stone]]
+  + [[http://www.math.mcgill.ca/triples/Barr-Wells-ctcs.pdf][Category Theory for Computing Science -- Michael Barr and Charles Wells]]
+
+  Monoidal:
+  + [[https://arxiv.org/pdf/math/0507349.pdf][Elementary remarks on units in monoidal categories]]
+  + [[http://math.uchicago.edu/~may/TQFT/Boyarchenko%20on%20associativity.pdf][ASSOCIATIVITY CONSTRAINTS IN MONOIDAL CATEGORIES]]
+  + [[http://mtm.ufsc.br/~ebatista/2016-2/tensor_categories.pdf][Tensor Categories]]
 
 * space newpage                                                      :ignore:
   \newpage
@@ -1545,9 +1551,6 @@ The category theory is mostly implicit, but presented elegantly!
       =   ρ_I ⊗ Id_I
 
       Thus, λ_I = ρ_I.
-
-  Elementary remarks on units in monoidal categories
-  https://arxiv.org/pdf/math/0507349.pdf
 
   :END:
 
@@ -1689,10 +1692,32 @@ The category theory is mostly implicit, but presented elegantly!
 
   \room
 
+  The apparent complexity of the definition of monoidal categories vanishes
+  when a [[https://qchu.wordpress.com/2012/11/05/introduction-to-string-diagrams/][geometrical notation]] is used ---the coherence laws simply become
+  expected geometric operations on the plane.
+  The geometric interpretation is sound and complete
+  ---i.e., equal morphisms yield ‘equal’ pictures, and conversely.
+  # ⇒ Easy, just check each axiom.
+  # ⇐ Show that a picture must be constructed from one of the monoidal axioms,
+  #   induct on the number of possible constructions required to produce it.
+  ( [[https://www.mathstat.dal.ca/~selinger/papers/graphical-2up.pdf][A survey of graphical languages for monoidal categories]] )
+
+
+ # Theorem 29. Every monoidal category is monoidally equivalent to
+ # a strict monoidal category
+ #
+ # Proof sketch: http://events.cs.bham.ac.uk/mgs2019/vicary.pdf
+
+  \room
+
   Examples
   + Common examples include preordered monoids thought of as monoidal categories.
   + Functor categories $𝒞^𝒞$ with tensor being functor composition.
-  + Any category with finite co/products is monoidal using sums or products.
+  + Any category with finite co/products is monoidal using sums or products; e.g., 𝒮ℯ𝓉.
+  + ℛℯ𝓁 with Cartesian product is monoidal, even though this is /not/
+    a categorical product.
+       # the latter having relations being performed in parallel.
+      # (a, c) (R × S) (b, d)  ≡  a R b  ∧  c S d
   + The ‘free strict monoidal category’ on 𝒞 has objects being
     finite lists of 𝒞-objects where an arrow exists only between equal length
     lists and it is a list of 𝒞-morphisms between the corresponding components;
@@ -1700,6 +1725,11 @@ The category theory is mostly implicit, but presented elegantly!
     # + The category 𝒞𝒶𝓉 is cartesian closed: The internal-hom is the functor category of functors and natural transformations.
   + Symmetric monoidal categories are closed under products, and this has a right
     adjoint yielding functor categories of sym. mon. cats.
+
+   + (Mat(K), ⊗, 1): The category whose objects are natural numbers and whose arrows M : m → n are n × m matrices taking values in field K. Composition is matrix multiplication, the monoidal
+product is multiplication of natural numbers (on objects) and the [[https://en.wikipedia.org/wiki/Kronecker_product#Definition][Kronecker product]] of matrices (on arrows). This category is essentially the category of finite-dimensional vector spaces over K, with a chosen basis for all of its objects.
+
+  \room
 
   Interestingly, tensor distributes over sums: ~(A + B) ⊗ C ≅ (A ⊗ C) + (B ⊗ C)~.
   :Proof:
@@ -3177,6 +3207,22 @@ For categories in which sums and products exist, we define for $f : A → B$ and
 \room
 
 Notice that the last law above is self-dual.
+
+* COMMENT more
+  + Naturality actually corresponds to the idea of parametricity in functional
+programming: rev is defined uniformly for all sets. It is good to look at a
+counterexample but actually we cannot define one because in type theory and
+in functional programming all functions are parametric and hence natural. To
+get our hands on an unnatural function let us allow for the moment to define a
+weird function which analyses a set, that is we define
+
+weird : ΠA:SetList A ! List A
+weird_Bool = rev_Bool
+weird_A = id_{List A} for all other A : Set
+
+That is weird reverses lists of booleans but is the identity every else. weird
+has the same type as rev hence we have to check the same naturality square.
+It is unnatural.
 
 * COMMENT README
 
